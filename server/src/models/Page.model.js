@@ -93,6 +93,12 @@ pageSchema.index({
   slug: 1,
 });
 
+pageSchema.index({
+  slug: 1,
+  status: 1,
+  isVisible: 1,
+});
+
 const Page = mongoose.model(
   "Page",
   pageSchema

@@ -103,6 +103,9 @@ const Footer = () => {
             <img
               src={CBRILogo}
               alt="CSIR-CBRI"
+              decoding="async"
+              fetchPriority="low"
+              loading="lazy"
               className="h-20 object-contain"
             />
 
@@ -111,6 +114,9 @@ const Footer = () => {
             <img
               src={SmartVillageLogo}
               alt="Smart Village"
+              decoding="async"
+              fetchPriority="low"
+              loading="lazy"
               className="h-20 object-contain"
             />
 

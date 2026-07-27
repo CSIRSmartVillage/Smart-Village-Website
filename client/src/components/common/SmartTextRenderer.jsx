@@ -571,6 +571,8 @@ const SmartTextRenderer = ({
           key={`img-${elements.length}`}
           src={image[2]}
           alt={image[1]}
+          decoding="async"
+          fetchPriority="low"
           loading="lazy"
           className="my-8 rounded-xl shadow-md"
         />

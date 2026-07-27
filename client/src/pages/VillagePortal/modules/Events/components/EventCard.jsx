@@ -30,6 +30,9 @@ const EventCard = ({ event }) => {
         <img
           src={image}
           alt={title}
+          decoding="async"
+          fetchPriority="low"
+          loading="lazy"
           className="h-full w-full object-cover transition duration-500 hover:scale-110"
         />
 

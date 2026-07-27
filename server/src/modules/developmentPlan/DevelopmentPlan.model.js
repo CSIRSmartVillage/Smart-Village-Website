@@ -195,6 +195,12 @@ export const withCalculatedSectorProgress = (plan) => {
 developmentPlanSchema.index({
   village: 1,
   isPublished: 1,
+  createdAt: -1,
+});
+
+developmentPlanSchema.index({
+  isPublished: 1,
+  createdAt: -1,
 });
 
 const DevelopmentPlan = mongoose.model(

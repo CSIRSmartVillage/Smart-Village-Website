@@ -283,6 +283,18 @@ xl:h-[500px]
                         image.originalName ||
                         "Hero"
                       }
+                      decoding="async"
+                      fetchPriority={
+                        index === 0
+                          ? "high"
+                          : "low"
+                      }
+                      loading={
+                        index === 0
+                          ? "eager"
+                          : "lazy"
+                      }
+                      sizes="(min-width: 1280px) 76vw, (min-width: 1024px) 78vw, (min-width: 768px) 82vw, 88vw"
                       className={`
                         h-full
                         w-full

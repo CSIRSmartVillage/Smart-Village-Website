@@ -7,6 +7,72 @@ import Navigation from "../../models/Navigation.model.js";
 import Media
   from "../../models/Media.model.js";
 
+const resolveSectionMedia = async (sections) => {
+  const mediaIds = new Set();
+
+  for (const section of sections) {
+    if (section.content?.heroImage) {
+      mediaIds.add(String(section.content.heroImage));
+    }
+
+    if (
+      Array.isArray(
+        section.content?.heroImages
+      )
+    ) {
+      for (const imageId of section.content.heroImages) {
+        mediaIds.add(String(imageId));
+      }
+    }
+  }
+
+  if (!mediaIds.size) {
+    return sections;
+  }
+
+  const mediaItems = await Media.find({
+    _id: {
+      $in: [...mediaIds],
+    },
+  }).lean();
+
+  const mediaById = new Map(
+    mediaItems.map((media) => [
+      String(media._id),
+      media,
+    ])
+  );
+
+  for (const section of sections) {
+    if (section.content?.heroImage) {
+      const media = mediaById.get(
+        String(section.content.heroImage)
+      );
+
+      if (media) {
+        section.content.heroImage = media;
+        section.content.backgroundImage =
+          media.url;
+      }
+    }
+
+    if (
+      Array.isArray(
+        section.content?.heroImages
+      )
+    ) {
+      section.content.heroImages =
+        section.content.heroImages
+          .map((imageId) =>
+            mediaById.get(String(imageId))
+          )
+          .filter(Boolean);
+    }
+  }
+
+  return sections;
+};
+
 export const getNavigation =
   async () => {
     return Navigation.find({
@@ -44,62 +110,7 @@ export const getPageBySlug =
         })
         .lean();
 
-for (const section of sections) {
-
-  // Single Hero Image
-
-  if (
-    section.content?.heroImage
-  ) {
-
-    const media =
-      await Media.findById(
-        section.content.heroImage
-      ).lean();
-
-    if (media) {
-
-      section.content.heroImage =
-        media;
-
-      section.content.backgroundImage =
-        media.url;
-
-    }
-
-  }
-
-  // Multiple Hero Images
-
-  if (
-    Array.isArray(
-      section.content?.heroImages
-    )
-  ) {
-
-    const heroImages =
-      await Promise.all(
-
-        section.content.heroImages.map(
-          async (imageId) => {
-
-            return Media.findById(
-              imageId
-            ).lean();
-
-          }
-        )
-
-      );
-
-    section.content.heroImages =
-      heroImages.filter(
-        Boolean
-      );
-
-  }
-
-}
+    await resolveSectionMedia(sections);
 
     return {
       page,

@@ -174,6 +174,29 @@ villageSchema.index({
   location: "2dsphere",
 });
 
+villageSchema.index({
+  isPublished: 1,
+  status: 1,
+  isActive: 1,
+  sortOrder: 1,
+  createdAt: 1,
+});
+
+villageSchema.index({
+  state: 1,
+  isPublished: 1,
+  status: 1,
+  isActive: 1,
+  "name.en": 1,
+});
+
+villageSchema.index({
+  slug: 1,
+  isPublished: 1,
+  status: 1,
+  isActive: 1,
+});
+
 export default mongoose.model(
   "Village",
   villageSchema

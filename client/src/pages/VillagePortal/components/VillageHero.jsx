@@ -25,6 +25,10 @@ const VillageHero = ({
         <img
           src={heroImage}
           alt={title}
+          decoding="async"
+          fetchPriority="high"
+          loading="eager"
+          sizes="100vw"
           className="absolute inset-0 h-full w-full object-contain object-left sm:object-cover sm:object-center"
         />
 

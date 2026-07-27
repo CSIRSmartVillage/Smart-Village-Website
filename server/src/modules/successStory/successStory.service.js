@@ -28,7 +28,8 @@ export const getPublishedStories =
       .populate("village")
       .sort({
         createdAt: -1,
-      });
+      })
+      .lean();
   };
 
 export const getStoryBySlug =
@@ -39,7 +40,8 @@ export const getStoryBySlug =
       })
         .populate("featuredImage")
         .populate("galleryImages")
-        .populate("village");
+        .populate("village")
+        .lean();
 
     if (!story) {
       throw new ApiError(
@@ -78,7 +80,8 @@ export const getStoriesByVillageSlug =
       })
         .populate("coverImage")
         .populate("bannerImage")
-        .populate("video.media");
+        .populate("video.media")
+        .lean();
 
     if (!village) {
       throw new ApiError(
@@ -97,7 +100,8 @@ export const getStoriesByVillageSlug =
         .populate("village")
         .sort({
           createdAt: -1,
-        });
+        })
+        .lean();
 
     return {
       village,

@@ -55,11 +55,15 @@
 
   import policiesSchemeRoutes from "../modules/policiesSchemes/policiesScheme.routes.js";
   import {
+  publicCache,
+} from "../middleware/cache.middleware.js";
+  import {
   publicLimiter,
   adminLimiter,
 } from "../middleware/rateLimit.middleware.js";
 
 const router = Router();
+const publicReadCache = publicCache();
 
 router.use("/health", healthRoutes);
 
@@ -68,24 +72,28 @@ router.use("/auth", authRoutes);
 router.use(
   "/public",
   publicLimiter,
+  publicReadCache,
   cmsRoutes
 );
 
 router.use(
   "/states",
   publicLimiter,
+  publicReadCache,
   stateRoutes
 );
 
 router.use(
   "/villages",
   publicLimiter,
+  publicReadCache,
   villageRoutes
 );
 
 router.use(
   "/news",
   publicLimiter,
+  publicReadCache,
   newsRoutes
 );
 
@@ -93,12 +101,14 @@ router.use(
 router.use(
   "/village-profiles",
   publicLimiter,
+  publicReadCache,
   villageProfileRoutes
 );
 
 router.use(
   "/announcements",
   publicLimiter,
+  publicReadCache,
   announcementRoutes
 );
 
@@ -106,6 +116,7 @@ router.use(
 router.use(
   "/success-stories",
   publicLimiter,
+  publicReadCache,
   successStoryRoutes
 );
 
@@ -113,36 +124,42 @@ router.use(
 router.use(
   "/success-story-villages",
   publicLimiter,
+  publicReadCache,
   successStoryVillageRoutes
 );
 
 router.use(
   "/videos",
   publicLimiter,
+  publicReadCache,
   videoRoutes
 );
 
 router.use(
   "/laboratories",
   publicLimiter,
+  publicReadCache,
   laboratoryRoutes
 );
 
 router.use(
   "/contact",
   publicLimiter,
+  publicReadCache,
   contactRoutes
 );
 
 router.use(
   "/site-settings",
   publicLimiter,
+  publicReadCache,
   siteSettingsRoutes
 );
 
 router.use(
   "/development-plans",
   publicLimiter,
+  publicReadCache,
   developmentPlanRoutes
 );
 
@@ -151,24 +168,28 @@ router.use("/", surveyRoutes);
 router.use(
   "/village-locations",
   publicLimiter,
+  publicReadCache,
   villageLocationRoutes
 );
 
 router.use(
   "/events",
   publicLimiter,
+  publicReadCache,
   eventRoutes
 );
 
 router.use(
   "/home",
   publicLimiter,
+  publicReadCache,
   homeRoutes
 );
 
 router.use(
   "/policies-schemes",
   publicLimiter,
+  publicReadCache,
   policiesSchemeRoutes
 );
 

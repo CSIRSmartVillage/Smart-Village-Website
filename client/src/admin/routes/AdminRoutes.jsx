@@ -1,109 +1,58 @@
+import { lazy } from "react";
+
 import {
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
 
-import LoginPage
-  from "../pages/LoginPage";
-
-import DashboardPage
-  from "../pages/DashboardPage";
-
-import AdminLayout
-  from "../layouts/AdminLayout";
-
-  import PagesPage from "../pages/PagesPage";
-
-  import NavigationPage from "../pages/NavigationPage";
-
-  import NewsManagementPage from "../pages/NewsManagementPage";
-  import SuccessStoriesPage from "../pages/SuccessStoriesPage";
-
-  import PageEditPage
-  from "../pages/PageEditPage";
-
-  import PageSectionsPage from "../pages/PageSectionsPage";
-
-  import EditSectionPage from "../pages/EditSectionPage";
-
-  import CreateNewsPage
-  from "../pages/CreateNewsPage";
-
-  import EditNewsPage
-  from "../pages/EditNewsPage";
-
-
-  import LaboratoriesPage
-  from "../pages/LaboratoriesPage";
-
-  import CreateSuccessStoryPage
-  from "../pages/CreateSuccessStoryPage";
-
-  import CreateLaboratoryPage from "../pages/CreateLaboratoryPage";
-
-  import EditLaboratoryPage from "../pages/EditLaboratoryPage"
-
-  import EditSuccessStoryPage
-  from "../pages/EditSuccessStoryPage";
-
-  import CreateNavigationPage
-  from "../pages/CreateNavigationPage";
-
-  import EditNavigationPage
-  from "../pages/EditNavigationPage";
-
-  import MediaLibraryPage
-  from "../pages/MediaLibraryPage";
-
-  import VideosPage
-  from "../pages/VideosPage";
-
-import CreateVideoPage
-  from "../pages/CreateVideoPage";
-
-import EditVideoPage
-  from "../pages/EditVideoPage";
-
-import AnnouncementsPage from "../pages/AnnouncementsPage";
-import CreateAnnouncementPage from "../pages/CreateAnnouncementPage";
-import EditAnnouncementPage from "../pages/EditAnnouncementPage";
-import HomeSectionsPage
-from "../pages/HomeSectionsPage";
-
-import SuccessStoryVillagesPage
-  from "../pages/SuccessStoryVillagesPage";
-
-import CreateSuccessStoryVillagePage
-  from "../pages/CreateSuccessStoryVillagePage";
-
-import EditSuccessStoryVillagePage
-  from "../pages/EditSuccessStoryVillagePage";
-
-
-import SmartVillageDashboard from "../pages/SmartVillageDashboard";
-import VillageProfilesPage from "../pages/VillageProfilesPage";
-import CreateVillageProfilePage from "../pages/CreateVillageProfilePage";
-import EditVillageProfilePage from "../pages/EditVillageProfilePage";
-
-
-import DevelopmentPlanManagementPage from "../pages/DevelopmentPlanManagementPage";
-import CreateDevelopmentPlanPage from "../pages/CreateDevelopmentPlanPage";
-import EditDevelopmentPlanPage from "../pages/EditDevelopmentPlanPage";
-
-import EventsManagementPage from "../pages/EventsManagementPage";
-import CreateEventPage from "../pages/CreateEventPage";
-import EditEventPage from "../pages/EditEventPage";
-
-import PoliciesSchemesPage from "../pages/PoliciesSchemesPage";
-import CreatePoliciesSchemePage from "../pages/CreatePoliciesSchemePage";
-import EditPoliciesSchemePage from "../pages/EditPoliciesSchemePage";
-
-import VillageLocationsPage from "../pages/VillageLocationsPage";
-import CreateVillageLocationPage from "../pages/CreateVillageLocationPage";
-import EditVillageLocationPage from "../pages/EditVillageLocationPage";
-
-import SurveyManagementPage from "../pages/SurveyManagementPage";
+const LoginPage = lazy(() => import("../pages/LoginPage"));
+const DashboardPage = lazy(() => import("../pages/DashboardPage"));
+const AdminLayout = lazy(() => import("../layouts/AdminLayout"));
+const PagesPage = lazy(() => import("../pages/PagesPage"));
+const NavigationPage = lazy(() => import("../pages/NavigationPage"));
+const NewsManagementPage = lazy(() => import("../pages/NewsManagementPage"));
+const SuccessStoriesPage = lazy(() => import("../pages/SuccessStoriesPage"));
+const PageEditPage = lazy(() => import("../pages/PageEditPage"));
+const PageSectionsPage = lazy(() => import("../pages/PageSectionsPage"));
+const EditSectionPage = lazy(() => import("../pages/EditSectionPage"));
+const CreateNewsPage = lazy(() => import("../pages/CreateNewsPage"));
+const EditNewsPage = lazy(() => import("../pages/EditNewsPage"));
+const LaboratoriesPage = lazy(() => import("../pages/LaboratoriesPage"));
+const CreateSuccessStoryPage = lazy(() => import("../pages/CreateSuccessStoryPage"));
+const CreateLaboratoryPage = lazy(() => import("../pages/CreateLaboratoryPage"));
+const EditLaboratoryPage = lazy(() => import("../pages/EditLaboratoryPage"));
+const EditSuccessStoryPage = lazy(() => import("../pages/EditSuccessStoryPage"));
+const CreateNavigationPage = lazy(() => import("../pages/CreateNavigationPage"));
+const EditNavigationPage = lazy(() => import("../pages/EditNavigationPage"));
+const MediaLibraryPage = lazy(() => import("../pages/MediaLibraryPage"));
+const VideosPage = lazy(() => import("../pages/VideosPage"));
+const CreateVideoPage = lazy(() => import("../pages/CreateVideoPage"));
+const EditVideoPage = lazy(() => import("../pages/EditVideoPage"));
+const AnnouncementsPage = lazy(() => import("../pages/AnnouncementsPage"));
+const CreateAnnouncementPage = lazy(() => import("../pages/CreateAnnouncementPage"));
+const EditAnnouncementPage = lazy(() => import("../pages/EditAnnouncementPage"));
+const HomeSectionsPage = lazy(() => import("../pages/HomeSectionsPage"));
+const SuccessStoryVillagesPage = lazy(() => import("../pages/SuccessStoryVillagesPage"));
+const CreateSuccessStoryVillagePage = lazy(() => import("../pages/CreateSuccessStoryVillagePage"));
+const EditSuccessStoryVillagePage = lazy(() => import("../pages/EditSuccessStoryVillagePage"));
+const SmartVillageDashboard = lazy(() => import("../pages/SmartVillageDashboard"));
+const VillageProfilesPage = lazy(() => import("../pages/VillageProfilesPage"));
+const CreateVillageProfilePage = lazy(() => import("../pages/CreateVillageProfilePage"));
+const EditVillageProfilePage = lazy(() => import("../pages/EditVillageProfilePage"));
+const DevelopmentPlanManagementPage = lazy(() => import("../pages/DevelopmentPlanManagementPage"));
+const CreateDevelopmentPlanPage = lazy(() => import("../pages/CreateDevelopmentPlanPage"));
+const EditDevelopmentPlanPage = lazy(() => import("../pages/EditDevelopmentPlanPage"));
+const EventsManagementPage = lazy(() => import("../pages/EventsManagementPage"));
+const CreateEventPage = lazy(() => import("../pages/CreateEventPage"));
+const EditEventPage = lazy(() => import("../pages/EditEventPage"));
+const PoliciesSchemesPage = lazy(() => import("../pages/PoliciesSchemesPage"));
+const CreatePoliciesSchemePage = lazy(() => import("../pages/CreatePoliciesSchemePage"));
+const EditPoliciesSchemePage = lazy(() => import("../pages/EditPoliciesSchemePage"));
+const VillageLocationsPage = lazy(() => import("../pages/VillageLocationsPage"));
+const CreateVillageLocationPage = lazy(() => import("../pages/CreateVillageLocationPage"));
+const EditVillageLocationPage = lazy(() => import("../pages/EditVillageLocationPage"));
+const SurveyManagementPage = lazy(() => import("../pages/SurveyManagementPage"));
 const ProtectedRoute = ({
   children,
 }) => {

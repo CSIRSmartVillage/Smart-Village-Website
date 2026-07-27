@@ -59,6 +59,10 @@ const FeaturedEvent = ({ event }) => {
           <img
             src={image}
             alt={title}
+            decoding="async"
+            fetchPriority="high"
+            loading="eager"
+            sizes="(min-width: 1024px) 1024px, 100vw"
             className="h-full w-full object-cover transition duration-500 hover:scale-105"
           />
 

@@ -13,12 +13,25 @@ import path from "path";
 import {
   securityMiddleware,
 } from "./middleware/security.middleware.js";
+import {
+  requestContext,
+} from "./middleware/requestContext.middleware.js";
+import {
+  performanceMiddleware,
+} from "./middleware/performance.middleware.js";
+import {
+  requestPerformanceContext,
+} from "./config/mongoosePerformance.js";
 
 
 import { env } from "./config/env.js";
 
 const app = express();
 app.set("trust proxy", 1);
+
+app.use(requestContext);
+app.use(requestPerformanceContext);
+app.use(performanceMiddleware);
 
 app.use(
   cors({

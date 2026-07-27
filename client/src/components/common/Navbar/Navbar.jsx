@@ -33,10 +33,6 @@ const Navbar = () => {
   const [mobileVillagesLoading, setMobileVillagesLoading] =
     useState(false);
 
-  if (loading) {
-    return null;
-  }
-
   const parentItems = items.filter(
     (item) => !item.parentId
   );
@@ -83,7 +79,16 @@ const Navbar = () => {
           <nav className="hidden lg:flex justify-center">
             <ul className="flex items-center gap-8 font-medium text-slate-700">
 
-              {parentItems.map((item) => {
+              {loading ? (
+                <>
+                  {[0, 1, 2, 3, 4].map((item) => (
+                    <li key={item}>
+                      <div className="h-5 w-24 animate-pulse rounded bg-slate-200" />
+                    </li>
+                  ))}
+                </>
+              ) : (
+              parentItems.map((item) => {
                 const children = getChildren(item._id);
 
                 return (
@@ -154,7 +159,8 @@ const Navbar = () => {
                     )}
                   </li>
                 );
-              })}
+              })
+              )}
 
               <li>
                 <button className="flex items-center gap-2 hover:text-blue-900 transition-colors">
@@ -222,7 +228,16 @@ const Navbar = () => {
           <nav className="px-4 py-4">
             <ul className="space-y-1">
 
-              {parentItems.map((item) => {
+              {loading ? (
+                <>
+                  {[0, 1, 2, 3].map((item) => (
+                    <li key={item}>
+                      <div className="mx-3 my-3 h-5 animate-pulse rounded bg-slate-200" />
+                    </li>
+                  ))}
+                </>
+              ) : (
+              parentItems.map((item) => {
                 const isSmartVillage =
                   item.label === "CSIR Smart Village";
 
@@ -438,7 +453,8 @@ const Navbar = () => {
                     )}
                   </li>
                 );
-              })}
+              })
+              )}
 
               <li>
                 <button className="w-full flex items-center gap-2 py-3 px-3 rounded-lg hover:bg-slate-100 text-slate-700 font-medium">

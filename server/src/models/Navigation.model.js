@@ -74,6 +74,11 @@ const navigationSchema =
     }
   );
 
+navigationSchema.index({
+  isVisible: 1,
+  order: 1,
+});
+
 const Navigation =
   mongoose.model(
     "Navigation",

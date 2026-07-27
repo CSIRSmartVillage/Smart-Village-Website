@@ -113,7 +113,8 @@ export const getDevelopmentPlanById =
       .populate(
         "village",
         "name slug district state"
-      );
+      )
+      .lean();
 
     return withCalculatedSectorProgress(plan);
   };
@@ -129,7 +130,9 @@ export const getDevelopmentPlansByVillage =
     const village =
       await Village.findOne({
         slug,
-      });
+      })
+        .select("_id")
+        .lean();
 
     if (!village) {
       throw new ApiError(404, "Village not found.");
@@ -141,7 +144,8 @@ export const getDevelopmentPlansByVillage =
     })
       .sort({
         createdAt: -1,
-      });
+      })
+      .lean();
 
     return plans.map(withCalculatedSectorProgress);
   };

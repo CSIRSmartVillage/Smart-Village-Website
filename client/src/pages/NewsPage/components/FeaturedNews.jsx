@@ -14,6 +14,9 @@ const FeaturedNews = ({
   <img
     src={article.featuredImage.url}
     alt={article.title}
+    decoding="async"
+    fetchPriority="high"
+    loading="eager"
     className="w-full h-80 object-cover rounded-xl mb-6"
   />
 )}

@@ -94,6 +94,17 @@ video: {
     }
   );
 
+successStoryVillageSchema.index({
+  slug: 1,
+  isPublished: 1,
+});
+
+successStoryVillageSchema.index({
+  isPublished: 1,
+  sortOrder: 1,
+  createdAt: -1,
+});
+
 const SuccessStoryVillage =
   mongoose.model(
     "SuccessStoryVillage",

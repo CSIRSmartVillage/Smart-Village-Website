@@ -12,6 +12,9 @@ const PageLoader = () => {
           <img
             src={csirLogo}
             alt="CSIR-CBRI"
+            decoding="async"
+            fetchPriority="high"
+            loading="eager"
             className="h-20 w-20 rounded-full border border-slate-200 bg-white p-2 shadow-md"
           />
 
@@ -20,6 +23,9 @@ const PageLoader = () => {
           <img
             src={smartVillageLogo}
             alt="Smart Village"
+            decoding="async"
+            fetchPriority="high"
+            loading="eager"
             className="h-20 w-20 rounded-full border border-slate-200 bg-white p-2 shadow-md"
           />
         </div>

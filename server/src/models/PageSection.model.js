@@ -167,6 +167,12 @@ const pageSectionSchema =
     }
   );
 
+pageSectionSchema.index({
+  pageId: 1,
+  isVisible: 1,
+  order: 1,
+});
+
 const PageSection =
   mongoose.model(
     "PageSection",

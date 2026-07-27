@@ -46,7 +46,8 @@ export const getPublishedStates = async () => {
     .sort({
       sortOrder: 1,
       createdAt: 1,
-    });
+    })
+    .lean();
 };
 
 /**
@@ -73,7 +74,9 @@ export const getStateById = async (id) => {
 export const getStateBySlug = async (slug) => {
   const state = await State.findOne({
     slug,
-  }).populate("coverImage");
+  })
+    .populate("coverImage")
+    .lean();
 
   if (!state) {
     throw new ApiError(

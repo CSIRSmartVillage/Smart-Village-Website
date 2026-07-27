@@ -1,4 +1,5 @@
 import Village from "../../models/Village.model.js";
+import State from "../../models/State.model.js";
 import ApiError from "../../utils/ApiError.js";
 
 /*
@@ -76,7 +77,8 @@ export const getPublishedVillages =
       .sort({
         sortOrder: 1,
         createdAt: 1,
-      });
+      })
+      .lean();
   };
 
 /*
@@ -118,7 +120,8 @@ export const getVillageBySlug =
         isActive: true,
       })
         .populate("state")
-        .populate("coverImage");
+        .populate("coverImage")
+        .lean();
 
     if (!village) {
       throw new ApiError(
@@ -256,16 +259,24 @@ Get Published Villages By State
 export const getVillagesByState = async (
   stateSlug
 ) => {
+  const state = await State.findOne({
+    slug: stateSlug,
+  })
+    .select("name slug")
+    .lean();
+
+  if (!state) {
+    return [];
+  }
+
   const villages = await Village.find({
+    state: state._id,
     isPublished: true,
     status: "ACTIVE",
     isActive: true,
   })
     .populate({
       path: "state",
-      match: {
-        slug: stateSlug,
-      },
       select: "name slug",
     })
     .select(
@@ -273,9 +284,8 @@ export const getVillagesByState = async (
     )
     .sort({
       "name.en": 1,
-    });
+    })
+    .lean();
 
-  return villages.filter(
-    (village) => village.state
-  );
+  return villages;
 };

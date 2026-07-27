@@ -14,22 +14,23 @@ const HomePage = () => {
     error,
   } = usePage("home");
 
-  if (loading) {
-    return <h1>Loading...</h1>;
-  }
-
-  if (error) {
-    return <h1>{error}</h1>;
-  }
-console.log(page);
   return (
     <>
     <MainLayout>
+    {error ? (
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        <h1 className="text-2xl font-bold text-slate-900">
+          {error}
+        </h1>
+      </section>
+    ) : (
     <HomePageRenderer
+      loading={loading}
       sections={
-        page.sections
+        page?.sections || []
       }
     />
+    )}
     </MainLayout>
     </>
   );

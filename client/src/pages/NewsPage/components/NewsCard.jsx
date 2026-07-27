@@ -13,6 +13,9 @@ const NewsCard = ({
   <img
     src={article.featuredImage.url}
     alt={article.title}
+    decoding="async"
+    fetchPriority="low"
+    loading="lazy"
     className="w-full h-52 object-cover rounded-lg mb-4"
   />
 )}

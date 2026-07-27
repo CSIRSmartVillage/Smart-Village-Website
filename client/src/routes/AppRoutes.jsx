@@ -8,8 +8,11 @@ import {
   Route,
 } from "react-router-dom";
 
-import AdminRoutes from "../admin/routes/AdminRoutes";
 import PageLoader from "../components/common/PageLoader";
+
+const AdminRoutes = lazy(() =>
+  import("../admin/routes/AdminRoutes")
+);
 
 const HomePage = lazy(() =>
   import("../pages/HomePage/HomePage")

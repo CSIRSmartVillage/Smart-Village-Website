@@ -65,6 +65,12 @@ const stateSchema = new mongoose.Schema(
   }
 );
 
+stateSchema.index({
+  isPublished: 1,
+  sortOrder: 1,
+  createdAt: 1,
+});
+
 export default mongoose.model(
   "State",
   stateSchema

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Event from "./Event.model.js";
 import ApiError from "../../utils/ApiError.js";
 
@@ -314,51 +315,72 @@ export const toggleFeatured = async (
 export const getEventStatistics =
   async (query = {}) => {
     const { village } = query;
-    const baseFilter = {
+    const match = {
       published: true,
       isDeleted: false,
     };
 
     if (village) {
-      baseFilter.village = village;
+      match.village =
+        new mongoose.Types.ObjectId(village);
     }
 
-    const [
-      total,
-      upcoming,
-      completed,
-      achievements,
-      featured,
-    ] = await Promise.all([
-      Event.countDocuments(baseFilter),
-
-      Event.countDocuments({
-        ...baseFilter,
-        status: "UPCOMING",
-      }),
-
-      Event.countDocuments({
-        ...baseFilter,
-        status: "COMPLETED",
-      }),
-
-      Event.countDocuments({
-        ...baseFilter,
-        type: "ACHIEVEMENT",
-      }),
-
-      Event.countDocuments({
-        ...baseFilter,
-        isFeatured: true,
-      }),
+    const [stats = {}] = await Event.aggregate([
+      {
+        $match: match,
+      },
+      {
+        $group: {
+          _id: null,
+          total: {
+            $sum: 1,
+          },
+          upcoming: {
+            $sum: {
+              $cond: [
+                { $eq: ["$status", "UPCOMING"] },
+                1,
+                0,
+              ],
+            },
+          },
+          completed: {
+            $sum: {
+              $cond: [
+                { $eq: ["$status", "COMPLETED"] },
+                1,
+                0,
+              ],
+            },
+          },
+          achievements: {
+            $sum: {
+              $cond: [
+                { $eq: ["$type", "ACHIEVEMENT"] },
+                1,
+                0,
+              ],
+            },
+          },
+          featured: {
+            $sum: {
+              $cond: [
+                { $eq: ["$isFeatured", true] },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
     ]);
 
     return {
-      total,
-      upcoming,
-      completed,
-      achievements,
-      featured,
+      total: stats.total || 0,
+      upcoming: stats.upcoming || 0,
+      completed: stats.completed || 0,
+      achievements: stats.achievements || 0,
+      featured: stats.featured || 0,
     };
   };
 

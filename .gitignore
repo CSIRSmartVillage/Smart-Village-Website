@@ -6,6 +6,8 @@ node_modules/
 .env.*
 !.env.example
 
+smart-village-backup/
+
 # Build output
 dist/
 build/

@@ -115,6 +115,17 @@ footerQuickLinks: [
     }
   );
 
+successStorySchema.index({
+  status: 1,
+  createdAt: -1,
+});
+
+successStorySchema.index({
+  village: 1,
+  status: 1,
+  createdAt: -1,
+});
+
 const SuccessStory =
   mongoose.model(
     "SuccessStory",

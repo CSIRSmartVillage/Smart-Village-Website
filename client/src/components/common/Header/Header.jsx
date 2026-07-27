@@ -17,6 +17,9 @@ const Header = () => {
             <img
               src={csirLogo}
               alt="CSIR-CBRI"
+              decoding="async"
+              fetchPriority="high"
+              loading="eager"
               className="h-16 lg:h-20 object-contain"
             />
 
@@ -61,6 +64,9 @@ const Header = () => {
             <img
               src={smartVillageLogo}
               alt="Smart Village Mission"
+              decoding="async"
+              fetchPriority="high"
+              loading="eager"
               className="h-20 lg:h-24 object-contain"
             />
 
@@ -77,6 +83,9 @@ const Header = () => {
             <img
               src={csirLogo}
               alt="CSIR-CBRI"
+              decoding="async"
+              fetchPriority="high"
+              loading="eager"
               className="h-12 object-contain"
             />
 
@@ -89,6 +98,9 @@ const Header = () => {
             <img
               src={smartVillageLogo}
               alt="Smart Village Mission"
+              decoding="async"
+              fetchPriority="high"
+              loading="eager"
               className="h-12 object-contain"
             />
 

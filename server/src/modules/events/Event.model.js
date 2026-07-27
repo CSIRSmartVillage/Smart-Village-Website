@@ -209,6 +209,37 @@ EventSchema.index({
   isDeleted: 1,
 });
 
+EventSchema.index({
+  published: 1,
+  isDeleted: 1,
+  eventDate: -1,
+});
+
+EventSchema.index({
+  published: 1,
+  isDeleted: 1,
+  isFeatured: 1,
+  eventDate: -1,
+});
+
+EventSchema.index({
+  slug: 1,
+  published: 1,
+  isDeleted: 1,
+});
+
+EventSchema.index({
+  village: 1,
+  published: 1,
+  isDeleted: 1,
+  eventDate: -1,
+});
+
+EventSchema.index({
+  isDeleted: 1,
+  eventDate: -1,
+});
+
 const Event = mongoose.model("Event", EventSchema);
 
 export default Event;
