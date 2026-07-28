@@ -68,3 +68,12 @@ html {
 .modal-panel-in {
   animation: modal-panel-in 200ms ease-out both;
 }
+
+@keyframes lab-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

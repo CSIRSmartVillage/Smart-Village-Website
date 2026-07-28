@@ -2,7 +2,6 @@ import {
   MapPin,
   Mail,
   Phone,
-  Globe,
   ArrowUpRight,
 } from "lucide-react";
 
@@ -58,25 +57,49 @@ const Footer = () => {
 
   const socialLinks = [
     {
-    icon: FaFacebookF,
+      icon: FaFacebookF,
       url: settings?.socialLinks?.facebook,
       label: "Facebook",
+      colorClass: "text-[#1877F2]",
     },
     {
       icon: FaLinkedinIn,
       url: settings?.socialLinks?.linkedin,
       label: "LinkedIn",
+      colorClass: "text-[#0A66C2]",
     },
     {
-     icon: FaYoutube,
+      icon: FaYoutube,
       url: settings?.socialLinks?.youtube,
       label: "YouTube",
+      colorClass: "text-[#FF0000]",
     },
     {
-     icon: FaInstagram,
+      icon: FaInstagram,
       url: settings?.socialLinks?.instagram,
       label: "Instagram",
+      colorClass: "text-[#E4405F]",
     },
+  ];
+
+  const labLogos = [
+    { name: "CSIR-CBRI", src: "/lab-logos/csir-cbri.jpg" },
+    { name: "CSIR-CECRI", src: "/lab-logos/csir-cecri.jpg" },
+    { name: "CSIR-CEERI", src: "/lab-logos/csir-ceeri.png" },
+    { name: "CSIR-CFTRI", src: "/lab-logos/csir-cftri.jpg" },
+    { name: "CSIR-CGCRI", src: "/lab-logos/csir-cgcri.jpg" },
+    { name: "CSIR-CIMAP", src: "/lab-logos/csir-cimap.jpg" },
+    { name: "CSIR-CLRI", src: "/lab-logos/csir-clri.jpg" },
+    { name: "CSIR-CMERI", src: "/lab-logos/csir-cmeri.jpg" },
+    { name: "CSIR-CRRI", src: "/lab-logos/csir-crri.jpg" },
+    { name: "CSIR-CSIO", src: "/lab-logos/csir-csio.jpg" },
+    { name: "CSIR-CSMCRI", src: "/lab-logos/csir-csmcri.jpg" },
+    { name: "CSIR-IICB", src: "/lab-logos/csir-iicb.jpg" },
+    { name: "CSIR-IICT", src: "/lab-logos/csir-iict.png" },
+    { name: "CSIR-IIP", src: "/lab-logos/csir-iip.jpg" },
+    { name: "CSIR-IMMT", src: "/lab-logos/csir-immt.jpg" },
+    { name: "CSIR-NAL", src: "/lab-logos/csir-nal.jpg" },
+    { name: "CSIR-NEERI", src: "/lab-logos/csir-neeri.jpg" },
   ];
 
   return (
@@ -86,7 +109,7 @@ const Footer = () => {
 
   <footer className="bg-slate-50 border-t border-slate-200">
 
-    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14">
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
@@ -152,21 +175,6 @@ const Footer = () => {
             className="mt-6 max-w-lg"
           />
 
-          {/* Official Website */}
-
-          <a
-            href={settings?.website || "https://cbri.res.in"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 mt-8 text-blue-700 font-semibold hover:text-blue-900 transition"
-          >
-
-            Visit Official Website
-
-            <ArrowUpRight size={18} />
-
-          </a>
-
         </div>
 
 
@@ -218,15 +226,15 @@ const Footer = () => {
 
         <div className="lg:col-span-4">
 
-          <h3 className="text-lg font-semibold text-slate-900 mb-6">
+          <h3 className="text-lg font-semibold text-slate-900 mb-5">
             Contact Information
           </h3>
 
-          <div className="space-y-6">
+          <div className="space-y-4">
 
             <div className="flex items-start gap-4">
 
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
                 <MapPin size={18} />
               </div>
 
@@ -247,7 +255,7 @@ const Footer = () => {
 
             <div className="flex items-start gap-4">
 
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
                 <Mail size={18} />
               </div>
 
@@ -271,7 +279,7 @@ const Footer = () => {
 
             <div className="flex items-start gap-4">
 
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
                 <Phone size={18} />
               </div>
 
@@ -293,42 +301,13 @@ const Footer = () => {
 
             </div>
 
-            <div className="flex items-start gap-4">
-
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
-                <Globe size={18} />
-              </div>
-
-              <div>
-
-                <p className="text-sm font-semibold text-slate-900">
-                  Website
-                </p>
-
-                <a
-                  href={
-                    settings?.website ||
-                    "https://cbri.res.in"
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-1 block text-sm text-slate-600 hover:text-blue-700 transition"
-                >
-                  {settings?.website ||
-                    "https://cbri.res.in"}
-                </a>
-
-              </div>
-
-            </div>
-
           </div>
 
 
 
           {/* Follow Us */}
 
-          <div className="mt-12">
+          <div className="mt-8">
 
             <h3 className="text-lg font-semibold text-slate-900 mb-5">
               Follow Us
@@ -337,7 +316,7 @@ const Footer = () => {
             <div className="flex flex-wrap gap-4">
 
               {socialLinks.map(
-                ({ icon: Icon, url, label }) => (
+                ({ icon: Icon, url, label, colorClass }) => (
 
                   <a
                     key={label}
@@ -345,7 +324,7 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="group flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-700 hover:bg-blue-700 hover:text-white hover:shadow-lg"
+                    className={`group flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white ${colorClass} shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg`}
                   >
 
                     <Icon size={20} />
@@ -376,6 +355,26 @@ const Footer = () => {
     {/* ================================================= */}
 
     <div className="border-t border-slate-200 bg-white">
+
+      <div className="overflow-hidden border-b border-slate-200 bg-slate-50 py-4">
+        <div className="flex w-max animate-[lab-marquee_36s_linear_infinite] items-center gap-4 hover:[animation-play-state:paused]">
+          {[...labLogos, ...labLogos].map((lab, index) => (
+            <div
+              key={`${lab.name}-${index}`}
+              className="flex h-14 w-24 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white px-2 shadow-sm"
+              aria-label={`${lab.name} lab logo`}
+            >
+              <img
+                src={lab.src}
+                alt={lab.name}
+                className="h-10 w-20 object-contain"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
 
@@ -423,18 +422,6 @@ const Footer = () => {
             <span className="hidden md:block text-slate-300">
               |
             </span>
-
-            <a
-              href={
-                settings?.website ||
-                "https://cbri.res.in"
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-700 hover:underline"
-            >
-              Official Website
-            </a>
 
           </div>
 

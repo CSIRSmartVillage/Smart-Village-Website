@@ -7,7 +7,7 @@ node_modules/
 !.env.example
 
 smart-village-backup/
-
+docs/
 # Build output
 dist/
 build/
