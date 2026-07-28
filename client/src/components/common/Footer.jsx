@@ -356,18 +356,18 @@ const Footer = () => {
 
     <div className="border-t border-slate-200 bg-white">
 
-      <div className="overflow-hidden border-b border-slate-200 bg-slate-50 py-4">
-        <div className="flex w-max animate-[lab-marquee_36s_linear_infinite] items-center gap-4 hover:[animation-play-state:paused]">
+      <div className="overflow-hidden border-b border-slate-200 bg-slate-50 py-5">
+        <div className="flex w-max animate-[lab-marquee_36s_linear_infinite] items-center gap-10 hover:[animation-play-state:paused]">
           {[...labLogos, ...labLogos].map((lab, index) => (
             <div
               key={`${lab.name}-${index}`}
-              className="flex h-14 w-24 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white px-2 shadow-sm"
+              className="flex h-20 w-32 shrink-0 items-center justify-center"
               aria-label={`${lab.name} lab logo`}
             >
               <img
                 src={lab.src}
                 alt={lab.name}
-                className="h-10 w-20 object-contain"
+                className="h-18 w-30 object-contain"
                 loading="lazy"
                 decoding="async"
               />
