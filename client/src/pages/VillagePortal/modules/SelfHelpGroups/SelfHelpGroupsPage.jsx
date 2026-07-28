@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useOutletContext } from "react-router-dom";
+import { useDebounce } from "use-debounce";
 import {
   ArrowRight,
   Search,
@@ -14,6 +15,7 @@ import {
 const SelfHelpGroupsPage = () => {
   const { village } = useOutletContext();
   const [search, setSearch] = useState("");
+  const [debouncedSearch] = useDebounce(search, 500);
 
   const {
     data,
@@ -23,14 +25,14 @@ const SelfHelpGroupsPage = () => {
     queryKey: [
       "self-help-groups",
       village?.slug,
-      search,
+      debouncedSearch,
     ],
     queryFn: () =>
       getSelfHelpGroupsByVillage(
         village.slug,
-        search
+        debouncedSearch
           ? {
-              search,
+              search: debouncedSearch,
             }
           : {}
       ),
