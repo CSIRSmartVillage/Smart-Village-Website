@@ -134,15 +134,21 @@ const PoliciesPage = lazy(() =>
   )
 );
 
-const IndicatorsPage = lazy(() =>
+const SelfHelpGroupsPage = lazy(() =>
   import(
-    "../pages/VillagePortal/modules/Indicators/IndicatorsPage"
+    "../pages/VillagePortal/modules/SelfHelpGroups/SelfHelpGroupsPage"
   )
 );
 
-const TechnologyMappingPage = lazy(() =>
+const SelfHelpGroupDetailPage = lazy(() =>
   import(
-    "../pages/VillagePortal/modules/TechnologyMapping/TechnologyMappingPage"
+    "../pages/VillagePortal/modules/SelfHelpGroups/SelfHelpGroupDetailPage"
+  )
+);
+
+const IndicatorsPage = lazy(() =>
+  import(
+    "../pages/VillagePortal/modules/Indicators/IndicatorsPage"
   )
 );
 
@@ -280,13 +286,18 @@ const AppRoutes = () => {
   />
 
   <Route
-    path="indicators"
-    element={<IndicatorsPage />}
+    path="self-help-groups"
+    element={<SelfHelpGroupsPage />}
   />
 
   <Route
-    path="technology-mapping"
-    element={<TechnologyMappingPage />}
+    path="self-help-groups/:shgSlug"
+    element={<SelfHelpGroupDetailPage />}
+  />
+
+  <Route
+    path="indicators"
+    element={<IndicatorsPage />}
   />
 
      </Route>

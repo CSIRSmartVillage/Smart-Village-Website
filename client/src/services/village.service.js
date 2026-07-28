@@ -95,15 +95,6 @@ export const getDevelopmentPlan =
     return response.data.data;
   };
 
-export const getTechnologyMapping =
-  async (slug) => {
-    const response = await axios.get(
-      `${API}/technology-mapping/slug/${slug}`
-    );
-
-    return response.data.data;
-  };
-
 export const getVillageEvents =
   async (slug) => {
     const response = await axios.get(
@@ -135,6 +126,27 @@ export const getPoliciesSchemeBySlug =
   async (slug) => {
     const response = await axios.get(
       `${API}/policies-schemes/${slug}`
+    );
+
+    return response.data.data;
+  };
+
+export const getSelfHelpGroupsByVillage =
+  async (slug, params = {}) => {
+    const response = await axios.get(
+      `${API}/self-help-groups/village/${slug}`,
+      {
+        params,
+      }
+    );
+
+    return response.data.data;
+  };
+
+export const getSelfHelpGroupBySlug =
+  async (slug) => {
+    const response = await axios.get(
+      `${API}/self-help-groups/slug/${slug}`
     );
 
     return response.data.data;

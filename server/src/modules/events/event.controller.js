@@ -149,6 +149,11 @@ export const getEventStatistics = asyncHandler(
         req.query
       );
 
+    res.set(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate"
+    );
+
     return res.status(200).json(
       new ApiResponse(
         200,

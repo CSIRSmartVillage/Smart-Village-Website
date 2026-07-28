@@ -54,6 +54,7 @@
   from "../modules/villageLocation/villageLocation.routes.js";
 
   import policiesSchemeRoutes from "../modules/policiesSchemes/policiesScheme.routes.js";
+  import selfHelpGroupRoutes from "../modules/selfHelpGroup/selfHelpGroup.routes.js";
   import {
   publicCache,
 } from "../middleware/cache.middleware.js";
@@ -191,6 +192,13 @@ router.use(
   publicLimiter,
   publicReadCache,
   policiesSchemeRoutes
+);
+
+router.use(
+  "/self-help-groups",
+  publicLimiter,
+  publicReadCache,
+  selfHelpGroupRoutes
 );
 
 router.use(

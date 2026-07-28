@@ -102,6 +102,10 @@ const AdminLayout = () => {
           label: "Policies & Schemes",
           path: "/admin/policies-schemes",
         },
+        {
+          label: "Self Help Groups",
+          path: "/admin/self-help-groups",
+        },
       ],
     },
 

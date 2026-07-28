@@ -28,6 +28,11 @@ const initialForm = {
   isPublished: true,
 };
 
+const createContactKey = () =>
+  `contact-${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2)}`;
+
 const normalizeFormData = (data) => {
   data = data ?? {};
 
@@ -69,6 +74,9 @@ const normalizeFormData = (data) => {
       Array.isArray(data.contactPersons) &&
       data.contactPersons.length > 0
         ? data.contactPersons.map((contact, index) => ({
+            _clientKey:
+              contact._id ||
+              createContactKey(),
             name: contact.name || "",
             designation: contact.designation || "",
             phone: contact.phone || "",
@@ -84,6 +92,7 @@ const normalizeFormData = (data) => {
           data.officeAddress
         ? [
             {
+              _clientKey: createContactKey(),
               name: data.contactPerson || "",
               designation: data.designation || "",
               phone: data.phone || "",
@@ -155,7 +164,11 @@ export default function VillageProfileForm({
           ].some(Boolean)
         )
         .map((contact, index) => ({
-          ...contact,
+          name: contact.name,
+          designation: contact.designation,
+          phone: contact.phone,
+          email: contact.email,
+          officeAddress: contact.officeAddress,
           displayOrder:
             contact.displayOrder === "" ||
             contact.displayOrder === null ||

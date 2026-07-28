@@ -7,7 +7,7 @@ import {
   Map,
   ScrollText,
   BarChart3,
-  Cpu,
+  UsersRound,
   MapPinned,
   Landmark,
   Trees,
@@ -49,16 +49,16 @@ const VillageSidebar = ({ village }) => {
       path: "policies",
     },
     {
+      label: "Self Help Groups",
+      description: "SHGs & members",
+      icon: UsersRound,
+      path: "self-help-groups",
+    },
+    {
       label: "Development Indicators",
       description: "Village statistics",
       icon: BarChart3,
       path: "indicators",
-    },
-    {
-      label: "Technology Mapping",
-      description: "Technology adoption",
-      icon: Cpu,
-      path: "technology-mapping",
     },
   ];
 

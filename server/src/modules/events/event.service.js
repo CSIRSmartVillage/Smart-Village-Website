@@ -330,6 +330,19 @@ export const getEventStatistics =
         $match: match,
       },
       {
+        $addFields: {
+          normalizedStatus: {
+            $toUpper: {
+              $trim: {
+                input: {
+                  $ifNull: ["$status", ""],
+                },
+              },
+            },
+          },
+        },
+      },
+      {
         $group: {
           _id: null,
           total: {
@@ -338,7 +351,12 @@ export const getEventStatistics =
           upcoming: {
             $sum: {
               $cond: [
-                { $eq: ["$status", "UPCOMING"] },
+                {
+                  $eq: [
+                    "$normalizedStatus",
+                    "UPCOMING",
+                  ],
+                },
                 1,
                 0,
               ],
@@ -347,7 +365,26 @@ export const getEventStatistics =
           completed: {
             $sum: {
               $cond: [
-                { $eq: ["$status", "COMPLETED"] },
+                {
+                  $eq: [
+                    "$normalizedStatus",
+                    "COMPLETED",
+                  ],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          ongoing: {
+            $sum: {
+              $cond: [
+                {
+                  $eq: [
+                    "$normalizedStatus",
+                    "ONGOING",
+                  ],
+                },
                 1,
                 0,
               ],
@@ -378,6 +415,7 @@ export const getEventStatistics =
     return {
       total: stats.total || 0,
       upcoming: stats.upcoming || 0,
+      ongoing: stats.ongoing || 0,
       completed: stats.completed || 0,
       achievements: stats.achievements || 0,
       featured: stats.featured || 0,

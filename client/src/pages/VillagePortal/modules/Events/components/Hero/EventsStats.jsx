@@ -2,6 +2,7 @@ import {
   Award,
   CalendarDays,
   Clock3,
+  Timer,
   Star,
 } from "lucide-react";
 
@@ -15,6 +16,13 @@ const EventsStats = ({
       icon: Clock3,
       color: "text-blue-600",
       bg: "bg-blue-50",
+    },
+    {
+      title: "Ongoing",
+      value: statistics?.ongoing ?? 0,
+      icon: Timer,
+      color: "text-cyan-600",
+      bg: "bg-cyan-50",
     },
     {
       title: "Completed",
@@ -41,7 +49,7 @@ const EventsStats = ({
 
   return (
     <section className="mt-8">
-      <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-5 lg:grid-cols-5">
         {stats.map((item) => {
           const Icon = item.icon;
 

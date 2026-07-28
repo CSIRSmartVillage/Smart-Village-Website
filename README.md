@@ -282,7 +282,6 @@ Each village gets a self-contained micro-portal with 11 sub-modules:
 | Policies | `/policies` | Government schemes |
 | Knowledge Hub | `/knowledge-hub` | Reports, manuals, documents |
 | Indicators | `/indicators` | VDI and analytics |
-| Technology Mapping | `/technology-mapping` | Technologies implemented |
 | Feedback | `/feedback` | Citizen feedback form |
 
 ### Admin Panel (`/admin/*`)
@@ -419,7 +418,6 @@ All routes are prefixed with `/api`. Base URL: `http://localhost:5000/api`
 | `policies` | `PoliciesPage` |
 | `knowledge-hub` | `KnowledgeHubPage` |
 | `indicators` | `IndicatorsPage` |
-| `technology-mapping` | `TechnologyMappingPage` |
 | `feedback` | `FeedbackPage` |
 
 ---

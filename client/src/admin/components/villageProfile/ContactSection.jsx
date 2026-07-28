@@ -11,6 +11,9 @@ const inputClass =
   "w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100";
 
 const createContact = (displayOrder = 0) => ({
+  _clientKey: `contact-${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2)}`,
   name: "",
   designation: "",
   phone: "",
@@ -178,7 +181,7 @@ export default function ContactSection({
 
             return (
               <div
-                key={`${contact.name || "contact"}-${index}`}
+                key={contact._clientKey || index}
                 className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50"
               >
                 <button

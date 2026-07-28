@@ -49,6 +49,9 @@ const EditEventPage = lazy(() => import("../pages/EditEventPage"));
 const PoliciesSchemesPage = lazy(() => import("../pages/PoliciesSchemesPage"));
 const CreatePoliciesSchemePage = lazy(() => import("../pages/CreatePoliciesSchemePage"));
 const EditPoliciesSchemePage = lazy(() => import("../pages/EditPoliciesSchemePage"));
+const SelfHelpGroupsPage = lazy(() => import("../pages/SelfHelpGroupsPage"));
+const CreateSelfHelpGroupPage = lazy(() => import("../pages/CreateSelfHelpGroupPage"));
+const EditSelfHelpGroupPage = lazy(() => import("../pages/EditSelfHelpGroupPage"));
 const VillageLocationsPage = lazy(() => import("../pages/VillageLocationsPage"));
 const CreateVillageLocationPage = lazy(() => import("../pages/CreateVillageLocationPage"));
 const EditVillageLocationPage = lazy(() => import("../pages/EditVillageLocationPage"));
@@ -209,6 +212,21 @@ const AdminRoutes = () => {
 <Route
   path="policies-schemes/:id/edit"
   element={<EditPoliciesSchemePage />}
+/>
+
+<Route
+  path="self-help-groups"
+  element={<SelfHelpGroupsPage />}
+/>
+
+<Route
+  path="self-help-groups/create"
+  element={<CreateSelfHelpGroupPage />}
+/>
+
+<Route
+  path="self-help-groups/:id/edit"
+  element={<EditSelfHelpGroupPage />}
 />
 
 <Route

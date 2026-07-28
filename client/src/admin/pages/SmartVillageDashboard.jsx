@@ -44,17 +44,17 @@ const cards = [
     category: "Village Content",
   },
   {
-    title: "Technology Mapping",
-    description: "Manage technologies implemented in villages.",
-    path: "/admin/technology-mapping",
-    icon: "📚",
-    category: "Development",
-  },
-  {
     title: "Policies & Schemes",
     description: "Government schemes and policies.",
     path: "/admin/policies-schemes",
     icon: "📜",
+    category: "Development",
+  },
+  {
+    title: "Self Help Groups",
+    description: "Manage SHGs, leaders, members and publishing.",
+    path: "/admin/self-help-groups",
+    icon: "SHG",
     category: "Development",
   },
   {
