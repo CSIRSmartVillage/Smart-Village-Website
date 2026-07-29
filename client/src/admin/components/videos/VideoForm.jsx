@@ -17,6 +17,9 @@ const VideoForm = ({
       youtubeUrl:
         initialData.youtubeUrl || "",
 
+      thumbnailUrl:
+        initialData.thumbnailUrl || "",
+
       description:
         initialData.description || "",
 
@@ -99,7 +102,7 @@ const handleChange = (
       <div>
 
         <label className="block mb-2 font-medium">
-          YouTube URL
+          Video / Post URL
         </label>
 
         <input
@@ -119,6 +122,36 @@ const handleChange = (
           "
           required
         />
+
+      </div>
+
+      <div>
+
+        <label className="block mb-2 font-medium">
+          Thumbnail Image URL
+        </label>
+
+        <input
+          type="url"
+          name="thumbnailUrl"
+          value={
+            formData.thumbnailUrl
+          }
+          onChange={
+            handleChange
+          }
+          placeholder="Required for LinkedIn posts; optional for YouTube"
+          className="
+            w-full
+            border
+            rounded-lg
+            p-3
+          "
+        />
+
+        <p className="mt-2 text-sm text-slate-500">
+          YouTube thumbnails are generated automatically if this is left blank.
+        </p>
 
       </div>
 

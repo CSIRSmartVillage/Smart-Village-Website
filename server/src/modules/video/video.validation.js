@@ -11,6 +11,9 @@ export const createVideoSchema =
         .string()
         .url(),
 
+      thumbnailUrl:
+        z.string().url().optional().or(z.literal("")),
+
       description:
         z.string().optional(),
 
@@ -30,6 +33,9 @@ export const updateVideoSchema =
 
       youtubeUrl:
         z.string().url().optional(),
+
+      thumbnailUrl:
+        z.string().url().optional().or(z.literal("")),
 
       description:
         z.string().optional(),

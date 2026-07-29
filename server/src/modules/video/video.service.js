@@ -28,6 +28,7 @@ export const createVideo =
       ...payload,
 
       thumbnailUrl:
+        payload.thumbnailUrl ||
         getYoutubeThumbnail(
           payload.youtubeUrl
         ),
@@ -72,7 +73,8 @@ export const updateVideo =
   ) => {
 
     if (
-      payload.youtubeUrl
+      payload.youtubeUrl &&
+      !payload.thumbnailUrl
     ) {
       payload.thumbnailUrl =
         getYoutubeThumbnail(
