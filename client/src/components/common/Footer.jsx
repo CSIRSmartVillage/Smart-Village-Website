@@ -473,6 +473,21 @@ const Footer = () => {
 
             </p>
 
+            <p className="mt-2 text-xs leading-5 text-slate-500">
+              Developed by{" "}
+              <span className="font-semibold text-slate-700">
+                Milan Chauhan
+              </span>
+              ,{" "}
+              <span className="font-semibold text-slate-700">
+                Shagun Tyagi
+              </span>
+              , and{" "}
+              <span className="font-semibold text-slate-700">
+                Jha Aman Prem
+              </span>
+            </p>
+
           </div>
 
           {/* Quick Info */}
