@@ -44,6 +44,7 @@ const emptyTechnology = {
   description: "",
   image: null,
   progress: 0,
+  showProgress: true,
   status: "PLANNED",
   order: 0,
 };
@@ -163,6 +164,7 @@ const TechnologyModal = ({
   const [values, setValues] = useState({
     ...emptyTechnology,
     ...initialValue,
+    showProgress: initialValue?.showProgress ?? true,
   });
 
   const handleChange = (field, value) => {
@@ -341,23 +343,40 @@ const TechnologyModal = ({
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700">
-                Progress: {values.progress}%
-              </label>
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <label className="block text-sm font-medium text-slate-700">
+                  Progress: {values.progress}%
+                </label>
+                <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600">
+                  <input
+                    type="checkbox"
+                    checked={values.showProgress}
+                    onChange={(e) =>
+                      handleChange("showProgress", e.target.checked)
+                    }
+                    className="h-4 w-4 rounded border-slate-300 text-blue-600"
+                  />
+                  Show
+                </label>
+              </div>
               <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-4">
                 <input
                   type="range"
                   min="0"
                   max="100"
                   value={values.progress}
+                  disabled={!values.showProgress}
                   onChange={(e) =>
                     handleChange(
                       "progress",
                       Number(e.target.value)
                     )
                   }
-                  className="w-full accent-blue-600"
+                  className="w-full accent-blue-600 disabled:opacity-40"
                 />
+                <p className="mt-2 text-xs text-slate-500">
+                  Turn off Show to hide the progress bar on the village portal.
+                </p>
               </div>
             </div>
 
@@ -596,7 +615,9 @@ const SectorTechnologyManager = ({
                   </button>
 
                   <div className="flex flex-wrap items-center gap-3">
-                    <ProgressBar value={sector.progress || 0} />
+                    {sector.showProgress !== false && (
+                      <ProgressBar value={sector.progress || 0} />
+                    )}
 
                     <button
                       type="button"
@@ -667,9 +688,15 @@ const SectorTechnologyManager = ({
                                 {technology.status?.replaceAll("_", " ")}
                               </td>
                               <td className="px-4 py-3">
-                                <ProgressBar
-                                  value={technology.progress || 0}
-                                />
+                                {technology.showProgress === false ? (
+                                  <span className="text-sm text-slate-400">
+                                    Hidden
+                                  </span>
+                                ) : (
+                                  <ProgressBar
+                                    value={technology.progress || 0}
+                                  />
+                                )}
                               </td>
                               <td className="px-4 py-3">
                                 {technology.order || 0}

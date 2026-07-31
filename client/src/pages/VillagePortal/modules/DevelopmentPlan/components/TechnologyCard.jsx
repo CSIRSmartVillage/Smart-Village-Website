@@ -196,9 +196,11 @@ const TechnologyCard = ({ technology }) => {
               </div>
             )}
 
-            <div className="mt-5">
-              <ProgressBar value={technology.progress} />
-            </div>
+            {technology.showProgress !== false && (
+              <div className="mt-5">
+                <ProgressBar value={technology.progress} />
+              </div>
+            )}
           </div>
         </div>
       </article>

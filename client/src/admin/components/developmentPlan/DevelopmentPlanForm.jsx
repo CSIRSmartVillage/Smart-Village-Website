@@ -10,8 +10,6 @@ const defaultValues = {
 };
 
 const normalizeValues = (data = {}) => ({
-  ...defaultValues,
-  ...data,
   village: data.village?._id ?? data.village ?? "",
   title: data.title ?? "",
   description: data.description ?? "",
@@ -55,7 +53,19 @@ const DevelopmentPlanForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit?.(values);
+    const {
+      village,
+      title,
+      description,
+      isPublished,
+    } = values;
+
+    onSubmit?.({
+      village,
+      title,
+      description,
+      isPublished,
+    });
   };
 
   return (

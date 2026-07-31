@@ -46,6 +46,10 @@ const technologySchema = z.object({
     .max(100)
     .optional(),
 
+  showProgress: z
+    .boolean()
+    .optional(),
+
   status: statusEnum.optional(),
 
   order: z

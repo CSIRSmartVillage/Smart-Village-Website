@@ -39,6 +39,11 @@ const technologySchema = new mongoose.Schema(
       default: 0,
     },
 
+    showProgress: {
+      type: Boolean,
+      default: true,
+    },
+
     status: {
       type: String,
       enum: TECHNOLOGY_STATUS,
@@ -155,7 +160,9 @@ const developmentPlanSchema = new mongoose.Schema(
 );
 
 const calculateSectorProgress = (sector) => {
-  const technologies = sector.technologies || [];
+  const technologies = (sector.technologies || []).filter(
+    (technology) => technology.showProgress !== false
+  );
 
   if (!technologies.length) {
     return 0;
@@ -184,6 +191,9 @@ export const withCalculatedSectorProgress = (plan) => {
       .map((sector) => ({
         ...sector,
         progress: calculateSectorProgress(sector),
+        showProgress: (sector.technologies || []).some(
+          (technology) => technology.showProgress !== false
+        ),
         technologies: [
           ...(sector.technologies || []),
         ].sort((a, b) => (a.order || 0) - (b.order || 0)),

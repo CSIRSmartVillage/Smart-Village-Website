@@ -51,10 +51,12 @@ const SectorAccordion = ({
             </div>
           </div>
 
-          <div className="flex min-w-64 items-center gap-5">
-            <div className="flex-1">
-              <ProgressBar value={sector.progress} />
-            </div>
+          <div className="flex min-w-64 items-center justify-end gap-5">
+            {sector.showProgress !== false && (
+              <div className="flex-1">
+                <ProgressBar value={sector.progress} />
+              </div>
+            )}
 
             <div
               className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-700 text-white transition-transform duration-300 ${
