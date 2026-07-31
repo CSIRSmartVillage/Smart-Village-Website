@@ -60,7 +60,7 @@ const LoginPage = () => {
         className="w-full max-w-md border rounded-xl p-8 shadow"
       >
         <h1 className="text-3xl font-bold mb-6">
-          Admin Login
+          Admin Login 7230
         </h1>
 
         {error && (
