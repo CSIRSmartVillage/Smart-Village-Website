@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   Menu,
   X,
-  Languages,
   Shield,
   ChevronDown,
   ChevronRight,
@@ -161,13 +160,6 @@ const Navbar = () => {
                 );
               })
               )}
-
-              <li>
-                <button className="flex items-center gap-2 hover:text-blue-900 transition-colors">
-                  <Languages size={18} />
-                  Language
-                </button>
-              </li>
 
               <li>
                 <Link
@@ -455,13 +447,6 @@ const Navbar = () => {
                 );
               })
               )}
-
-              <li>
-                <button className="w-full flex items-center gap-2 py-3 px-3 rounded-lg hover:bg-slate-100 text-slate-700 font-medium">
-                  <Languages size={18} />
-                  Language
-                </button>
-              </li>
 
               <li>
                 <Link

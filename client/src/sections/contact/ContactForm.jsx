@@ -1,4 +1,10 @@
 import { useState } from "react";
+import {
+  Mail,
+  MessageSquare,
+  Send,
+  User,
+} from "lucide-react";
 import { sendContactMessage } from "../../services/contact.service";
 import SmartTextRenderer
   from "../../components/common/SmartTextRenderer";
@@ -51,85 +57,119 @@ setError(
     }
   };
 
-  return (
-    <section className="py-12">
-      <div className="max-w-4xl mx-auto px-6">
-        <h2 className="text-3xl font-bold mb-2">
-          {data.heading}
-        </h2>
+  const fieldClass =
+    "w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100";
 
-        {data.description && (
-          <SmartTextRenderer
-            text={data.description}
-            className="mb-6 max-w-none"
-          />
-        )}
+  return (
+    <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm lg:p-8">
+      <div className="mb-7 flex items-start gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+          <MessageSquare size={24} />
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-bold text-slate-950 lg:text-3xl">
+            {data.heading}
+          </h2>
+
+          {data.description && (
+            <SmartTextRenderer
+              text={data.description}
+              className="mt-2 text-slate-600"
+            />
+          )}
+        </div>
+      </div>
 
         {success && (
-          <div className="mb-4 rounded bg-green-100 border border-green-300 px-4 py-3 text-green-700">
+          <div className="mb-5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
             {success}
           </div>
         )}
 
         {error && (
-          <div className="mb-4 rounded bg-red-100 border border-red-300 px-4 py-3 text-red-700">
+          <div className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
             {error}
           </div>
         )}
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-4"
+          className="space-y-5"
         >
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full border rounded p-3"
-            required
-          />
+          <div className="grid gap-5 md:grid-cols-2">
+            <label className="block">
+              <span className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
+                <User size={16} />
+                Name
+              </span>
+              <input
+                type="text"
+                name="name"
+                placeholder="Your name"
+                value={formData.name}
+                onChange={handleChange}
+                className={fieldClass}
+                required
+              />
+            </label>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full border rounded p-3"
-            required
-          />
+            <label className="block">
+              <span className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
+                <Mail size={16} />
+                Email
+              </span>
+              <input
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                className={fieldClass}
+                required
+              />
+            </label>
+          </div>
 
-          <input
-            type="text"
-            name="subject"
-            placeholder="Subject"
-            value={formData.subject}
-            onChange={handleChange}
-            className="w-full border rounded p-3"
-            required
-          />
+          <label className="block">
+            <span className="mb-2 block text-sm font-semibold text-slate-700">
+              Subject
+            </span>
+            <input
+              type="text"
+              name="subject"
+              placeholder="How can we help?"
+              value={formData.subject}
+              onChange={handleChange}
+              className={fieldClass}
+              required
+            />
+          </label>
 
-          <textarea
-            rows="5"
-            name="message"
-            placeholder="Message"
-            value={formData.message}
-            onChange={handleChange}
-            className="w-full border rounded p-3"
-            required
-          />
+          <label className="block">
+            <span className="mb-2 block text-sm font-semibold text-slate-700">
+              Message
+            </span>
+            <textarea
+              rows="6"
+              name="message"
+              placeholder="Write your message here"
+              value={formData.message}
+              onChange={handleChange}
+              className={`${fieldClass} resize-y`}
+              required
+            />
+          </label>
 
           <button
             type="submit"
             disabled={loading}
-            className="rounded bg-blue-700 px-6 py-3 text-white transition hover:bg-blue-800 disabled:opacity-60"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-700 px-6 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-blue-800 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-sm"
           >
+            <Send size={18} />
             {loading ? "Sending..." : "Send Message"}
           </button>
         </form>
-      </div>
     </section>
   );
 };

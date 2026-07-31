@@ -1,7 +1,15 @@
+import { useState } from "react";
+import {
+  LogOut,
+  Menu,
+  Shield,
+  X,
+} from "lucide-react";
 import { Outlet, NavLink } from "react-router-dom";
 
 const AdminLayout = () => {
   const admin = JSON.parse(localStorage.getItem("admin"));
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
@@ -10,10 +18,10 @@ const AdminLayout = () => {
   };
 
   const navClass = ({ isActive }) =>
-    `block rounded-lg px-3 py-2 transition ${
+    `block rounded-lg px-3 py-2.5 text-sm font-medium transition ${
       isActive
-        ? "bg-blue-600 text-white"
-        : "text-gray-700 hover:bg-gray-100"
+        ? "bg-blue-700 text-white shadow-sm"
+        : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
     }`;
 
   const menuSections = [
@@ -120,61 +128,117 @@ const AdminLayout = () => {
     },
   ];
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Sidebar */}
+  const sidebar = (
+    <aside className="flex h-full w-72 flex-col border-r border-slate-200 bg-white">
+      <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-700 text-white">
+            <Shield size={20} />
+          </div>
 
-      <aside className="fixed left-0 top-0 flex h-screen w-64 flex-col border-r bg-white">
-        <div className="flex-1 overflow-y-auto p-6">
-          <h2 className="mb-2 text-2xl font-bold">
-            CMS Admin
-          </h2>
-
-          <p className="mb-8 text-sm text-gray-500">
-            {admin?.username}
-          </p>
-
-          {menuSections.map((section) => (
-            <div
-              key={section.title}
-              className="mb-8"
-            >
-              <h3 className="mb-3 border-b pb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
-                {section.title}
-              </h3>
-
-              <nav className="space-y-2">
-                {section.items.map((item) => (
-                  <NavLink
-                    key={item.path}
-                    to={item.path}
-                    className={navClass}
-                  >
-                    {item.label}
-                  </NavLink>
-                ))}
-              </nav>
-            </div>
-          ))}
+          <div>
+            <h2 className="text-lg font-bold text-slate-950">
+              CMS Admin
+            </h2>
+            <p className="text-xs text-slate-500">
+              {admin?.username || "Administrator"}
+            </p>
+          </div>
         </div>
 
-        {/* Logout */}
+        <button
+          type="button"
+          onClick={() => setSidebarOpen(false)}
+          className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 lg:hidden"
+          aria-label="Close admin menu"
+        >
+          <X size={20} />
+        </button>
+      </div>
 
-        <div className="border-t p-6">
-          <button
-            onClick={handleLogout}
-            className="w-full rounded-lg bg-red-600 px-4 py-2 text-white transition hover:bg-red-700"
+      <div className="flex-1 overflow-y-auto px-4 py-5">
+        {menuSections.map((section) => (
+          <div
+            key={section.title}
+            className="mb-7"
           >
-            Logout
-          </button>
+            <h3 className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+              {section.title}
+            </h3>
+
+            <nav className="space-y-1">
+              {section.items.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setSidebarOpen(false)}
+                  className={navClass}
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </nav>
+          </div>
+        ))}
+      </div>
+
+      <div className="border-t border-slate-200 p-4">
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700"
+        >
+          <LogOut size={18} />
+          Logout
+        </button>
+      </div>
+    </aside>
+  );
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:block">
+        {sidebar}
+      </div>
+
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <button
+            type="button"
+            className="absolute inset-0 bg-slate-950/40"
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close admin menu overlay"
+          />
+          <div className="relative h-full">
+            {sidebar}
+          </div>
         </div>
-      </aside>
+      )}
 
-      {/* Main Content */}
+      <div className="lg:pl-72">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur lg:hidden">
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            className="rounded-lg p-2 text-slate-700 hover:bg-slate-100"
+            aria-label="Open admin menu"
+          >
+            <Menu size={24} />
+          </button>
 
-      <main className="ml-64 p-8">
-        <Outlet />
-      </main>
+          <div className="text-right">
+            <p className="text-sm font-semibold text-slate-950">
+              CMS Admin
+            </p>
+            <p className="text-xs text-slate-500">
+              {admin?.username || "Administrator"}
+            </p>
+          </div>
+        </header>
+
+        <main className="p-4 sm:p-6 lg:p-8">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

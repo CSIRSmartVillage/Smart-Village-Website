@@ -1,136 +1,105 @@
+import {
+  ArrowUpRight,
+  CalendarDays,
+  ClipboardList,
+  FileCheck,
+  HandHeart,
+  MapPin,
+  Route,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
-const cards = [
-  {
-    title: "States",
-    description: "Manage states participating in the Smart Village Mission.",
-    path: "/admin/states",
-    icon: "🌍",
-    category: "Master Data",
-  },
-  {
-    title: "Villages",
-    description: "Manage villages and their master information.",
-    path: "/admin/villages",
-    icon: "🏘️",
-    category: "Master Data",
-  },
-  {
-    title: "Village Profiles",
-    description: "Manage hero, overview, event-backed highlights, gallery and contact information.",
-    path: "/admin/village-profiles",
-    icon: "📄",
-    category: "Village Content",
-  },
-  {
-    title: "Village Statistics",
-    description: "Population, households, education and infrastructure.",
-    path: "/admin/village-statistics",
-    icon: "📊",
-    category: "Village Content",
-  },
-  {
-    title: "Village VDI",
-    description: "Village Development Index and analytics.",
-    path: "/admin/village-vdi",
-    icon: "📈",
-    category: "Village Content",
-  },
+const moduleCards = [
   {
     title: "Development Plans",
     description: "Manage ongoing and future development plans.",
     path: "/admin/development-plans",
-    icon: "🛠️",
-    category: "Village Content",
+    icon: Route,
+    color: "bg-blue-50 text-blue-700",
+  },
+  {
+    title: "Village Locations",
+    description: "Manage village facilities, coordinates, and map points.",
+    path: "/admin/village-locations",
+    icon: MapPin,
+    color: "bg-emerald-50 text-emerald-700",
+  },
+  {
+    title: "Events & Achievements",
+    description: "Publish village events, activities, and achievements.",
+    path: "/admin/events",
+    icon: CalendarDays,
+    color: "bg-violet-50 text-violet-700",
+  },
+  {
+    title: "Survey Management",
+    description: "Upload, manage, and publish village survey data.",
+    path: "/admin/surveys",
+    icon: ClipboardList,
+    color: "bg-amber-50 text-amber-700",
   },
   {
     title: "Policies & Schemes",
-    description: "Government schemes and policies.",
+    description: "Manage government schemes and policy information.",
     path: "/admin/policies-schemes",
-    icon: "📜",
-    category: "Development",
+    icon: FileCheck,
+    color: "bg-cyan-50 text-cyan-700",
   },
   {
     title: "Self Help Groups",
-    description: "Manage SHGs, leaders, members and publishing.",
+    description: "Manage SHGs, leaders, members, and publishing.",
     path: "/admin/self-help-groups",
-    icon: "SHG",
-    category: "Development",
+    icon: HandHeart,
+    color: "bg-rose-50 text-rose-700",
   },
-  {
-    title: "Events",
-    description: "Village events and achievements.",
-    path: "/admin/events",
-    icon: "🎉",
-    category: "Development",
-  },
-  {
-    title: "Village Map",
-    description: "GIS, locations and map information.",
-    path: "/admin/village-map",
-    icon: "🗺️",
-    category: "Development",
-  },
-];
-
-const categories = [
-  "Master Data",
-  "Village Content",
-  "Development",
 ];
 
 export default function SmartVillageDashboard() {
   return (
-    <div className="space-y-10">
+    <div className="mx-auto max-w-7xl space-y-6">
+      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm lg:p-8">
+        <p className="text-sm font-semibold uppercase tracking-wider text-blue-700">
+          Smart Village
+        </p>
 
-      <div>
-        <h1 className="text-4xl font-bold">
-          🏡 Smart Village Management
+        <h1 className="mt-2 text-3xl font-bold text-slate-950 sm:text-4xl">
+          Village Modules
         </h1>
 
-        <p className="mt-2 text-gray-600">
-          Manage all Smart Village modules from one dashboard.
+        <p className="mt-3 max-w-2xl text-slate-600">
+          Open the village administration modules used for planning,
+          locations, surveys, policies, groups, and events.
         </p>
-      </div>
+      </section>
 
-      {categories.map((category) => (
-        <div key={category} className="space-y-5">
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {moduleCards.map(({ title, description, path, icon: Icon, color }) => (
+          <Link
+            key={title}
+            to={path}
+            className="group rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-md"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${color}`}>
+                <Icon size={23} />
+              </div>
 
-          <h2 className="text-2xl font-semibold">
-            {category}
-          </h2>
+              <ArrowUpRight
+                size={18}
+                className="text-slate-300 transition group-hover:text-blue-700"
+              />
+            </div>
 
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <h2 className="mt-5 text-xl font-bold text-slate-950">
+              {title}
+            </h2>
 
-            {cards
-              .filter(
-                (card) => card.category === category
-              )
-              .map((card) => (
-                <Link
-                  key={card.title}
-                  to={card.path}
-                  className="rounded-xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-lg font-bold text-blue-700">
-                    {card.icon}
-                  </div>
-
-                  <h3 className="mt-4 text-xl font-semibold">
-                    {card.title}
-                  </h3>
-
-                  <p className="mt-2 text-sm text-gray-600">
-                    {card.description}
-                  </p>
-                </Link>
-              ))}
-
-          </div>
-
-        </div>
-      ))}
-
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              {description}
+            </p>
+          </Link>
+        ))}
+      </section>
     </div>
   );
 }

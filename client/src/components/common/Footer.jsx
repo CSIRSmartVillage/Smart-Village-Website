@@ -83,23 +83,91 @@ const Footer = () => {
   ];
 
   const labLogos = [
-    { name: "CSIR-CBRI", src: "/lab-logos/csir-cbri.jpg" },
-    { name: "CSIR-CECRI", src: "/lab-logos/csir-cecri.jpg" },
-    { name: "CSIR-CEERI", src: "/lab-logos/csir-ceeri.png" },
-    { name: "CSIR-CFTRI", src: "/lab-logos/csir-cftri.jpg" },
-    { name: "CSIR-CGCRI", src: "/lab-logos/csir-cgcri.jpg" },
-    { name: "CSIR-CIMAP", src: "/lab-logos/csir-cimap.jpg" },
-    { name: "CSIR-CLRI", src: "/lab-logos/csir-clri.jpg" },
-    { name: "CSIR-CMERI", src: "/lab-logos/csir-cmeri.jpg" },
-    { name: "CSIR-CRRI", src: "/lab-logos/csir-crri.jpg" },
-    { name: "CSIR-CSIO", src: "/lab-logos/csir-csio.jpg" },
-    { name: "CSIR-CSMCRI", src: "/lab-logos/csir-csmcri.jpg" },
-    { name: "CSIR-IICB", src: "/lab-logos/csir-iicb.jpg" },
-    { name: "CSIR-IICT", src: "/lab-logos/csir-iict.png" },
-    { name: "CSIR-IIP", src: "/lab-logos/csir-iip.jpg" },
-    { name: "CSIR-IMMT", src: "/lab-logos/csir-immt.jpg" },
-    { name: "CSIR-NAL", src: "/lab-logos/csir-nal.jpg" },
-    { name: "CSIR-NEERI", src: "/lab-logos/csir-neeri.jpg" },
+    {
+      name: "CSIR-AMPRI",
+      src: "/lab-logos/csir-ampri.jpeg",
+      url: "https://ampri.res.in/hi/",
+    },
+    {
+      name: "CSIR-CBRI",
+      src: "/lab-logos/csir-cbri.jpeg",
+      url: "https://cbri.res.in/",
+    },
+    {
+      name: "CSIR-CEERI",
+      src: "/lab-logos/csir-ceeri.jpeg",
+      url: "https://www.ceeri.res.in/",
+    },
+    {
+      name: "CSIR-CFTRI",
+      src: "/lab-logos/csir-cftri.jpeg",
+      url: "https://cftri.res.in/",
+    },
+    {
+      name: "CSIR-CIMAP",
+      src: "/lab-logos/csir-cimap.jpeg",
+      url: "https://www.cimap.res.in/",
+    },
+    {
+      name: "CSIR-CLRI",
+      src: "/lab-logos/csir-clri.jpeg",
+      url: "https://www.clri.org/",
+    },
+    {
+      name: "CSIR-CMERI",
+      src: "/lab-logos/csir-cmeri.jpeg",
+      url: "https://www.cmeri.res.in/",
+    },
+    {
+      name: "CSIR-CRRI",
+      src: "/lab-logos/csir-crri.jpeg",
+      url: "https://crridom.gov.in/en",
+    },
+    {
+      name: "CSIR-CSIO",
+      src: "/lab-logos/csir-csio.jpeg",
+      url: "https://www.csio.res.in/",
+    },
+    {
+      name: "CSIR-IHBT",
+      src: "/lab-logos/csir-ihbt.jpeg",
+      url: "https://www.ihbt.res.in/en/",
+    },
+    {
+      name: "CSIR-IICT",
+      src: "/lab-logos/csir-iict.jpeg",
+      url: "https://www.iict.res.in/",
+    },
+    {
+      name: "CSIR-IMMT",
+      src: "/lab-logos/csir-immt.jpeg",
+      url: "https://www.immt.res.in/",
+    },
+    {
+      name: "CSIR-NEERI",
+      src: "/lab-logos/csir-neeri.jpeg",
+      url: "https://www.neeri.res.in/",
+    },
+    {
+      name: "CSIR-NEIST",
+      src: "/lab-logos/csir-neist.jpeg",
+      url: "https://www.neist.res.in/",
+    },
+    {
+      name: "CSIR-NGRI",
+      src: "/lab-logos/csir-ngri.jpeg",
+      url: "https://www.ngri.res.in/",
+    },
+    {
+      name: "CSIR-NIIST",
+      src: "/lab-logos/csir-niist.jpeg",
+      url: "https://www.niist.res.in/",
+    },
+    {
+      name: "CSIR-SERC",
+      src: "/lab-logos/csir-serc.jpeg",
+      url: "https://serc.res.in/",
+    },
   ];
 
   return (
@@ -359,19 +427,23 @@ const Footer = () => {
       <div className="overflow-hidden border-b border-slate-200 bg-slate-50 py-5">
         <div className="flex w-max animate-[lab-marquee_36s_linear_infinite] items-center gap-10 hover:[animation-play-state:paused]">
           {[...labLogos, ...labLogos].map((lab, index) => (
-            <div
+            <a
               key={`${lab.name}-${index}`}
-              className="flex h-20 w-32 shrink-0 items-center justify-center"
-              aria-label={`${lab.name} lab logo`}
+              href={lab.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative z-0 flex h-20 w-32 shrink-0 items-center justify-center rounded-lg bg-white/70 transition-all duration-300 ease-out hover:z-10 hover:-translate-y-2 hover:scale-110 hover:bg-white hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+              aria-label={`Open ${lab.name} website`}
+              title={lab.name}
             >
               <img
                 src={lab.src}
                 alt={lab.name}
-                className="h-18 w-30 object-contain"
+                className="h-18 w-30 object-contain transition-transform duration-300 ease-out group-hover:scale-105"
                 loading="lazy"
                 decoding="async"
               />
-            </div>
+            </a>
           ))}
         </div>
       </div>

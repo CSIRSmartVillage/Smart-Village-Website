@@ -5,41 +5,40 @@ import ContactForm from "../../sections/contact/ContactForm";
 const ContactPageRenderer = ({
   sections,
 }) => {
+  const heroSection = sections.find(
+    (section) => section.sectionType === "CONTACT_HERO"
+  );
+  const formSection = sections.find(
+    (section) => section.sectionType === "CONTACT_FORM"
+  );
+  const informationSection = sections.find(
+    (section) => section.sectionType === "CONTACT_INFORMATION"
+  );
+
   return (
-    <>
-      {sections.map((section) => {
-        switch (
-          section.sectionType
-        ) {
-          case "CONTACT_HERO":
-            return (
-              <ContactHero
-                key={section._id}
-                data={section.content}
-              />
-            );
+    <main className="bg-slate-50">
+      {heroSection && (
+        <ContactHero
+          data={heroSection.content}
+        />
+      )}
 
-          case "CONTACT_INFORMATION":
-            return (
-              <ContactInformation
-                key={section._id}
-                data={section.content}
-              />
-            );
+      <section className="px-6 pb-20">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+          {formSection && (
+            <ContactForm
+              data={formSection.content}
+            />
+          )}
 
-          case "CONTACT_FORM":
-            return (
-              <ContactForm
-                key={section._id}
-                data={section.content}
-              />
-            );
-
-          default:
-            return null;
-        }
-      })}
-    </>
+          {informationSection && (
+            <ContactInformation
+              data={informationSection.content}
+            />
+          )}
+        </div>
+      </section>
+    </main>
   );
 };
 
