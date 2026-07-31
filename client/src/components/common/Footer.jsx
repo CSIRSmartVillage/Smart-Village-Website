@@ -473,7 +473,7 @@ const Footer = () => {
 
             </p>
 
-            <p className="mt-2 text-xs leading-5 text-slate-500">
+            {/* <p className="mt-2 text-xs leading-5 text-slate-500">
               Developed by{" "}
               <span className="font-semibold text-slate-700">
                 Milan Chauhan
@@ -486,7 +486,7 @@ const Footer = () => {
               <span className="font-semibold text-slate-700">
                 Jha Aman Prem
               </span>
-            </p>
+            </p> */}
 
           </div>
 
