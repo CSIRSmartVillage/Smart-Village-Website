@@ -1,0 +1,49 @@
+name: Deploy Smart Village Website
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+
+          script: |
+            set -e
+
+            cd ~/Smart-Village-Website
+
+            echo "Pulling latest code..."
+            git pull origin main
+
+            echo "Installing backend dependencies..."
+            cd server
+            npm install
+
+            echo "Restarting backend..."
+            pm2 restart smart-village-api
+
+            echo "Installing frontend dependencies..."
+            cd ../client
+            npm install
+
+            echo "Building frontend..."
+            npm run build
+
+            echo "Deploying frontend..."
+            sudo rm -rf /var/www/html/*
+            sudo cp -r dist/* /var/www/html/
+
+            echo "Reloading Nginx..."
+            sudo systemctl reload nginx
+
+            echo "Deployment completed successfully!"
