@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
   MapPin,
   Mail,
@@ -23,6 +25,25 @@ import SmartVillageLogo from "../../assets/logos/SmartVillage.jpeg";
 
 const Footer = () => {
   const { settings } = useSiteSettings();
+  const [developerIndex, setDeveloperIndex] =
+    useState(null);
+
+  const developerNames = [
+    "Sagar Tomar",
+    "Milan Chauhan",
+    "Shagun Tyagi",
+    "Jha Aman Prem",
+  ];
+
+  const handleTeamClick = () => {
+    setDeveloperIndex((current) =>
+      current === null
+        ? 0
+        : current === developerNames.length - 1
+          ? null
+          : current + 1
+    );
+  };
 
   const quickLinks = [
     {
@@ -473,20 +494,25 @@ const Footer = () => {
 
             </p>
 
-            {/* <p className="mt-2 text-xs leading-5 text-slate-500">
-              Developed by{" "}
+            <p className="mt-2 text-xs leading-5 text-slate-500">
+              Developed By{" "}
               <span className="font-semibold text-slate-700">
-                Milan Chauhan
+                Dr. Kishor Kulkarni
               </span>
-              ,{" "}
-              <span className="font-semibold text-slate-700">
-                Shagun Tyagi
-              </span>
-              , and{" "}
-              <span className="font-semibold text-slate-700">
-                Jha Aman Prem
-              </span>
-            </p> */}
+              {" "}and{" "}
+              <button
+                type="button"
+                onClick={handleTeamClick}
+                className="font-semibold text-slate-700 transition hover:text-slate-900"
+              >
+                Team
+              </button>
+              {developerIndex !== null && (
+                <span className="ml-2 inline-flex rounded-full bg-blue-50 px-2 py-0.5 font-semibold text-blue-700">
+                  {developerNames[developerIndex]}
+                </span>
+              )}
+            </p>
 
           </div>
 
