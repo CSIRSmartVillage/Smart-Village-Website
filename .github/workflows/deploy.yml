@@ -12,6 +12,7 @@ jobs:
     steps:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.2.2
+
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
@@ -20,30 +21,44 @@ jobs:
           script: |
             set -e
 
+            echo "==============================="
+            echo "Starting Smart Village Deploy"
+            echo "==============================="
+
             cd ~/Smart-Village-Website
 
-            echo "Pulling latest code..."
-            git pull origin main
+            echo "Cleaning repository..."
+            git fetch origin
+            git reset --hard origin/main
+            git clean -fd
 
-            echo "Installing backend dependencies..."
+            echo "Backend"
+
             cd server
-            npm install
 
-            echo "Restarting backend..."
+            npm ci
+
             pm2 restart smart-village-api
 
-            echo "Installing frontend dependencies..."
-            cd ../client
-            npm install
+            cd ..
 
-            echo "Building frontend..."
+            echo "Frontend"
+
+            cd client
+
+            npm ci
+
             npm run build
 
-            echo "Deploying frontend..."
+            echo "Updating Nginx files..."
+
             sudo rm -rf /var/www/html/*
             sudo cp -r dist/* /var/www/html/
 
             echo "Reloading Nginx..."
+
             sudo systemctl reload nginx
 
-            echo "Deployment completed successfully!"
+            echo "==============================="
+            echo "Deployment Successful"
+            echo "==============================="
