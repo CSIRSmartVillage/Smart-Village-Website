@@ -46,7 +46,7 @@ jobs:
 
             cd client
 
-            npm ci
+            npm install
 
             npm run build
 
