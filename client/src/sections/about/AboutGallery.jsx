@@ -59,9 +59,14 @@ const AboutGallery = ({
               >
                 <div
                   className="
+                    group
                     rounded-2xl
                     overflow-hidden
                     shadow-none
+                    transition-shadow
+                    duration-[350ms]
+                    ease-out
+                    hover:shadow-lg
                   "
                 >
                   <img
@@ -73,6 +78,12 @@ const AboutGallery = ({
                       w-full
                       h-[300px]
                       object-contain
+                      transform-gpu
+                      origin-center
+                      transition-transform
+                      duration-[350ms]
+                      ease-out
+                      group-hover:scale-110
                     "
                   />
                 </div>

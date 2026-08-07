@@ -1,47 +1,76 @@
 import { z } from "zod";
 
+const optionalUrl =
+  z.string().url().optional()
+    .or(z.literal(""));
+
+const optionalMediaId =
+  z.string().nullable().optional();
+
 export const createVideoSchema =
   z.object({
-    body: z.object({
-      title: z
-        .string()
-        .min(3),
+    body: z
+      .object({
+        title: z
+          .string()
+          .min(3),
 
-      youtubeUrl: z
-        .string()
-        .url(),
+        media:
+          optionalMediaId,
 
-      thumbnailUrl:
-        z.string().url().optional().or(z.literal("")),
+        youtubeUrl:
+          optionalUrl,
 
-      description:
-        z.string().optional(),
+        thumbnailUrl:
+          optionalUrl,
 
-      displayOrder:
-        z.number().optional(),
+        description:
+          z.string().optional(),
 
-      isActive:
-        z.boolean().optional(),
-    }),
+        displayOrder:
+          z.coerce.number().optional(),
+
+        isActive:
+          z.boolean().optional(),
+      })
+      .superRefine(
+        (data, context) => {
+          if (
+            !data.media &&
+            !data.youtubeUrl
+          ) {
+            context.addIssue({
+              code:
+                z.ZodIssueCode.custom,
+              path: ["media"],
+              message:
+                "Select an uploaded video or enter an external video URL",
+            });
+          }
+        }
+      ),
   });
 
 export const updateVideoSchema =
   z.object({
     body: z.object({
       title:
-        z.string().optional(),
+        z.string().min(3).optional(),
+
+      media:
+        optionalMediaId,
 
       youtubeUrl:
-        z.string().url().optional(),
+        optionalUrl,
 
       thumbnailUrl:
-        z.string().url().optional().or(z.literal("")),
+        optionalUrl,
 
       description:
         z.string().optional(),
 
       displayOrder:
-        z.number().optional(),
+        z.coerce.number().optional(),
 
       isActive:
         z.boolean().optional(),

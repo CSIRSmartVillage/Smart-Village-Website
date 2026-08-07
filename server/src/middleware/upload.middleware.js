@@ -1,47 +1,75 @@
 import multer from "multer";
+import path from "path";
 
-const storage =
-  multer.memoryStorage();
+import ApiError
+  from "../utils/ApiError.js";
 
-const fileFilter =
-  (
-    req,
-    file,
-    cb
-  ) => {
+const storage = multer.memoryStorage();
 
-    const isImage =
-      file.mimetype.startsWith(
-        "image/"
-      );
+const videoMimeTypes = [
+  "video/mp4",
+  "video/webm",
+  "video/quicktime",
+];
 
-    const isVideo =
-      file.mimetype.startsWith(
-        "video/"
-      );
+const videoExtensions = [
+  ".mp4",
+  ".webm",
+  ".mov",
+];
 
-    const isPdf =
-      file.mimetype ===
-      "application/pdf";
+const fileFilter = (
+  req,
+  file,
+  cb
+) => {
+  const isImage =
+    file.mimetype.startsWith(
+      "image/"
+    );
 
-    if (
-      isImage ||
-      isVideo ||
-      isPdf
-    ) {
-      cb(null, true);
-    } else {
-      cb(
-        new Error(
-          "Only images, videos and PDF files are allowed"
-        )
-      );
-    }
-  };
+  const isVideo =
+    videoMimeTypes.includes(
+      file.mimetype
+    ) &&
+    videoExtensions.includes(
+      path.extname(
+        file.originalname
+      ).toLowerCase()
+    );
+
+  const isPdf =
+    file.mimetype ===
+    "application/pdf";
+
+  if (
+    isImage ||
+    isVideo ||
+    isPdf
+  ) {
+    cb(null, true);
+  } else {
+    cb(
+      new ApiError(
+        400,
+        "Only images, MP4, WebM, MOV and PDF files are allowed"
+      )
+    );
+  }
+};
 
 const upload = multer({
   storage,
   fileFilter,
+  limits: {
+    fileSize:
+      Number(
+        process.env.MAX_MEDIA_FILE_SIZE_MB ||
+          250
+      ) *
+      1024 *
+      1024,
+  },
 });
 
 export default upload;

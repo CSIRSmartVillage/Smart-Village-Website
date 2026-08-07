@@ -2,74 +2,24 @@ const ObjectivesHero = ({
   data,
 }) => {
   return (
-<section
-  className="
-    relative
-    min-h-[450px]
-    md:min-h-[500px]
-    flex
-    items-center
-    justify-center
-    text-white
-    overflow-hidden
-  "
-  style={{
-    backgroundImage: data?.backgroundImage
-      ? `url(${data.backgroundImage})`
-      : undefined,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  }}
->
-  <div className="absolute inset-0 bg-black/55" />
-
-  <div
-    className="
-      relative
-      z-10
-      max-w-5xl
-      mx-auto
-      px-6
-      text-center
-    "
-  >
-    <span
-      className="
-        uppercase
-        tracking-[4px]
-        text-blue-300
-        font-semibold
-      "
+    <section
+      className="relative flex min-h-[360px] items-center justify-center overflow-hidden text-white sm:min-h-[420px] md:min-h-[480px] lg:min-h-[520px]"
+      style={{
+        backgroundImage: data?.backgroundImage
+          ? `url(${data.backgroundImage})`
+          : undefined,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
-      CSIR SMART VILLAGE MISSION
-    </span>
+      <div className="absolute inset-0 bg-[#061A33]/60" />
 
-    <h1
-      className="
-        text-4xl
-        md:text-6xl
-        font-bold
-        mt-4
-      "
-    >
-      {data?.heading}
-    </h1>
-
-    <p
-      className="
-        text-lg
-        md:text-xl
-        text-slate-200
-        mt-6
-        max-w-3xl
-        mx-auto
-        leading-relaxed
-      "
-    >
-      {data?.subHeading}
-    </p>
-  </div>
-</section>
+      <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
+        <h1 className="text-[30px] font-extrabold leading-tight tracking-[0.06em] text-white [text-shadow:0_3px_14px_rgba(0,0,0,0.5)] sm:text-[32px] md:text-[40px] lg:text-[56px] xl:text-[64px]">
+          CSIR SMART VILLAGE MISSION
+        </h1>
+      </div>
+    </section>
   );
 };
 

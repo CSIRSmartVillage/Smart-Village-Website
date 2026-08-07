@@ -264,11 +264,12 @@ const LaboratoryForm = ({
         }
       />
 
-      <input
+      <textarea
         name="address"
         placeholder="Address"
         value={formData.address}
         onChange={handleChange}
+        rows={4}
         className="w-full border p-3 rounded"
       />
 

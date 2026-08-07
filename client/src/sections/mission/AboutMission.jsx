@@ -6,10 +6,10 @@ const AboutMission = ({
 }) => {
   const {
     heading =
-      "About Smart Village Mission",
+      "About SMART Village Mission",
 
     description =
-      "The Smart Village Mission aims to transform rural communities through sustainable development, technology adoption, infrastructure improvement, and knowledge-based growth.",
+      "The SMART Village Mission aims to transform rural communities through sustainable development, technology adoption, infrastructure improvement, and knowledge-based growth.",
 
     features = [],
   } = data;

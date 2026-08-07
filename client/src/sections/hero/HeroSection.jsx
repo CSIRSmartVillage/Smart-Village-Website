@@ -10,7 +10,7 @@ import {
 
 const HeroSection = ({ data = {} }) => {
   const {
-    heading = "Smart Village Management Portal",
+    heading = "SMART Village Management Portal",
 
     subHeading =
       "Empowering Rural Communities Through Technology and Sustainable Development",
@@ -21,6 +21,11 @@ const HeroSection = ({ data = {} }) => {
 
     heroImages = [],
   } = data;
+
+  const displayHeading =
+    /^CSIR Smart Village$/i.test(heading)
+      ? "CSIR SMART Village"
+      : heading;
 
   /* --------------------------------------- */
 
@@ -195,7 +200,7 @@ backdrop-blur-[3px]
                 text-cyan-300
               "
             >
-              CSIR-CBRI, Roorkee
+              
             </p>
 
             <h1
@@ -206,7 +211,7 @@ backdrop-blur-[3px]
                 lg:text-4xl
               "
             >
-              {heading}
+              {displayHeading}
             </h1>
 
             <p

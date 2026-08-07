@@ -9,7 +9,7 @@ const MissionObjectives = ({
       "Mission Objectives",
 
     description =
-      "The Smart Village initiative focuses on sustainable, technology-driven development to improve quality of life, strengthen rural infrastructure, and empower communities.",
+      "The SMART Village initiative focuses on sustainable, technology-driven development to improve quality of life, strengthen rural infrastructure, and empower communities.",
 
     objectives = [],
   } = data;
@@ -21,7 +21,7 @@ const MissionObjectives = ({
         <div className="text-center mb-16">
 
           <span className="text-blue-700 font-semibold uppercase tracking-wider">
-            Smart Village Mission
+            SMART Village Mission
           </span>
 
           <h2 className="text-4xl font-bold text-slate-900 mt-3">

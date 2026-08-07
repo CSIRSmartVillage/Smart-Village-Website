@@ -1,6 +1,4 @@
-import {
-  Router,
-} from "express";
+import { Router } from "express";
 
 import * as controller
   from "./video.controller.js";
@@ -16,10 +14,7 @@ import {
 import verifyJWT
   from "../../middleware/auth.middleware.js";
 
-
-
-const router =
-  Router();
+const router = Router();
 
 /*
 |--------------------------------------------------------------------------
@@ -27,14 +22,9 @@ const router =
 |--------------------------------------------------------------------------
 */
 
-  router.get(
-  "/public",
-  controller.getPublicVideos
-);
-
 router.get(
   "/public",
-  controller.getActiveVideos
+  controller.getPublicVideos
 );
 
 /*

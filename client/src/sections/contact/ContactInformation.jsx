@@ -16,8 +16,8 @@ const ContactInformation = ({
     {
       icon: Mail,
       label: "Email",
-      value: data.email,
-      href: data.email ? `mailto:${data.email}` : null,
+      value: "csirsmartvillage@gmail.com",
+      href: "mailto:csirsmartvillage@gmail.com",
     },
     {
       icon: Phone,

@@ -9,6 +9,19 @@ const errorHandler = (
 ) => {
   let error = err;
 
+  if (
+    error?.name ===
+    "MulterError"
+  ) {
+    error = new ApiError(
+      400,
+      error.code ===
+        "LIMIT_FILE_SIZE"
+        ? "The selected file exceeds the upload size limit"
+        : error.message
+    );
+  }
+
   if (!(error instanceof ApiError)) {
     error = new ApiError(
       error.statusCode || 500,

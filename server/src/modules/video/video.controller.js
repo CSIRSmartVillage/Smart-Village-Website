@@ -7,39 +7,24 @@ import ApiResponse
 import asyncHandler
   from "../../utils/asyncHandler.js";
 
-  import Video from "../../models/Video.model.js";
-
-
-  export const getPublicVideos =
-  async (req, res, next) => {
-    try {
-
+export const getPublicVideos =
+  asyncHandler(
+    async (req, res) => {
       const videos =
-        await Video.find({
-          isActive: true,
-        })
-        .sort({
-          displayOrder: 1,
-        });
+        await videoService.getActiveVideos();
 
-      res.status(200).json({
-        success: true,
-        data: videos,
-      });
-
-    } catch (error) {
-      next(error);
+      return res.json(
+        new ApiResponse(
+          200,
+          videos
+        )
+      );
     }
-  };
-
+  );
 
 export const createVideo =
   asyncHandler(
-    async (
-      req,
-      res
-    ) => {
-
+    async (req, res) => {
       const video =
         await videoService.createVideo(
           req.body,
@@ -60,11 +45,7 @@ export const createVideo =
 
 export const getAllVideos =
   asyncHandler(
-    async (
-      req,
-      res
-    ) => {
-
+    async (req, res) => {
       const videos =
         await videoService.getAllVideos();
 
@@ -77,32 +58,9 @@ export const getAllVideos =
     }
   );
 
-export const getActiveVideos =
-  asyncHandler(
-    async (
-      req,
-      res
-    ) => {
-
-      const videos =
-        await videoService.getActiveVideos();
-
-      return res.json(
-        new ApiResponse(
-          200,
-          videos
-        )
-      );
-    }
-  );
-
 export const getVideoById =
   asyncHandler(
-    async (
-      req,
-      res
-    ) => {
-
+    async (req, res) => {
       const video =
         await videoService.getVideoById(
           req.params.id
@@ -119,11 +77,7 @@ export const getVideoById =
 
 export const updateVideo =
   asyncHandler(
-    async (
-      req,
-      res
-    ) => {
-
+    async (req, res) => {
       const video =
         await videoService.updateVideo(
           req.params.id,
@@ -142,11 +96,7 @@ export const updateVideo =
 
 export const deleteVideo =
   asyncHandler(
-    async (
-      req,
-      res
-    ) => {
-
+    async (req, res) => {
       await videoService.deleteVideo(
         req.params.id
       );

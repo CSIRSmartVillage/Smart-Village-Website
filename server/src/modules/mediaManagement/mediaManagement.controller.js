@@ -4,49 +4,17 @@ import * as mediaService
 import ApiResponse
   from "../../utils/ApiResponse.js";
 
-import {
-  uploadFile,
-  deleteFile,
-} from "../../services/s3.service.js";
-
 export const uploadMedia =
   async (req, res) => {
-
-    if (!req.file) {
-      throw new Error(
-        "No file uploaded"
-      );
-    }
-
-    const uploadResult =
-  await uploadFile({
-    file: req.file,
-    folder: "media",
-  });
-
-   const media =
-  await mediaService.createMedia({
-    filename:
-      uploadResult.filename,
-
-    originalName:
-      req.file.originalname,
-
-    url:
-      uploadResult.url,
-
-    publicId:
-      uploadResult.publicId,
-
-    resourceType:
-      uploadResult.resourceType,
-
-    mimeType:
-      uploadResult.mimeType,
-
-    size:
-      uploadResult.size,
-  });
+    const media =
+      await mediaService.uploadMedia({
+        file:
+          req.files?.file?.[0],
+        thumbnail:
+          req.files?.thumbnail?.[0],
+        uploadedBy:
+          req.admin?._id,
+      });
 
     return res.json(
       new ApiResponse(
@@ -56,11 +24,14 @@ export const uploadMedia =
       )
     );
   };
-    
+
 export const getAllMedia =
   async (req, res) => {
     const media =
-      await mediaService.getAllMedia();
+      await mediaService.getAllMedia({
+        mediaType:
+          req.query.type,
+      });
 
     return res.json(
       new ApiResponse(
@@ -105,22 +76,6 @@ export const createMedia =
 
 export const deleteMedia =
   async (req, res) => {
-
-    const media =
-      await mediaService.getMediaById(
-        req.params.id
-      );
-
-    if (!media) {
-      throw new Error(
-        "Media not found"
-      );
-    }
-
-   await deleteFile(
-  media.publicId
-);
-
     await mediaService.deleteMedia(
       req.params.id
     );

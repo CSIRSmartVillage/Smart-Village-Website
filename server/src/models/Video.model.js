@@ -9,9 +9,22 @@ const videoSchema =
         trim: true,
       },
 
+      media: {
+        type:
+          mongoose.Schema.Types.ObjectId,
+        ref: "Media",
+        default: null,
+      },
+
+      videoUrl: {
+        type: String,
+        default: "",
+        trim: true,
+      },
+
       youtubeUrl: {
         type: String,
-        required: true,
+        default: "",
         trim: true,
       },
 

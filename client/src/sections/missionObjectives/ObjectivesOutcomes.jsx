@@ -6,13 +6,13 @@ const ObjectivesOutcomes = ({
 
       <div className="max-w-6xl mx-auto px-6">
 
-        <div className="text-center mb-14">
+        <div className="text-center mb-16">
 
           <span
             className="
-              text-blue-600
+              text-blue-700
               uppercase
-              tracking-widest
+              tracking-wider
               font-semibold
             "
           >
@@ -23,6 +23,7 @@ const ObjectivesOutcomes = ({
             className="
               text-4xl
               font-bold
+              text-slate-900
               mt-3
             "
           >

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap");
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
@@ -67,6 +68,10 @@ html {
 
 .modal-panel-in {
   animation: modal-panel-in 200ms ease-out both;
+}
+
+.csr-announcement__text {
+  font-family: "Poppins", Arial, "Segoe UI", sans-serif;
 }
 
 @keyframes lab-marquee {

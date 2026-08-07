@@ -1,5 +1,10 @@
+import { Fragment } from "react";
+
 import HeroSection
   from "../../sections/hero/HeroSection";
+
+import CSRAnnouncement
+  from "../../sections/announcement/CSRAnnouncement";
 
 import ImpactStatistics
   from "../../sections/mission/ImpactStatistics";
@@ -98,14 +103,18 @@ const HomePageRenderer = ({
           ) {
             case "HERO":
               return (
-                <HeroSection
+                <Fragment
                   key={
                     section._id
                   }
-                  data={
-                    section.content
-                  }
-                />
+                >
+                  <HeroSection
+                    data={
+                      section.content
+                    }
+                  />
+                  <CSRAnnouncement />
+                </Fragment>
               );
 
                           case

@@ -10,7 +10,6 @@ import {
   ClipboardList,
   Cpu,
   Home,
-  MapPinned,
 } from "lucide-react";
 
 import { getHomeStats } from "../../services/home.service";
@@ -122,15 +121,9 @@ const ImpactStatistics = ({
         iconClass: "text-blue-700",
         iconBg: "bg-blue-50",
       },
+
       {
-        label: "States Covered",
-        value: homeStats?.statesCovered ?? 0,
-        icon: MapPinned,
-        iconClass: "text-emerald-700",
-        iconBg: "bg-emerald-50",
-      },
-      {
-        label: "Technologies Deployed",
+        label: "Technologies",
         value:
           homeStats?.technologiesDeployed ?? 0,
         icon: Cpu,
@@ -178,12 +171,12 @@ const ImpactStatistics = ({
 
           <SmartTextRenderer
             text={description}
-            className="mt-5 max-w-3xl text-blue-100 [&_*]:text-blue-100"
+            className="mt-5 mx-auto max-w-3xl text-center text-blue-100 [&_*]:text-center [&_*]:text-blue-100"
           />
 
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
 
           {stats.map(
             (stat, index) => (

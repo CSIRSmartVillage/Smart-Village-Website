@@ -39,9 +39,7 @@ const Footer = () => {
     setDeveloperIndex((current) =>
       current === null
         ? 0
-        : current === developerNames.length - 1
-          ? null
-          : current + 1
+        : (current + 1) % developerNames.length
     );
   };
 
@@ -355,11 +353,10 @@ const Footer = () => {
                 </p>
 
                 <a
-                  href={`mailto:${settings?.contactEmail}`}
+                  href="mailto:csirsmartvillage@gmail.com"
                   className="mt-1 block text-sm text-slate-600 hover:text-blue-700 transition"
                 >
-                  {settings?.contactEmail ||
-                    "smartvillage@cbri.res.in"}
+                  csirsmartvillage@gmail.com
                 </a>
 
               </div>
@@ -480,7 +477,7 @@ const Footer = () => {
             <p className="text-sm text-slate-600">
 
               {settings?.copyrightText ||
-                `© ${new Date().getFullYear()} Smart Village Management Portal. All Rights Reserved.`}
+                `© ${new Date().getFullYear()} SMART Village Management Portal. All Rights Reserved.`}
 
             </p>
 
@@ -489,7 +486,7 @@ const Footer = () => {
               Developed under the{" "}
 
               <span className="font-semibold text-blue-700">
-                CSIR Smart Village Initiative
+                CSIR SMART Village Initiative
               </span>
 
             </p>
@@ -497,13 +494,13 @@ const Footer = () => {
             <p className="mt-2 text-xs leading-5 text-slate-500">
               Developed By{" "}
               <span className="font-semibold text-slate-700">
-                Dr. Kishor Kulkarni
+                Dr. Kishor
               </span>
               {" "}and{" "}
               <button
                 type="button"
                 onClick={handleTeamClick}
-                className="font-semibold text-slate-700 transition hover:text-slate-900"
+                className="font-semibold text-blue-700 underline decoration-blue-200 underline-offset-4 transition hover:text-blue-900 hover:decoration-blue-500"
               >
                 Team
               </button>

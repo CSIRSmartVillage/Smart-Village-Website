@@ -1,5 +1,4 @@
-import { Router }
-  from "express";
+import { Router } from "express";
 
 import * as mediaController
   from "./mediaManagement.controller.js";
@@ -7,7 +6,12 @@ import * as mediaController
 import upload
   from "../../middleware/upload.middleware.js";
 
+import verifyJWT
+  from "../../middleware/auth.middleware.js";
+
 const router = Router();
+
+router.use(verifyJWT);
 
 router.get(
   "/",
@@ -21,7 +25,16 @@ router.get(
 
 router.post(
   "/upload",
-  upload.single("file"),
+  upload.fields([
+    {
+      name: "file",
+      maxCount: 1,
+    },
+    {
+      name: "thumbnail",
+      maxCount: 1,
+    },
+  ]),
   mediaController.uploadMedia
 );
 

@@ -2,6 +2,9 @@ import Village from "../../models/Village.model.js";
 import State from "../../models/State.model.js";
 import ApiError from "../../utils/ApiError.js";
 
+const escapeRegex = (value = "") =>
+  value.replace(/[.*+?^$(){}|[\]\\]/g, "\\$&");
+
 /*
 =====================================
 Create Village
@@ -16,7 +19,12 @@ export const createVillage = async (
     $or: [
       { slug: payload.slug },
       { villageCode: payload.villageCode },
-      { "name.en": payload.name.en },
+      {
+        "name.en": {
+          $regex: "^" + escapeRegex(payload.name.en.trim()) + "$",
+          $options: "i",
+        },
+      },
     ],
   });
 
@@ -178,20 +186,29 @@ export const updateVillage =
       payload.villageCode ||
       payload.name?.en
     ) {
+      const duplicateConditions = [];
+
+      if (payload.slug) {
+        duplicateConditions.push({ slug: payload.slug });
+      }
+      if (payload.villageCode) {
+        duplicateConditions.push({
+          villageCode: payload.villageCode,
+        });
+      }
+      if (payload.name?.en) {
+        duplicateConditions.push({
+          "name.en": {
+            $regex: "^" + escapeRegex(payload.name.en.trim()) + "$",
+            $options: "i",
+          },
+        });
+      }
+
       const duplicate =
         await Village.findOne({
           _id: { $ne: id },
-          $or: [
-            { slug: payload.slug },
-            {
-              villageCode:
-                payload.villageCode,
-            },
-            {
-              "name.en":
-                payload.name?.en,
-            },
-          ],
+          $or: duplicateConditions,
         });
 
       if (duplicate) {
