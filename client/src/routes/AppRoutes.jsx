@@ -80,6 +80,9 @@ const ContactPage = lazy(() =>
   import("../pages/ContactPage/ContactPage")
 );
 
+const SupportersPage = lazy(() =>
+  import("../pages/SupportersPage/SupportersPage")
+);
 const AnnouncementDetailPage = lazy(() =>
   import(
     "../pages/AnnouncementPage/AnnouncementDetailPage"
@@ -239,6 +242,12 @@ const AppRoutes = () => {
         element={<SuccessStoryDetailPage />}
       />
 
+      {/* Our Supporters */}
+
+      <Route
+        path="/our-supporters"
+        element={<SupportersPage />}
+      />
       {/* Contact */}
 
       <Route

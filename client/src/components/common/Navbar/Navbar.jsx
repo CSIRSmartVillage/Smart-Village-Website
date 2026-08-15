@@ -32,12 +32,28 @@ const Navbar = () => {
   const [mobileVillagesLoading, setMobileVillagesLoading] =
     useState(false);
 
-  const parentItems = items.filter(
+  const hasSupportersItem = items.some(
+    (item) => item.path === "/our-supporters"
+  );
+
+  const navigationItems = hasSupportersItem
+    ? items
+    : [
+        ...items,
+        {
+          _id: "our-supporters-navigation",
+          label: "Our Supporters",
+          path: "/our-supporters",
+          parentId: null,
+        },
+      ];
+
+  const parentItems = navigationItems.filter(
     (item) => !item.parentId
   );
 
   const getChildren = (parentId) =>
-    items.filter(
+    navigationItems.filter(
       (item) => item.parentId === parentId
     );
 

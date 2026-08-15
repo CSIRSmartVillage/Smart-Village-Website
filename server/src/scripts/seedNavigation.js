@@ -138,12 +138,24 @@ const csirLabs =
 
       await Navigation.create({
         label:
+          "Our Supporters",
+
+        path:
+          "/our-supporters",
+
+        order: 7,
+
+        menuType:
+          "INTERNAL",
+      });
+      await Navigation.create({
+        label:
           "Contact Us",
 
         path:
           "/contact",
 
-        order: 7,
+        order: 8,
 
         menuType:
           "INTERNAL",

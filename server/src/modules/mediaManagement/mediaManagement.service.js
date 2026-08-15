@@ -4,6 +4,9 @@ import Media
 import Video
   from "../../models/Video.model.js";
 
+import Supporter
+  from "../supporter/supporter.model.js";
+
 import {
   deleteFile,
   uploadFile,
@@ -168,6 +171,19 @@ export const deleteMedia =
       throw new ApiError(
         409,
         "This video is in use. Delete its Website Content video record before removing it from the Media Library."
+      );
+    }
+
+    const isUsedBySupporter =
+      await Supporter.exists({
+        "logo.publicId": media.publicId,
+        isDeleted: false,
+      });
+
+    if (isUsedBySupporter) {
+      throw new ApiError(
+        409,
+        "This image is in use by a supporter. Update or delete the supporter before removing it from the Media Library."
       );
     }
 

@@ -55,6 +55,7 @@
 
   import policiesSchemeRoutes from "../modules/policiesSchemes/policiesScheme.routes.js";
   import selfHelpGroupRoutes from "../modules/selfHelpGroup/selfHelpGroup.routes.js";
+  import supporterRoutes from "../modules/supporter/supporter.routes.js";
   import {
   publicCache,
 } from "../middleware/cache.middleware.js";
@@ -201,6 +202,10 @@ router.use(
   selfHelpGroupRoutes
 );
 
+router.use(
+  "/supporters",
+  supporterRoutes
+);
 router.use(
   "/admin/pages",
   adminLimiter,

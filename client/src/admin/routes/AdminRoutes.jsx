@@ -56,6 +56,9 @@ const VillageLocationsPage = lazy(() => import("../pages/VillageLocationsPage"))
 const CreateVillageLocationPage = lazy(() => import("../pages/CreateVillageLocationPage"));
 const EditVillageLocationPage = lazy(() => import("../pages/EditVillageLocationPage"));
 const SurveyManagementPage = lazy(() => import("../pages/SurveyManagementPage"));
+const SupportersPage = lazy(() => import("../pages/SupportersPage"));
+const CreateSupporterPage = lazy(() => import("../pages/CreateSupporterPage"));
+const EditSupporterPage = lazy(() => import("../pages/EditSupporterPage"));
 const ProtectedRoute = ({
   children,
 }) => {
@@ -375,6 +378,20 @@ const AdminRoutes = () => {
   }
 />
 
+<Route
+  path="supporters"
+  element={<SupportersPage />}
+/>
+
+<Route
+  path="supporters/create"
+  element={<CreateSupporterPage />}
+/>
+
+<Route
+  path="supporters/:id/edit"
+  element={<EditSupporterPage />}
+/>
 <Route
   path="*"
   element={
