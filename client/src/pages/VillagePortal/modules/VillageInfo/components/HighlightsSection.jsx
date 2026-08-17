@@ -62,7 +62,11 @@ const HighlightCard = ({ event }) => {
   const title = event.title || "Village Highlight";
   const summary = event.summary || "No description available.";
   const badge =
-    event.type === "ACHIEVEMENT" ? "Achievement" : "Event";
+    {
+      EVENT: "Event",
+      ACHIEVEMENT: "Achievement",
+      VISIT: "Visit",
+    }[event.type] || "Event";
   const villageSlug = event.village?.slug;
   const href = villageSlug
     ? `/village/${villageSlug}/events/${event.slug}`

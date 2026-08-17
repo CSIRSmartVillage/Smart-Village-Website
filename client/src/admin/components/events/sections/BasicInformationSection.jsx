@@ -50,6 +50,10 @@ const BasicInformationSection = () => {
               label: "Achievement",
               value: "ACHIEVEMENT",
             },
+            {
+              label: "Visit",
+              value: "VISIT",
+            },
           ]}
         />
 

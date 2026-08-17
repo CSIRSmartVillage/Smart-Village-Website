@@ -64,6 +64,7 @@ const EventFilters = ({
           <option value="ACHIEVEMENT">
             Achievement
           </option>
+          <option value="VISIT">Visit</option>
         </select>
 
         {/* Status */}

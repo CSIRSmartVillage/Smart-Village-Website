@@ -7,7 +7,7 @@ export const eventFormSchema = z.object({
     .min(3, "Title must be at least 3 characters.")
     .max(200, "Title cannot exceed 200 characters."),
 
-  type: z.enum(["EVENT", "ACHIEVEMENT"], {
+  type: z.enum(["EVENT", "ACHIEVEMENT", "VISIT"], {
     error: "Please select an event type.",
   }),
 

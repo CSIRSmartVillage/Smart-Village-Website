@@ -1,6 +1,7 @@
 export const EVENT_TYPES = {
   EVENT: "EVENT",
   ACHIEVEMENT: "ACHIEVEMENT",
+  VISIT: "VISIT",
 };
 
 export const EVENT_STATUS = {

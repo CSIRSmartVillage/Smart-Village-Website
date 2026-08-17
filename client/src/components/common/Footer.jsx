@@ -33,6 +33,8 @@ const Footer = () => {
     "Milan Chauhan",
     "Shagun Tyagi",
     "Jha Aman Prem",
+    "Pradeep Rawat",
+    "Akash Pandey",
   ];
 
   const handleTeamClick = () => {
