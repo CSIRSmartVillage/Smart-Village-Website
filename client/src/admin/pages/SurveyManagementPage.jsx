@@ -27,7 +27,8 @@ const SurveyManagementPage = () => {
   const [filteredVillages, setFilteredVillages] = useState([]);
   const [villageId, setVillageId] = useState("");
   const [deferredVillageId, setDeferredVillageId] = useState("");
-  const [year, setYear] = useState("");
+  const [surveyTitle, setSurveyTitle] = useState("");
+  const [replacementSurveyId, setReplacementSurveyId] = useState("");
   const [file, setFile] = useState(null);
   const [saving, setSaving] = useState(false);
   const [history, setHistory] = useState([]);
@@ -73,19 +74,22 @@ const SurveyManagementPage = () => {
 
   const submit = async (event) => {
     event.preventDefault();
-    if (!selectedStateId || !villageId || !year || !file) {
-      return toast.error("Choose state, village, year, and workbook.");
+    if (!selectedStateId || !villageId || !surveyTitle.trim() || !file) {
+      return toast.error("Choose state, village, survey title, and workbook.");
     }
 
     setSaving(true);
     try {
       const data = new FormData();
       data.append("villageId", villageId);
-      data.append("surveyYear", year);
+      data.append("surveyTitle", surveyTitle.trim());
+      if (replacementSurveyId) data.append("surveyId", replacementSurveyId);
       data.append("file", file);
       await uploadSurvey(data);
       toast.success("Survey processed and saved.");
       setFile(null);
+      setSurveyTitle("");
+      setReplacementSurveyId("");
       event.target.reset();
       loadHistory();
     } catch (error) {
@@ -121,7 +125,11 @@ const SurveyManagementPage = () => {
   const handleReplace = (survey) => {
     setSelectedStateId(survey.state?._id || survey.state);
     setDeferredVillageId(survey.village?._id || survey.village);
-    setYear(survey.surveyYear);
+    setSurveyTitle(
+      survey.surveyTitle ||
+        (survey.surveyYear ? `Survey ${survey.surveyYear}` : "Untitled Survey")
+    );
+    setReplacementSurveyId(survey._id);
     toast.success("Form populated to replace survey. Select a new Excel file.");
   };
 
@@ -148,7 +156,7 @@ const SurveyManagementPage = () => {
   const renderActions = (survey) => (
     <>
       <a
-        href={`/village/${survey.village?.slug}/indicators?year=${survey.surveyYear}`}
+        href={`/village/${survey.village?.slug}/indicators?survey=${survey._id}`}
         target="_blank"
         rel="noreferrer"
         className={`${actionClass} bg-blue-50 text-blue-700 hover:bg-blue-100`}
@@ -237,7 +245,7 @@ const SurveyManagementPage = () => {
                 Upload Workbook
               </h2>
               <p className="mt-1 text-sm leading-6 text-slate-600">
-                Select a state, village, survey year, and .xlsx file.
+                Select a state, village, survey title, and .xlsx file.
               </p>
             </div>
           </div>
@@ -281,16 +289,15 @@ const SurveyManagementPage = () => {
             </label>
 
             <label className="block text-sm font-semibold text-slate-700">
-              Survey year
+              Survey Title
               <input
                 required
-                type="number"
-                min="1900"
-                max="3000"
-                value={year}
-                onChange={(event) => setYear(event.target.value)}
+                type="text"
+                maxLength={200}
+                value={surveyTitle}
+                onChange={(event) => setSurveyTitle(event.target.value)}
                 className={fieldClass}
-                placeholder="2026"
+                placeholder="Household Survey 2026"
               />
             </label>
 
@@ -363,10 +370,10 @@ const SurveyManagementPage = () => {
                   <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
                     <div className="rounded-lg bg-slate-50 p-3">
                       <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                        Year
+                        Survey Title
                       </p>
                       <p className="mt-1 font-semibold text-slate-800">
-                        {survey.surveyYear}
+                        {survey.surveyTitle}
                       </p>
                     </div>
                     <div className="rounded-lg bg-slate-50 p-3">
@@ -393,7 +400,7 @@ const SurveyManagementPage = () => {
                 <tr className="border-b border-slate-100 bg-slate-50 font-semibold text-slate-500">
                   <th className="px-6 py-3.5">Village</th>
                   <th className="px-6 py-3.5">State</th>
-                  <th className="px-6 py-3.5">Survey Year</th>
+                  <th className="px-6 py-3.5">Survey Title</th>
                   <th className="px-6 py-3.5">Upload Date</th>
                   <th className="px-6 py-3.5">Status</th>
                   <th className="px-6 py-3.5 text-right">Actions</th>
@@ -424,7 +431,7 @@ const SurveyManagementPage = () => {
                       <td className="px-6 py-4 text-slate-600">
                         <span className="inline-flex items-center gap-1.5">
                           <CalendarDays size={14} />
-                          {survey.surveyYear}
+                          {survey.surveyTitle}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-slate-500">

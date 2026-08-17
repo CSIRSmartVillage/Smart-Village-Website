@@ -19,7 +19,7 @@ const run = async () => {
   const Survey = mongoose.model("Survey");
   
   // Find the uploaded survey file
-  const survey = await Survey.findOne({ surveyYear: 2026 }).sort({ updatedAt: -1 });
+  const survey = await Survey.findOne().sort({ updatedAt: -1 });
   if (!survey) {
     console.error("No survey found!");
     process.exit(1);

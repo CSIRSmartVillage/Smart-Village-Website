@@ -4,7 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LabelList,
   PieChart, Pie, Cell, ResponsiveContainer
 } from "recharts";
-import { getSurvey, getSurveyYears } from "../../../../services/survey.service";
+import { getSurvey, getSurveyOptions } from "../../../../services/survey.service";
 
 /* ─── Palette ─── */
 const PAL = [
@@ -320,65 +320,89 @@ const ChartCard = ({ cat, idx, populationSummary }) => {
   return                              <VBar       data={data} color={color} />;
 };
 
-/* ─── Year Selector ─── */
-const YBtn = ({ year, active, onClick }) => (
+/* ─── Survey Selector ─── */
+const SurveyButton = ({ survey, active, onClick }) => (
   <button onClick={onClick} style={{
     padding:"9px 22px", borderRadius:10, fontSize:15,
     fontWeight: active ? 700 : 500, cursor:"pointer", border:"none",
     background: active ? "#2563eb" : "transparent",
     color: active ? "#fff" : "#475569", transition:"all .2s"
   }}>
-    {year}
+    {survey.surveyTitle}
   </button>
 );
 
 /* ═══════════════════ Main Page ═══════════════════ */
 const IndicatorsPage = () => {
   const { village } = useOutletContext();
-  const [sp, setSp]           = useSearchParams();
-  const [years, setYears]     = useState([]);
-  const [selYear, setSelYear] = useState(null);
-  const [survey, setSurvey]   = useState(null);
-  const [err, setErr]         = useState("");
+  const [sp, setSp] = useSearchParams();
+  const [surveys, setSurveys] = useState([]);
+  const [selectedSurveyId, setSelectedSurveyId] = useState(null);
+  const [survey, setSurvey] = useState(null);
+  const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
 
   const sid = village?.state?._id || village?.state;
-  const qy  = Number(sp.get("year"));
+  const querySurveyId = sp.get("survey");
+  const legacyYear = Number(sp.get("year"));
 
   useEffect(() => {
     if (!sid || !village?._id) return;
     let dead = false;
-    getSurveyYears(sid, village._id)
+
+    getSurveyOptions(sid, village._id)
       .then(items => {
         if (dead) return;
-        setYears(items);
+        setSurveys(items);
+
         if (items.length) {
-          const pick = items.includes(qy) ? qy : items[0];
-          setSelYear(pick);
-          if (pick !== qy) setSp({ year: String(pick) }, { replace: true });
+          const selected =
+            items.find(item => String(item._id) === querySurveyId) ||
+            items.find(item => item.surveyYear === legacyYear) ||
+            items[0];
+
+          const id = String(selected._id);
+          setSelectedSurveyId(id);
+          if (id !== querySurveyId) {
+            setSp({ survey: id }, { replace: true });
+          }
         }
       })
-      .catch(() => { if (!dead) setErr("Development indicator surveys are not available yet."); });
+      .catch(() => {
+        if (!dead) setErr("Development indicator surveys are not available yet.");
+      });
+
     return () => { dead = true; };
   }, [sid, village?._id]);
 
   useEffect(() => {
-    if (!selYear || !sid || !village?._id) return;
+    if (!selectedSurveyId || !sid || !village?._id) return;
     let dead = false;
-    setLoading(true); setErr(""); setSurvey(null);
-    getSurvey(sid, village._id, selYear)
-      .then(d  => { if (!dead) setSurvey(d); })
+    setLoading(true);
+    setErr("");
+    setSurvey(null);
+
+    getSurvey(sid, village._id, selectedSurveyId)
+      .then(data => { if (!dead) setSurvey(data); })
       .catch(() => { if (!dead) setErr("Unable to load the selected survey."); })
       .finally(() => { if (!dead) setLoading(false); });
+
     return () => { dead = true; };
-  }, [sid, village?._id, selYear]);
+  }, [sid, village?._id, selectedSurveyId]);
 
-  const onYear = y => { setSelYear(y); setSp({ year: String(y) }, { replace: true }); };
+  const onSurvey = (id) => {
+    const value = String(id);
+    setSelectedSurveyId(value);
+    setSp({ survey: value }, { replace: true });
+  };
 
+  const selectedSurvey = surveys.find(
+    item => String(item._id) === selectedSurveyId
+  );
   const categories = buildAnalytics(survey?.processedData);
   const myScoreValue = survey?.processedData?.summary?.myScore;
 
-  if (err && !years.length) return (
+  if (err && !surveys.length) return (
     <div style={{borderRadius:20, border:"1px solid #e2e8f0", background:"#fff",
       padding:40, textAlign:"center", color:"#64748b"}}>
       <p style={{fontSize:20, fontWeight:600}}>{err}</p>
@@ -400,10 +424,17 @@ const IndicatorsPage = () => {
             Analytics from the uploaded Household Survey — {village?.name?.en || "Village"}
           </p>
         </div>
-        {years.length > 0 && (
+        {surveys.length > 0 && (
           <div style={{display:"flex", flexWrap:"wrap", gap:6,
             background:"#f1f5f9", borderRadius:14, padding:"6px 8px"}}>
-            {years.map(y => <YBtn key={y} year={y} active={selYear===y} onClick={()=>onYear(y)} />)}
+            {surveys.map(item => (
+              <SurveyButton
+                key={item._id}
+                survey={item}
+                active={String(item._id) === selectedSurveyId}
+                onClick={() => onSurvey(item._id)}
+              />
+            ))}
           </div>
         )}
       </div>
@@ -433,7 +464,7 @@ const IndicatorsPage = () => {
             { bg:"#eff6ff", color:"#2563eb", text:`📊 ${categories.length} Categories` },
             { bg:"#f0fdf4", color:"#16a34a",
               text:`📋 ${categories.reduce((s,c)=>s+(c.graphData||[]).length,0)} Parameters` },
-            { bg:"#f5f3ff", color:"#7c3aed", text:`📅 Survey Year: ${selYear}` },
+            { bg:"#f5f3ff", color:"#7c3aed", text:`📋 Survey: ${selectedSurvey?.surveyTitle || survey?.surveyTitle || "Untitled Survey"}` },
           ].map(({bg,color,text}) => (
             <div key={text} style={{background:bg, borderRadius:10, padding:"8px 20px",
               fontSize:15, color, fontWeight:600}}>{text}</div>
@@ -452,10 +483,10 @@ const IndicatorsPage = () => {
       )}
 
       {/* No data */}
-      {!loading && !err && categories.length === 0 && years.length > 0 && (
+      {!loading && !err && categories.length === 0 && surveys.length > 0 && (
         <div style={{borderRadius:20, border:"1px solid #e2e8f0", background:"#fff",
           padding:40, textAlign:"center", color:"#64748b"}}>
-          <p style={{fontSize:20, fontWeight:600}}>No data available for {selYear}.</p>
+          <p style={{fontSize:20, fontWeight:600}}>No data available for {selectedSurvey?.surveyTitle || "this survey"}.</p>
           <p style={{fontSize:15, marginTop:6}}>
             Re-upload the Household Survey Excel in the admin panel.
           </p>

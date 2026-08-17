@@ -32,32 +32,64 @@ jobs:
             git reset --hard origin/main
             git clean -fd
 
-            echo "Backend"
+            # -----------------------------------------------------------
+            # Ensure server/.env has NODE_ENV=production.
+            # The file is gitignored so it lives only on this server.
+            # This sed command is idempotent: it replaces the existing
+            # NODE_ENV line (whatever its current value is) with the
+            # correct production value.
+            # -----------------------------------------------------------
+            echo "Ensuring NODE_ENV=production in server/.env..."
+            if [ -f server/.env ]; then
+              sed -i 's/^NODE_ENV=.*/NODE_ENV=production/' server/.env
+            fi
 
+            # -----------------------------------------------------------
+            # Backend
+            # -----------------------------------------------------------
+            echo "Installing backend dependencies..."
             cd server
-
             npm ci
 
-            pm2 restart smart-village-api
+            echo "Restarting backend with PM2 ecosystem config..."
+            pm2 restart ecosystem.config.cjs --update-env \
+              || pm2 start ecosystem.config.cjs
+
+            echo "Waiting for backend to be ready..."
+            sleep 4
+            curl -sf http://127.0.0.1:5000/api/health \
+              || { pm2 logs smart-village-api --lines 50 --nostream; exit 1; }
+            echo "Backend health check passed."
 
             cd ..
 
-            echo "Frontend"
-
+            # -----------------------------------------------------------
+            # Frontend
+            # -----------------------------------------------------------
+            echo "Building frontend..."
             cd client
-
             npm install
-
             npm run build
 
-            echo "Updating Nginx files..."
-
+            echo "Updating Nginx static files..."
             sudo rm -rf /var/www/html/*
             sudo cp -r dist/* /var/www/html/
 
-            echo "Reloading Nginx..."
-
+            echo "Reloading Nginx after frontend update..."
             sudo systemctl reload nginx
+
+            cd ..
+
+            # -----------------------------------------------------------
+            # Final smoke-test: hit the public HTTPS API to confirm that
+            # DNS, TLS, Nginx and the backend are all working together.
+            # -----------------------------------------------------------
+            echo "Running API smoke-test through public HTTPS..."
+            curl -sf https://csirsmartvillage.in/api/health \
+              || { echo "API unreachable through Nginx!"; sudo nginx -T; pm2 logs smart-village-api --lines 50 --nostream; exit 1; }
+            echo "Smoke-test passed — API is reachable through Nginx."
+
+            pm2 save
 
             echo "==============================="
             echo "Deployment Successful"

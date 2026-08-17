@@ -140,10 +140,13 @@ Location
 client/.env
 ```
 
-Current
+For the EC2 deployment, the checked-in production build uses the same-origin
+/api base and the Nginx reverse proxy forwards it to Express. If the frontend
+is hosted separately (for example, Vercel), set VITE_API_URL to the complete
+backend URL instead:
 
 ```
-VITE_API_URL=http://<EC2_PUBLIC_IP>/api
+VITE_API_URL=https://your-backend-domain.example/api
 ```
 
 After domain & HTTPS
@@ -209,6 +212,17 @@ pm2 startup
 ---
 
 # Nginx
+
+Use the repository configuration at `deployment/nginx.smart-village.conf` as the
+server block for the EC2 frontend. It is important that `/api/` is proxied to
+Express before the React SPA fallback; otherwise API requests receive
+`index.html` and the browser reports a failed fetch or JSON parse error.
+
+```bash
+sudo cp deployment/nginx.smart-village.conf /etc/nginx/sites-available/default
+sudo nginx -t
+sudo systemctl reload nginx
+```
 
 Test Configuration
 

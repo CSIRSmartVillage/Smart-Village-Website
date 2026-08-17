@@ -15,6 +15,8 @@ router.post("/admin/survey", verifyJWT, authorize("SUPER_ADMIN"), upload.single(
 router.get("/admin/surveys", verifyJWT, authorize("SUPER_ADMIN"), controller.getSurveyHistory);
 router.patch("/admin/surveys/:id/publication", verifyJWT, authorize("SUPER_ADMIN"), controller.updatePublication);
 router.delete("/admin/surveys/:id", verifyJWT, authorize("SUPER_ADMIN"), controller.removeSurvey);
+router.get("/states/:stateId/villages/:villageId/survey-options", controller.getSurveyOptions);
+router.get("/states/:stateId/villages/:villageId/surveys/by-id/:surveyId", controller.getSurveyById);
 router.get("/states/:stateId/villages/:villageId/surveys", controller.getSurveyYears);
 router.get("/states/:stateId/villages/:villageId/surveys/:year", controller.getSurveyByYear);
 

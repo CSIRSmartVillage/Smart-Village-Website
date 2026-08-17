@@ -10,9 +10,9 @@ const run = async () => {
     console.error("Village kusunpur not found!");
     process.exit(1);
   }
-  const survey = await Survey.findOne({ village: village._id, surveyYear: 2026 });
+  const survey = await Survey.findOne({ village: village._id }).sort({ updatedAt: -1 });
   if (!survey) {
-    console.error("Survey not found for kusunpur 2026!");
+    console.error("Survey not found for kusunpur!");
     process.exit(1);
   }
   console.log("Survey database document found!");

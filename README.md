@@ -614,7 +614,7 @@ CLIENT_URL=http://localhost:5173
 ### Client (`client/.env`)
 
 ```env
-VITE_API_BASE_URL=http://localhost:5000/api
+VITE_API_URL=http://localhost:5000/api
 ```
 
 ---
@@ -730,7 +730,7 @@ The server includes **28 database seed scripts** to bootstrap content:
 
 ### Frontend — Vercel
 
-The `client/vercel.json` configures SPA rewrites:
+The `client/vercel.json` configures SPA rewrites. When the frontend is deployed on Vercel, `VITE_API_URL` must be the full URL of the separately deployed Express API; do not use `/api` unless your hosting platform is proxying that path to the backend.
 
 ```json
 {
@@ -743,7 +743,7 @@ The `client/vercel.json` configures SPA rewrites:
 **Deploy steps:**
 1. Connect your GitHub repo to Vercel (https://vercel.com)
 2. Set **Root Directory** to `client`
-3. Add environment variable: `VITE_API_BASE_URL=https://your-backend.com/api`
+3. Add environment variable: `VITE_API_URL=https://your-backend.com/api` (the deployed Express API, including `/api`)
 4. Deploy
 
 ### Backend — Railway / Render / VPS

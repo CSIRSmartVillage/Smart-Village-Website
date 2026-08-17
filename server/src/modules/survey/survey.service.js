@@ -22,48 +22,96 @@ const processWorkbook = async (file) => {
   } finally { await fs.unlink(temp).catch(() => undefined); }
 };
 
-export const createSurvey = async ({ villageId, surveyYear, file, adminId }) => {
+const displayTitle = (survey) =>
+  survey.surveyTitle || (survey.surveyYear ? `Survey ${survey.surveyYear}` : "Untitled Survey");
+
+export const createSurvey = async ({ villageId, surveyTitle, surveyId, file, adminId }) => {
   const village = await Village.findById(villageId);
   if (!village) throw new ApiError(404, "Village not found.");
 
-  // Persist workbook locally so Delete can remove the Excel file.
   const uploadDir = path.resolve("uploads/surveys");
   await fs.mkdir(uploadDir, { recursive: true });
 
-  const storedName = `${villageId}-${surveyYear}-${randomUUID()}.xlsx`;
+  const storedName = `${villageId}-${randomUUID()}.xlsx`;
   const uploadedFilePath = path.join(uploadDir, storedName);
   await fs.writeFile(uploadedFilePath, file.buffer);
 
   const processedData = await processWorkbook(file);
+  const surveyData = {
+    state: village.state,
+    village: village._id,
+    surveyTitle,
+    file: { originalName: file.originalname, mimeType: file.mimetype, size: file.size },
+    uploadedFilePath,
+    processedData,
+    uploadedBy: adminId,
+    isPublished: true,
+  };
 
-  return Survey.findOneAndUpdate(
-    { village: village._id, surveyYear },
-    {
-      state: village.state,
-      village: village._id,
-      surveyYear,
-      file: { originalName: file.originalname, mimeType: file.mimetype, size: file.size },
-      uploadedFilePath,
-      processedData,
-      uploadedBy: adminId,
-      isPublished: true,
-    },
-    { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true }
-  );
+  if (surveyId) {
+    const survey = await Survey.findOneAndUpdate(
+      { _id: surveyId, village: village._id },
+      surveyData,
+      { new: true, runValidators: true }
+    );
+    if (!survey) throw new ApiError(404, "Survey to replace was not found.");
+    return survey;
+  }
+
+  return Survey.create(surveyData);
 };
 
-export const getSurveyYears = async (state, village) => (await Survey.find({ state, village, isPublished: true }).sort({ surveyYear: -1 }).select("surveyYear -_id")).map(x => x.surveyYear);
+export const getSurveyOptions = async (state, village) => {
+  const surveys = await Survey.find({ state, village, isPublished: true })
+    .sort({ updatedAt: -1 })
+    .select("surveyTitle surveyYear updatedAt");
+
+  return surveys.map((survey) => ({
+    _id: survey._id,
+    surveyTitle: displayTitle(survey),
+    surveyYear: survey.surveyYear,
+    updatedAt: survey.updatedAt,
+  }));
+};
+
+export const getSurveyById = async (state, village, surveyId) => {
+  const survey = await Survey.findOne({ _id: surveyId, state, village, isPublished: true })
+    .select("surveyTitle surveyYear processedData updatedAt");
+  if (!survey) throw new ApiError(404, "Survey not found.");
+  return survey;
+};
+
+export const getSurveyYears = async (state, village) => {
+  const years = await Survey.distinct("surveyYear", {
+    state,
+    village,
+    isPublished: true,
+    surveyYear: { $exists: true },
+  });
+  return years.sort((a, b) => b - a);
+};
+
 export const getSurveyByYear = async (state, village, surveyYear) => {
-  const survey = await Survey.findOne({ state, village, surveyYear, isPublished: true }).select("surveyYear processedData updatedAt");
+  const survey = await Survey.findOne({ state, village, surveyYear, isPublished: true })
+    .sort({ updatedAt: -1 })
+    .select("surveyTitle surveyYear processedData updatedAt");
   if (!survey) throw new ApiError(404, "No survey exists for this village and year.");
   return survey;
 };
 
-export const getSurveyHistory = async () => Survey.find()
-  .populate("village", "name slug")
-  .populate("state", "name slug")
-  .sort({ updatedAt: -1 })
-  .select("surveyYear file isPublished village state createdAt updatedAt");
+export const getSurveyHistory = async () => {
+  const surveys = await Survey.find()
+    .populate("village", "name slug")
+    .populate("state", "name slug")
+    .sort({ updatedAt: -1 })
+    .select("surveyTitle surveyYear file isPublished village state createdAt updatedAt");
+
+  return surveys.map((survey) => {
+    const item = survey.toObject();
+    item.surveyTitle = displayTitle(survey);
+    return item;
+  });
+};
 
 export const setSurveyPublication = async (id, isPublished) => {
   const survey = await Survey.findByIdAndUpdate(id, { isPublished }, { new: true });
@@ -78,8 +126,8 @@ export const deleteSurvey = async (id) => {
   if (survey.uploadedFilePath) {
     try {
       await fs.unlink(path.resolve(survey.uploadedFilePath));
-    } catch (e) {
-      // ignore if already missing
+    } catch {
+      // Ignore a missing legacy workbook; the database record is already removed.
     }
   }
 };
