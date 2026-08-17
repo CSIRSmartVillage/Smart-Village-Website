@@ -11,12 +11,17 @@ import {
   Plus,
   Route,
   Search,
+  Trash2,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import AddVillageModal from "../components/villages/AddVillageModal";
 import { getAllStates } from "../services/state.service";
-import { getAllVillages } from "../services/village.service";
+import {
+  deleteVillage,
+  getAllVillages,
+} from "../services/village.service";
+import { getAllVillageProfiles } from "../services/villageProfile.service";
 
 const moduleCards = [
   {
@@ -71,6 +76,7 @@ const moduleCards = [
 ];
 
 export default function SmartVillageDashboard() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [showAddVillage, setShowAddVillage] = useState(false);
   const [search, setSearch] = useState("");
@@ -109,6 +115,48 @@ export default function SmartVillageDashboard() {
     queryClient.invalidateQueries({ queryKey: ["villages"] });
     queryClient.invalidateQueries({ queryKey: ["admin-village-profiles"] });
     queryClient.invalidateQueries({ queryKey: ["admin-village-locations"] });
+  };
+
+  const handleManageModules = async (village) => {
+    try {
+      const profiles = await queryClient.fetchQuery({
+        queryKey: ["admin-village-profiles"],
+        queryFn: getAllVillageProfiles,
+      });
+      const profile = profiles.find(
+        (item) => (item.village?._id || item.village) === village._id
+      );
+
+      if (!profile) {
+        window.alert("Village profile not found.");
+        return;
+      }
+
+      navigate(`/admin/village-profiles/${profile._id}/edit`);
+    } catch (error) {
+      window.alert(
+        error.response?.data?.message || "Unable to open the village profile."
+      );
+    }
+  };
+
+  const handleDelete = async (village) => {
+    if (!window.confirm("Are you sure you want to delete this village?")) {
+      return;
+    }
+
+    try {
+      await deleteVillage(village._id);
+      queryClient.setQueryData(["admin-villages"], (current = []) =>
+        current.filter((item) => item._id !== village._id)
+      );
+      queryClient.invalidateQueries({ queryKey: ["admin-villages"] });
+      queryClient.invalidateQueries({ queryKey: ["villages"] });
+    } catch (error) {
+      window.alert(
+        error.response?.data?.message || "Unable to delete the village."
+      );
+    }
   };
 
   return (
@@ -227,13 +275,24 @@ export default function SmartVillageDashboard() {
                       </span>
                     </td>
                     <td className="px-5 py-4 text-right">
-                      <Link
-                        to="/admin/village-profiles"
-                        className="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-900"
-                      >
-                        Manage modules
-                        <ArrowUpRight size={15} />
-                      </Link>
+                      <div className="flex items-center justify-end gap-4">
+                        <button
+                          type="button"
+                          onClick={() => handleManageModules(village)}
+                          className="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-900"
+                        >
+                          Manage modules
+                          <ArrowUpRight size={15} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(village)}
+                          className="inline-flex items-center gap-1 text-sm font-semibold text-red-600 hover:text-red-800"
+                        >
+                          <Trash2 size={15} />
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

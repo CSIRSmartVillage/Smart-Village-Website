@@ -11,7 +11,9 @@ import {
 
 import {
   getAllVillages,
+  updateVillage,
 } from "../services/village.service";
+import { getAllStates } from "../services/state.service";
 
 export default function EditVillageProfilePage() {
  const { id } = useParams();
@@ -27,13 +29,15 @@ export default function EditVillageProfilePage() {
   } = useQuery({
     queryKey: ["admin-village-profile", id],
     queryFn: async () => {
-      const [villageList, profileData] = await Promise.all([
+      const [villageList, statesList, profileData] = await Promise.all([
         getAllVillages(),
+        getAllStates(),
         getVillageProfile(id),
       ]);
 
       return {
         villages: villageList,
+        states: statesList,
         profile: profileData,
       };
     },
@@ -41,16 +45,28 @@ export default function EditVillageProfilePage() {
   });
 
   const villages = data?.villages || [];
+  const states = data?.states || [];
   const profile = data?.profile || null;
 
   const handleSubmit = async (formData) => {
     try {
       setSaving(true);
 
-      await updateVillageProfile(
-        profile._id,
-        formData
-      );
+      const {
+        administrativeDetails,
+        ...profileData
+      } = formData;
+
+      await Promise.all([
+        updateVillageProfile(
+          profile._id,
+          profileData
+        ),
+        updateVillage(
+          profileData.village,
+          administrativeDetails
+        ),
+      ]);
 
       alert("Village Profile Updated Successfully.");
 
@@ -98,6 +114,7 @@ export default function EditVillageProfilePage() {
       <VillageProfileForm
         initialData={profile}
         villages={villages}
+        states={states}
         loading={saving}
         onSubmit={handleSubmit}
       />

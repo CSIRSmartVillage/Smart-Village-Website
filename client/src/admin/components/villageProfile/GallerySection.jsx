@@ -1,3 +1,9 @@
+import { useState } from "react";
+import { Loader2, Upload } from "lucide-react";
+import toast from "react-hot-toast";
+
+import { uploadMedia } from "../../services/media.service";
+
 const createGalleryItem = (sortOrder = 0) => ({
   image: "",
   caption: "",
@@ -9,8 +15,15 @@ export default function GallerySection({
   media,
   setFormData,
 }) {
-  const imageMedia = media.filter(
-    (item) => item.resourceType === "image"
+  const [uploadedMedia, setUploadedMedia] = useState([]);
+  const [uploadingIndex, setUploadingIndex] = useState(null);
+
+  const imageMedia = Array.from(
+    new Map(
+      [...uploadedMedia, ...media]
+        .filter((item) => item.resourceType === "image")
+        .map((item) => [item._id, item])
+    ).values()
   );
 
   const mediaById = new Map(
@@ -70,6 +83,51 @@ export default function GallerySection({
         sortOrder: itemIndex,
       }))
     );
+  };
+
+  const handleImageUpload = async (index, file) => {
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file.");
+      return;
+    }
+
+    try {
+      setUploadingIndex(index);
+
+      const uploaded = await uploadMedia(file);
+
+      setUploadedMedia((current) =>
+        current.some((item) => item._id === uploaded._id)
+          ? current
+          : [uploaded, ...current]
+      );
+
+      setFormData((prev) => ({
+        ...prev,
+        galleryImages: prev.galleryImages.map((galleryItem, itemIndex) =>
+          itemIndex === index
+            ? {
+                ...galleryItem,
+                image: uploaded._id,
+              }
+            : galleryItem
+        ),
+      }));
+
+      toast.success("Image uploaded and selected.");
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        error?.response?.data?.error?.message ||
+          error?.response?.data?.message ||
+          error?.message ||
+          "Failed to upload image."
+      );
+    } finally {
+      setUploadingIndex(null);
+    }
   };
 
   return (
@@ -155,6 +213,48 @@ export default function GallerySection({
                         </option>
                       ))}
                     </select>
+
+                    {formData._id ? (
+                      <>
+                    <div className="my-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                      <span className="h-px flex-1 bg-slate-200" />
+                      <span>OR</span>
+                      <span className="h-px flex-1 bg-slate-200" />
+                    </div>
+
+                    <label
+                      htmlFor={`village-gallery-upload-${index}`}
+                      className={`inline-flex w-full items-center justify-center gap-2 rounded border border-blue-600 bg-white px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-50 ${
+                        uploadingIndex !== null
+                          ? "cursor-not-allowed opacity-60"
+                          : "cursor-pointer"
+                      }`}
+                    >
+                      {uploadingIndex === index ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : (
+                        <Upload size={16} />
+                      )}
+
+                      {uploadingIndex === index
+                        ? "Uploading..."
+                        : "Upload Image"}
+                    </label>
+
+                    <input
+                      id={`village-gallery-upload-${index}`}
+                      type="file"
+                      accept="image/*"
+                      disabled={uploadingIndex !== null}
+                      className="hidden"
+                      onChange={(event) => {
+                        const file = event.target.files?.[0];
+                        handleImageUpload(index, file);
+                        event.target.value = "";
+                      }}
+                    />
+                      </>
+                    ) : null}
                   </div>
 
                   <div>
@@ -193,7 +293,7 @@ export default function GallerySection({
                   <button
                     type="button"
                     onClick={() => moveImage(index, -1)}
-                    disabled={index === 0}
+                    disabled={index === 0 || uploadingIndex !== null}
                     className="rounded border bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     Up
@@ -202,7 +302,10 @@ export default function GallerySection({
                   <button
                     type="button"
                     onClick={() => moveImage(index, 1)}
-                    disabled={index === formData.galleryImages.length - 1}
+                    disabled={
+                      index === formData.galleryImages.length - 1 ||
+                      uploadingIndex !== null
+                    }
                     className="rounded border bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     Down
@@ -211,7 +314,8 @@ export default function GallerySection({
                   <button
                     type="button"
                     onClick={() => removeImage(index)}
-                    className="rounded bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700"
+                    disabled={uploadingIndex !== null}
+                    className="rounded bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     Delete
                   </button>

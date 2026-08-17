@@ -7,6 +7,7 @@ import HeroSection from "./HeroSection";
 import InformationSection from "./InformationSection";
 import GallerySection from "./GallerySection";
 import ContactSection from "./ContactSection";
+import AdministrativeDetailsSection from "./AdministrativeDetailsSection";
 
 const initialForm = {
   village: "",
@@ -39,6 +40,18 @@ const normalizeFormData = (data) => {
   return {
     ...initialForm,
     ...data,
+
+    ...(data.village && typeof data.village === "object"
+      ? {
+          administrativeDetails: {
+            state:
+              data.village.state?._id || data.village.state || "",
+            district: data.village.district || "",
+            block: data.village.block || "",
+            gramPanchayat: data.village.gramPanchayat || "",
+          },
+        }
+      : {}),
 
     village: data.village?._id || data.village || "",
 
@@ -109,6 +122,7 @@ const normalizeFormData = (data) => {
 export default function VillageProfileForm({
   initialData = null,
   villages = [],
+  states = [],
   onSubmit,
   loading = false,
 }) {
@@ -131,6 +145,18 @@ export default function VillageProfileForm({
         type === "checkbox"
           ? checked
           : value,
+    }));
+  };
+
+  const handleAdministrativeChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      administrativeDetails: {
+        ...prev.administrativeDetails,
+        [name]: value,
+      },
     }));
   };
 
@@ -184,6 +210,14 @@ export default function VillageProfileForm({
       onSubmit={handleSubmit}
       className="space-y-8"
     >
+      {formData.administrativeDetails ? (
+        <AdministrativeDetailsSection
+          details={formData.administrativeDetails}
+          states={states}
+          onChange={handleAdministrativeChange}
+        />
+      ) : null}
+
       <HeroSection
         formData={formData}
         media={media}
