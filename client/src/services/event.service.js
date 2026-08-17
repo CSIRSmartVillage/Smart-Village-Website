@@ -119,3 +119,19 @@ export const getVillageInfoHighlights = async (
 
   return response.data.data?.data || [];
 };
+
+export const getNewsUpdates = async () => {
+  const response = await axios.get(
+    `${API_URL}/news-updates`
+  );
+
+  return response.data.data;
+};
+
+export const getHomePageNews = async () => {
+  const response = await axios.get(
+    `${API_URL}/home-page-news`
+  );
+
+  return response.data.data;
+};

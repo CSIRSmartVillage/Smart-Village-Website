@@ -10,8 +10,8 @@ import ImpactStatistics
   from "../../sections/mission/ImpactStatistics";
 
 
-import LatestUpdates
-  from "../../sections/updates/LatestUpdates";
+import FeaturedVillageUpdates
+  from "../../sections/updates/FeaturedVillageUpdates";
 
 
   import AboutPreview
@@ -120,7 +120,7 @@ const HomePageRenderer = ({
                           case
               "LATEST_UPDATES":
               return (
-                <LatestUpdates
+                <FeaturedVillageUpdates
                   key={
                     section._id
                   }

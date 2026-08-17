@@ -1,13 +1,37 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 import Event from "./Event.model.js";
 import ApiError from "../../utils/ApiError.js";
+
+const getUniqueEventSlug = async (title) => {
+  const baseSlug =
+    slugify(title, {
+      lower: true,
+      strict: true,
+      trim: true,
+    }) || "event";
+
+  let candidate = baseSlug;
+  let suffix = 2;
+
+  while (await Event.exists({ slug: candidate })) {
+    candidate = `${baseSlug}-${suffix}`;
+    suffix += 1;
+  }
+
+  return candidate;
+};
 
 /**
  * Create Event
  */
 export const createEvent = async (data, adminId) => {
+  const slug = await getUniqueEventSlug(data.title);
+
   const event = await Event.create({
     ...data,
+    slug,
+    featureOnHomePage: false,
     createdBy: adminId,
     updatedBy: adminId,
   });
@@ -119,6 +143,55 @@ export const getEvents = async (query = {}) => {
       totalPages: Math.ceil(total / Number(limit)),
     },
   };
+};
+
+/**
+ * Published Event/Achievement/Visit items for Public News & Updates.
+ */
+export const getNewsUpdates = async () => {
+  return Event.find({
+    published: true,
+    isDeleted: false,
+  })
+    .populate("village", "name slug")
+    .sort({
+      eventDate: -1,
+      createdAt: -1,
+    })
+    .lean();
+};
+
+/**
+ * Published items explicitly selected for the Home Page.
+ */
+export const getHomePageNews = async () => {
+  return Event.find({
+    published: true,
+    isDeleted: false,
+    featureOnHomePage: true,
+  })
+    .populate("village", "name slug")
+    .sort({
+      eventDate: -1,
+      createdAt: -1,
+    })
+    .limit(4)
+    .lean();
+};
+
+/**
+ * Event-backed items managed from Admin -> News.
+ */
+export const getAdminNewsItems = async () => {
+  return Event.find({
+    isDeleted: false,
+  })
+    .populate("village", "name slug")
+    .sort({
+      eventDate: -1,
+      createdAt: -1,
+    })
+    .lean();
 };
 
 /**
@@ -301,6 +374,36 @@ export const toggleFeatured = async (
       new: true,
     }
   );
+
+  if (!event) {
+    throw new ApiError(404, "Event not found.");
+  }
+
+  return event;
+};
+
+/**
+ * Feature / unfeature an Event-backed News item on the Home Page.
+ */
+export const toggleHomePageFeature = async (
+  id,
+  featureOnHomePage,
+  adminId
+) => {
+  const event = await Event.findOneAndUpdate(
+    {
+      _id: id,
+      isDeleted: false,
+    },
+    {
+      featureOnHomePage,
+      updatedBy: adminId,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  ).populate("village", "name slug");
 
   if (!event) {
     throw new ApiError(404, "Event not found.");

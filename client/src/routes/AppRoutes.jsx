@@ -51,7 +51,7 @@ const LaboratoryDetailPage = lazy(() =>
 );
 
 const NewsPage = lazy(() =>
-  import("../pages/NewsPage/NewsPage")
+  import("../pages/NewsPage/VillageNewsPage")
 );
 
 const NewsDetailPage = lazy(() =>

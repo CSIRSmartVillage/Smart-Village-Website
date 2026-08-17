@@ -19,13 +19,64 @@ export const createEvent = asyncHandler(async (req, res) => {
 });
 
 export const getEvents = asyncHandler(async (req, res) => {
-  const result = await eventService.getEvents(req.query);
+  const result = await eventService.getEvents({
+    ...req.query,
+    published: "true",
+  });
 
   return res.status(200).json(
     new ApiResponse(
       200,
       result,
       "Events fetched successfully."
+    )
+  );
+});
+
+export const getAdminEvents = asyncHandler(async (req, res) => {
+  const result = await eventService.getEvents(req.query);
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      result,
+      "Admin events fetched successfully."
+    )
+  );
+});
+
+export const getNewsUpdates = asyncHandler(async (_req, res) => {
+  const events = await eventService.getNewsUpdates();
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      events,
+      "Village news updates fetched successfully."
+    )
+  );
+});
+
+export const getHomePageNews = asyncHandler(async (_req, res) => {
+  const events = await eventService.getHomePageNews();
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      events,
+      "Home page news fetched successfully."
+    )
+  );
+});
+
+export const getAdminNewsItems = asyncHandler(async (_req, res) => {
+  const events = await eventService.getAdminNewsItems();
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      events,
+      "Admin news items fetched successfully."
     )
   );
 });
@@ -138,6 +189,24 @@ export const toggleFeatured = asyncHandler(async (req, res) => {
     )
   );
 });
+
+export const toggleHomePageFeature = asyncHandler(
+  async (req, res) => {
+    const event = await eventService.toggleHomePageFeature(
+      req.params.id,
+      req.body.featureOnHomePage,
+      req.admin._id
+    );
+
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        event,
+        "Home page feature status updated successfully."
+      )
+    );
+  }
+);
 
 /**
  * Get Event Statistics

@@ -11,7 +11,7 @@ const DashboardPage = lazy(() => import("../pages/DashboardPage"));
 const AdminLayout = lazy(() => import("../layouts/AdminLayout"));
 const PagesPage = lazy(() => import("../pages/PagesPage"));
 const NavigationPage = lazy(() => import("../pages/NavigationPage"));
-const NewsManagementPage = lazy(() => import("../pages/NewsManagementPage"));
+const NewsManagementPage = lazy(() => import("../pages/NewsFeatureManagementPage"));
 const SuccessStoriesPage = lazy(() => import("../pages/SuccessStoriesPage"));
 const PageEditPage = lazy(() => import("../pages/PageEditPage"));
 const PageSectionsPage = lazy(() => import("../pages/PageSectionsPage"));

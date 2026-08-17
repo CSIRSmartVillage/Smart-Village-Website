@@ -6,12 +6,23 @@ import SmartTextRenderer
 const NewsCard = ({
   article,
 }) => {
+  const imageUrl =
+    article.coverImage?.url ||
+    article.coverImage?.secureUrl ||
+    article.featuredImage?.url;
+  const villageSlug = article.village?.slug;
+  const detailUrl = villageSlug
+    ? `/village/${villageSlug}/events/${article.slug}`
+    : `/news/${article.slug}`;
+  const itemType = article.type || article.category;
+
+
   return (
     <div className="border rounded-xl p-6 shadow-sm">
 
-      {article.featuredImage?.url && (
+      {imageUrl && (
   <img
-    src={article.featuredImage.url}
+    src={imageUrl}
     alt={article.title}
     decoding="async"
     fetchPriority="low"
@@ -21,7 +32,7 @@ const NewsCard = ({
 )}
 
       <span className="text-sm text-blue-600">
-        {article.category}
+        {itemType}
       </span>
 
       <h3 className="text-xl font-semibold mt-2">
@@ -34,7 +45,7 @@ const NewsCard = ({
       />
 
       <Link
-        to={`/news/${article.slug}`}
+        to={detailUrl}
         className="inline-block mt-4 text-blue-700 font-medium"
       >
         Read More →

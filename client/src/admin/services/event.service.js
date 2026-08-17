@@ -25,7 +25,7 @@ export const getAllEvents = async (params = {}) => {
     )
   );
 
-  const response = await axios.get(API_URL, {
+  const response = await axios.get(`${API_URL}/admin/list`, {
     ...authHeaders(),
     params: cleanParams,
   });
@@ -131,6 +131,31 @@ export const toggleFeaturedEvent = async (
 export const getEventBySlug = async (slug) => {
   const response = await axios.get(
     `${API_URL}/slug/${slug}`
+  );
+
+  return response.data.data;
+};
+/* =====================================================
+   ADMIN NEWS: EVENT-BACKED ITEMS
+===================================================== */
+
+export const getAdminNewsItems = async () => {
+  const response = await axios.get(
+    `${API_URL}/admin/news-items`,
+    authHeaders()
+  );
+
+  return response.data.data;
+};
+
+export const toggleHomePageFeature = async (
+  id,
+  featureOnHomePage
+) => {
+  const response = await axios.patch(
+    `${API_URL}/${id}/home-page-feature`,
+    { featureOnHomePage },
+    authHeaders()
   );
 
   return response.data.data;

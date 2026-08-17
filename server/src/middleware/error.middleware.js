@@ -7,6 +7,7 @@ const errorHandler = (
   res,
   next
 ) => {
+  const originalError = err;
   let error = err;
 
   if (
@@ -32,6 +33,10 @@ const errorHandler = (
   logger.error({
     message: error.message,
     stack: error.stack,
+    originalMessage: originalError?.message,
+    errorName: originalError?.name,
+    errorCode: originalError?.code,
+    keyPattern: originalError?.keyPattern,
     path: req.originalUrl,
     method: req.method,
   });

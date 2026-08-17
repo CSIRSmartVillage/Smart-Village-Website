@@ -114,6 +114,12 @@ const EventSchema = new mongoose.Schema(
       index: true,
     },
 
+    featureOnHomePage: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+
     showOnVillageInfo: {
       type: Boolean,
       default: false,
@@ -219,6 +225,13 @@ EventSchema.index({
   published: 1,
   isDeleted: 1,
   isFeatured: 1,
+  eventDate: -1,
+});
+
+EventSchema.index({
+  published: 1,
+  isDeleted: 1,
+  featureOnHomePage: 1,
   eventDate: -1,
 });
 

@@ -104,6 +104,16 @@ export const updateEventSchema = z.object({
   }),
 });
 
+export const homePageFeatureSchema = z.object({
+  body: z.object({
+    featureOnHomePage: z.boolean(),
+  }),
+
+  params: z.object({
+    id: objectId,
+  }),
+});
+
 export const eventIdSchema = z.object({
   params: z.object({
     id: objectId,

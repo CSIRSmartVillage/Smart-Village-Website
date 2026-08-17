@@ -9,6 +9,7 @@ import authorize from "../../middleware/rbac.middleware.js";
 import {
   createEventSchema,
   updateEventSchema,
+  homePageFeatureSchema,
   eventIdSchema,
   eventSlugSchema,
   eventQuerySchema,
@@ -23,6 +24,16 @@ const router = express.Router();
 router.get(
   "/featured",
   eventController.getFeaturedEvent
+);
+
+router.get(
+  "/news-updates",
+  eventController.getNewsUpdates
+);
+
+router.get(
+  "/home-page-news",
+  eventController.getHomePageNews
 );
 
 router.get(
@@ -45,17 +56,31 @@ router.get(
   eventController.getEventBySlug
 );
 
-router.get(
-  "/:id",
-  validate(eventIdSchema),
-  eventController.getEventById
-);
-
 /* ==========================================================
    Admin Routes
 ========================================================== */
 
 router.use(auth);
+
+router.get(
+  "/admin/news-items",
+  authorize("SUPER_ADMIN", "ADMIN"),
+  eventController.getAdminNewsItems
+);
+
+router.get(
+  "/admin/list",
+  authorize("SUPER_ADMIN", "ADMIN"),
+  validate(eventQuerySchema),
+  eventController.getAdminEvents
+);
+
+router.get(
+  "/:id",
+  authorize("SUPER_ADMIN", "ADMIN"),
+  validate(eventIdSchema),
+  eventController.getEventById
+);
 
 router.post(
   "/",
@@ -81,6 +106,13 @@ router.patch(
   "/:id/feature",
   authorize("SUPER_ADMIN", "ADMIN"),
   eventController.toggleFeatured
+);
+
+router.patch(
+  "/:id/home-page-feature",
+  authorize("SUPER_ADMIN", "ADMIN"),
+  validate(homePageFeatureSchema),
+  eventController.toggleHomePageFeature
 );
 
 router.delete(
