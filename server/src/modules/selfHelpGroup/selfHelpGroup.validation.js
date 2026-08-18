@@ -58,13 +58,17 @@ const memberSchema = z.object({
     .string()
     .trim()
     .min(2)
-    .max(150),
+    .max(150)
+    .optional()
+    .or(z.literal("")),
 
   mobileNumber: z
     .string()
     .trim()
     .min(6)
-    .max(20),
+    .max(20)
+    .optional()
+    .or(z.literal("")),
 
   email: z
     .string()
@@ -94,7 +98,9 @@ const shgBodySchema = z.object({
     .trim()
     .min(3),
 
-  featuredImage: mediaSchema.optional(),
+  featuredImage: mediaSchema
+    .nullable()
+    .optional(),
 
   isPublished: z
     .boolean()

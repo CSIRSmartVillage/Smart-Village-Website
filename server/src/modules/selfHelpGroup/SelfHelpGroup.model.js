@@ -63,15 +63,15 @@ const memberSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      required: true,
       trim: true,
+      default: "",
       maxlength: 150,
     },
 
     mobileNumber: {
       type: String,
-      required: true,
       trim: true,
+      default: "",
       maxlength: 20,
     },
 
@@ -125,7 +125,10 @@ const selfHelpGroupSchema = new mongoose.Schema(
       trim: true,
     },
 
-    featuredImage: MediaSchema,
+    featuredImage: {
+      type: MediaSchema,
+      default: null,
+    },
 
     isPublished: {
       type: Boolean,

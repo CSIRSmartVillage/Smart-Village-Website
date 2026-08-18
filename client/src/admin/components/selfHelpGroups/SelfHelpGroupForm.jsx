@@ -286,18 +286,6 @@ const SelfHelpGroupForm = ({
             </select>
           </Field>
 
-          <Field label="Slug">
-            <input
-              type="text"
-              value={values.slug}
-              onChange={(e) =>
-                handleChange("slug", e.target.value)
-              }
-              className={inputClass}
-              placeholder="Auto-generated if empty"
-            />
-          </Field>
-
           <label className="flex items-center gap-3 rounded-lg border border-slate-200 p-4">
             <input
               type="checkbox"
@@ -487,10 +475,11 @@ const SelfHelpGroupForm = ({
                         )
                       }
                       className={inputClass}
+                      required
                     />
                   </Field>
 
-                  <Field label="Role" required>
+                  <Field label="Role">
                     <input
                       type="text"
                       value={member.role}
@@ -505,7 +494,7 @@ const SelfHelpGroupForm = ({
                     />
                   </Field>
 
-                  <Field label="Mobile Number" required>
+                  <Field label="Mobile Number">
                     <input
                       type="tel"
                       value={member.mobileNumber}
