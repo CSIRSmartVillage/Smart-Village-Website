@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -24,8 +25,7 @@ export default function VillageProfilesPage() {
     } catch (error) {
       console.error(error);
       alert(
-        error.response?.data?.message ||
-          "Failed to load village profiles."
+        getUserFriendlyError(error, "Unable to load village profiles. Please refresh the page.")
       );
     } finally {
       setLoading(false);
@@ -49,8 +49,7 @@ export default function VillageProfilesPage() {
       console.error(error);
 
       alert(
-        error.response?.data?.message ||
-          "Unable to delete profile."
+        getUserFriendlyError(error, "Unable to delete the village profile. Please try again.")
       );
     }
   };

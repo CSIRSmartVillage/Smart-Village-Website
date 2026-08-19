@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useEffect, useState } from "react";
 import {
   CalendarDays,
@@ -93,7 +94,7 @@ const SurveyManagementPage = () => {
       event.target.reset();
       loadHistory();
     } catch (error) {
-      toast.error(error.response?.data?.error?.message || "Upload failed.");
+      toast.error(getUserFriendlyError(error, { action: "upload", fallback: "Unable to upload the survey. Please try again." }));
     } finally {
       setSaving(false);
     }

@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useState } from "react";
 import {
   useQuery,
@@ -52,8 +53,7 @@ const EditPoliciesSchemePage = () => {
       console.error(error);
 
       toast.error(
-        error?.response?.data?.message ||
-          "Failed to update Policy or Scheme."
+        getUserFriendlyError(error, "Unable to update the policy or scheme. Please try again.")
       );
     } finally {
       setSaving(false);

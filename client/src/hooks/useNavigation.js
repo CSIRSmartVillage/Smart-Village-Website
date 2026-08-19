@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getNavigation } from "../services/navigation.service";
+import { getUserFriendlyError } from "../utils/userFriendlyError";
 
 const useNavigation = () => {
   const {
@@ -22,7 +23,7 @@ const useNavigation = () => {
   return {
     items: data,
     loading: isLoading,
-    error: error?.message || null,
+    error: error ? getUserFriendlyError(error, "Unable to load the navigation. Please refresh the page.") : null,
   };
 };
 

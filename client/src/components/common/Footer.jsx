@@ -20,8 +20,9 @@ import useSiteSettings from "../../hooks/useSiteSettings";
 import SmartTextRenderer from "./SmartTextRenderer";
 
 // Official Logos
-import CBRILogo from "../../assets/logos/CSIRCBRI-Logo.jpg";
-import SmartVillageLogo from "../../assets/logos/SmartVillage.jpeg";
+import cbriLogo from "../../assets/logos/CBRI.png";
+import csirLogo from "../../assets/logos/CSIR.jpg";
+import smartVillageLogo from "../../assets/logos/SmartVillage.jpeg";
 
 const Footer = () => {
   const { settings } = useSiteSettings();
@@ -64,7 +65,7 @@ const Footer = () => {
     },
     {
       title: "News & Updates",
-      path: "/news",
+      path: "/news-updates",
     },
     {
       title: "Success Stories",
@@ -210,26 +211,40 @@ const Footer = () => {
 
           {/* Logos */}
 
-          <div className="flex items-center gap-5">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-3">
 
-            <img
-              src={CBRILogo}
-              alt="CSIR-CBRI"
-              decoding="async"
-              fetchPriority="low"
-              loading="lazy"
-              className="h-20 object-contain"
+            <div className="flex items-center gap-0.5">
+              <img
+                src={csirLogo}
+                alt="CSIR"
+                decoding="async"
+                fetchPriority="low"
+                loading="lazy"
+                className="h-16 w-auto object-contain sm:h-20"
+              />
+
+              <img
+                src={cbriLogo}
+                alt="CSIR-CBRI"
+                decoding="async"
+                fetchPriority="low"
+                loading="lazy"
+                className="h-16 w-auto object-contain sm:h-20"
+              />
+            </div>
+
+            <div
+              aria-hidden="true"
+              className="mx-1 h-12 w-px shrink-0 bg-slate-300"
             />
 
-            <div className="h-12 w-px bg-slate-300" />
-
             <img
-              src={SmartVillageLogo}
+              src={smartVillageLogo}
               alt="Smart Village"
               decoding="async"
               fetchPriority="low"
               loading="lazy"
-              className="h-20 object-contain"
+              className="h-16 w-auto object-contain sm:h-20"
             />
 
           </div>
@@ -496,7 +511,7 @@ const Footer = () => {
             <p className="mt-2 text-xs leading-5 text-slate-500">
               Developed By{" "}
               <span className="font-semibold text-slate-700">
-                Dr. Kishor
+                Dr. Kishor S. Kulkarni
               </span>
               {" "}and{" "}
               <button

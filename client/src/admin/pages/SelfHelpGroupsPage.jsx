@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useMemo, useState } from "react";
 import {
   useQuery,
@@ -133,8 +134,7 @@ const SelfHelpGroupsPage = () => {
       console.error(error);
 
       toast.error(
-        error?.response?.data?.message ||
-          "Failed to delete Self Help Group."
+        getUserFriendlyError(error, "Unable to delete the Self Help Group. Please try again.")
       );
     } finally {
       setDeleting(false);
@@ -156,8 +156,7 @@ const SelfHelpGroupsPage = () => {
       console.error(error);
 
       toast.error(
-        error?.response?.data?.message ||
-          "Failed to update publish status."
+        getUserFriendlyError(error, "Unable to update the publication status. Please try again.")
       );
     }
   };

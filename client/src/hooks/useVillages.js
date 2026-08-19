@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getAllVillages } from "../admin/services/village.service";
+import { getUserFriendlyError } from "../utils/userFriendlyError";
 
 const useVillages = () => {
   const {
@@ -21,7 +22,7 @@ const useVillages = () => {
   return {
     villages: data,
     loading: isLoading,
-    error: error?.message || "",
+    error: error ? getUserFriendlyError(error, "Unable to load villages. Please refresh the page.") : "",
     refresh: refetch,
   };
 };

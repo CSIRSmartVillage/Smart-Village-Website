@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useState } from "react";
 import {
   useQuery,
@@ -49,8 +50,7 @@ const EditSupporterPage = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        error?.response?.data?.message ||
-          "Failed to update supporter."
+        getUserFriendlyError(error, "Unable to update the supporter. Please try again.")
       );
     } finally {
       setSaving(false);

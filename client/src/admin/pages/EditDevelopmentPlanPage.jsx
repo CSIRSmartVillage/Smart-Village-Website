@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useState } from "react";
 import {
   useQuery,
@@ -70,8 +71,7 @@ const EditDevelopmentPlanPage = () => {
       console.error(error);
 
       alert(
-        error?.response?.data?.message ||
-          "Update failed."
+        getUserFriendlyError(error, "Unable to update the development plan. Please try again.")
       );
     } finally {
       setSaving(false);

@@ -1,5 +1,5 @@
-import csirLogo from "../../../assets/logos/CSIRCBRI-Logo.jpg";
-// import cbriLogo from "../../../assets/logos/Smart.jpeg";
+import cbriLogo from "../../../assets/logos/CBRI.png";
+import csirLogo from "../../../assets/logos/CSIR.jpg";
 import smartVillageLogo from "../../../assets/logos/SmartVillage.jpeg";
 
 const Header = () => {
@@ -9,30 +9,24 @@ const Header = () => {
       <div className="max-w-7xl mx-auto">
 
         {/* Desktop Header */}
-        <div className="hidden md:flex items-center justify-between px-6 py-4">
+        <div className="hidden md:grid grid-cols-[1fr_auto_1fr] items-center gap-4 px-6 py-4">
 
-          {/* Left Logos */}
-          <div className="flex items-center gap-4">
+          {/* Left Logo */}
+          <div className="flex items-center justify-start">
 
             <img
               src={csirLogo}
-              alt="CSIR-CBRI"
+              alt="CSIR"
               decoding="async"
               fetchPriority="high"
               loading="eager"
-              className="h-16 lg:h-20 object-contain"
+              className="h-16 w-auto object-contain lg:h-20"
             />
-
-            {/* <img
-              src={cbriLogo}
-              alt="CSIR Smart Village"
-              className="h-16 lg:h-20 object-contain"
-            /> */}
 
           </div>
 
           {/* Center Title */}
-          <div className="flex-1 text-center px-6">
+          <div className="px-4 text-center">
 
             <h1
               className="
@@ -58,8 +52,17 @@ const Header = () => {
 
           </div>
 
-          {/* Right Logo */}
-          <div>
+          {/* Right Logos */}
+          <div className="flex items-center justify-end gap-2 lg:gap-3">
+
+            <img
+              src={cbriLogo}
+              alt="CSIR-CBRI"
+              decoding="async"
+              fetchPriority="high"
+              loading="eager"
+              className="h-16 w-auto object-contain lg:h-20"
+            />
 
             <img
               src={smartVillageLogo}
@@ -67,7 +70,7 @@ const Header = () => {
               decoding="async"
               fetchPriority="high"
               loading="eager"
-              className="h-20 lg:h-24 object-contain"
+              className="h-16 w-auto object-contain lg:h-20"
             />
 
           </div>
@@ -78,31 +81,36 @@ const Header = () => {
         <div className="md:hidden px-4 py-4">
 
           {/* Top Logos */}
-          <div className="flex justify-center items-center gap-4 mb-4">
+          <div className="mb-4 flex items-center justify-between gap-4">
 
             <img
               src={csirLogo}
-              alt="CSIR-CBRI"
+              alt="CSIR"
               decoding="async"
               fetchPriority="high"
               loading="eager"
-              className="h-12 object-contain"
+              className="h-12 w-auto object-contain"
             />
 
-            {/* <img
-              src={cbriLogo}
-              alt="CSIR Smart Village"
-              className="h-12 object-contain"
-            /> */}
+            <div className="flex items-center gap-2">
+              <img
+                src={cbriLogo}
+                alt="CSIR-CBRI"
+                decoding="async"
+                fetchPriority="high"
+                loading="eager"
+                className="h-12 w-auto object-contain"
+              />
 
-            <img
-              src={smartVillageLogo}
-              alt="Smart Village Mission"
-              decoding="async"
-              fetchPriority="high"
-              loading="eager"
-              className="h-12 object-contain"
-            />
+              <img
+                src={smartVillageLogo}
+                alt="Smart Village Mission"
+                decoding="async"
+                fetchPriority="high"
+                loading="eager"
+                className="h-12 w-auto object-contain"
+              />
+            </div>
 
           </div>
 

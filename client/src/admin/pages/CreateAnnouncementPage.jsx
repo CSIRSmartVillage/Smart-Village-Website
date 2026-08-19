@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useNavigate } from "react-router-dom";
 
 import AnnouncementForm from "../components/announcements/AnnouncementForm";
@@ -30,9 +31,7 @@ const CreateAnnouncementPage = () => {
         );
 
         alert(
-          error.response?.data
-            ?.error?.message ||
-            "Failed to create announcement"
+          getUserFriendlyError(error, "Unable to create the announcement. Please try again.")
         );
       }
     };

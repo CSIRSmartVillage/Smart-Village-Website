@@ -1,5 +1,6 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 
 import VillageProfileForm from "../components/villageProfile/VillageProfileForm";
@@ -19,6 +20,7 @@ export default function EditVillageProfilePage() {
  const { id } = useParams();
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [saving, setSaving] = useState(false);
 
@@ -48,6 +50,58 @@ export default function EditVillageProfilePage() {
   const states = data?.states || [];
   const profile = data?.profile || null;
 
+  const handleCoordinateSave = async (field, value) => {
+    const village = profile?.village;
+    const currentCoordinates = village?.location?.coordinates;
+
+    if (!village?._id || !Array.isArray(currentCoordinates)) {
+      throw new Error("Village coordinates are unavailable.");
+    }
+
+    const nextCoordinates = [...currentCoordinates];
+    nextCoordinates[field === "latitude" ? 1 : 0] = value;
+
+    const updatedVillage = await updateVillage(village._id, {
+      location: {
+        type: village.location?.type || "Point",
+        coordinates: nextCoordinates,
+      },
+    });
+
+    queryClient.setQueryData(["admin-village-profile", id], (current) => {
+      if (!current) return current;
+
+      return {
+        ...current,
+        villages: current.villages.map((item) =>
+          item._id === updatedVillage._id
+            ? { ...item, ...updatedVillage }
+            : item
+        ),
+        profile: {
+          ...current.profile,
+          village: {
+            ...current.profile.village,
+            ...updatedVillage,
+          },
+        },
+      };
+    });
+
+    queryClient.setQueryData(["admin-villages"], (current = []) =>
+      current.map((item) =>
+        item._id === updatedVillage._id
+          ? { ...item, ...updatedVillage }
+          : item
+      )
+    );
+
+    queryClient.invalidateQueries({ queryKey: ["villages"] });
+    queryClient.invalidateQueries({ queryKey: ["village"] });
+    queryClient.invalidateQueries({ queryKey: ["village-profile"] });
+    queryClient.invalidateQueries({ queryKey: ["admin-village-locations"] });
+  };
+
   const handleSubmit = async (formData) => {
     try {
       setSaving(true);
@@ -75,8 +129,7 @@ export default function EditVillageProfilePage() {
       console.error(error);
 
       alert(
-        error.response?.data?.message ||
-          "Something went wrong."
+        getUserFriendlyError(error, "Unable to update the village profile. Please try again.")
       );
     } finally {
       setSaving(false);
@@ -117,6 +170,7 @@ export default function EditVillageProfilePage() {
         states={states}
         loading={saving}
         onSubmit={handleSubmit}
+        onCoordinateSave={handleCoordinateSave}
       />
     </div>
   );

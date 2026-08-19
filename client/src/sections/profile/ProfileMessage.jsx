@@ -3,6 +3,7 @@ import SmartTextRenderer
 
 const ProfileMessage = ({
   data,
+  preserveLineBreaks = false,
 }) => {
   return (
     <section className="py-24 bg-white">
@@ -62,12 +63,13 @@ const ProfileMessage = ({
           </h2>
 
           <p
-            className="
+            className={`
               text-blue-700
               font-semibold
               mt-2
               mb-8
-            "
+              ${preserveLineBreaks ? "whitespace-pre-line" : ""}
+            `}
           >
             {data?.designation}
           </p>
@@ -87,7 +89,7 @@ const ProfileMessage = ({
 
           <SmartTextRenderer
             text={data?.message}
-            className="max-w-none"
+            className={`max-w-none ${preserveLineBreaks ? "whitespace-pre-line" : ""}`}
           />
 
         </div>

@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -37,9 +38,7 @@ export default function CreateVillageProfilePage() {
       console.error(error);
 
       alert(
-        error.response?.data?.message ||
-          error.response?.data?.error?.message ||
-          "Something went wrong."
+        getUserFriendlyError(error, "Unable to create the village profile. Please try again.")
       );
     } finally {
       setLoading(false);

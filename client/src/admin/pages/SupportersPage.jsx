@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useMemo, useState } from "react";
 import {
   useQuery,
@@ -59,8 +60,7 @@ const SupportersPage = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        error?.response?.data?.message ||
-          "Failed to delete supporter."
+        getUserFriendlyError(error, "Unable to delete the supporter. Please try again.")
       );
     } finally {
       setDeleting(false);

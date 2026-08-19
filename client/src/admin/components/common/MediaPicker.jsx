@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../../utils/userFriendlyError";
 import {
   useEffect,
   useState,
@@ -56,10 +57,7 @@ const MediaPicker = ({
           );
         } catch (loadError) {
           setError(
-            loadError?.response?.data
-              ?.error?.message ||
-              loadError.message ||
-              "Failed to load media."
+            getUserFriendlyError(loadError, "Unable to load media. Please refresh the page.")
           );
         } finally {
           setLoading(false);

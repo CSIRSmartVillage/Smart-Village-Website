@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useState } from "react";
 import {
   useQuery,
@@ -52,8 +53,7 @@ const EditSelfHelpGroupPage = () => {
       console.error(error);
 
       toast.error(
-        error?.response?.data?.message ||
-          "Failed to update Self Help Group."
+        getUserFriendlyError(error, "Unable to update the Self Help Group. Please try again.")
       );
     } finally {
       setSaving(false);

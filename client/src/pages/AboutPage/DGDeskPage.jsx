@@ -86,6 +86,7 @@ return (
               <ProfileMessage
                 key={section._id}
                 data={section.content}
+                preserveLineBreaks
               />
             );
 

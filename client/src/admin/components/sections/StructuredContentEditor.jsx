@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../../utils/userFriendlyError";
 import { useRef, useState } from "react";
 import {
   ArrowDown,
@@ -209,9 +210,7 @@ const ImageField = ({ fieldKey, label, value, media, onChange, onMediaUploaded }
       onChange(encodeImage(uploaded, value, fieldKey));
     } catch (uploadError) {
       setError(
-        uploadError?.response?.data?.error?.message ||
-          uploadError.message ||
-          "Failed to upload image."
+        getUserFriendlyError(uploadError, { action: "upload", fallback: "Unable to upload the image. Please try again." })
       );
     } finally {
       setUploading(false);
@@ -290,9 +289,7 @@ const ImageArrayField = ({
       ]);
     } catch (uploadError) {
       setError(
-        uploadError?.response?.data?.error?.message ||
-          uploadError.message ||
-          "Failed to upload image."
+        getUserFriendlyError(uploadError, { action: "upload", fallback: "Unable to upload the image. Please try again." })
       );
     } finally {
       setUploading(false);

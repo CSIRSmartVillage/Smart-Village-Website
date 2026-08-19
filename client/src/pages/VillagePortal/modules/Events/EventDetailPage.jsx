@@ -15,6 +15,8 @@ import EventCard from "./components/EventCard";
 import { getLocalizedText } from "./utils/eventText";
 import SmartTextRenderer
   from "../../../../components/common/SmartTextRenderer";
+import { getUserFriendlyError }
+  from "../../../../utils/userFriendlyError";
 
 const EventDetailPage = () => {
   const navigate = useNavigate();
@@ -46,8 +48,7 @@ const EventDetailPage = () => {
         console.error(err);
 
         setError(
-          err?.response?.data?.message ||
-            "Unable to load event."
+          getUserFriendlyError(err, "Unable to load the event. Please try again.")
         );
       } finally {
         setLoading(false);

@@ -15,6 +15,12 @@ import {
 } from "../../services/news.service";
 import SmartTextRenderer
   from "../../components/common/SmartTextRenderer";
+import ResourceErrorState
+  from "../../components/common/ResourceErrorState";
+import {
+  getUserFriendlyError,
+  isNotFoundError,
+} from "../../utils/userFriendlyError";
 
 const NewsDetailPage =
   () => {
@@ -30,6 +36,11 @@ const NewsDetailPage =
       loading,
       setLoading,
     ] = useState(true);
+
+    const [
+      loadError,
+      setLoadError,
+    ] = useState(null);
 
     useEffect(() => {
       const loadArticle =
@@ -47,6 +58,7 @@ const NewsDetailPage =
             console.error(
               error
             );
+            setLoadError(error);
           } finally {
             setLoading(
               false
@@ -65,11 +77,23 @@ const NewsDetailPage =
       );
     }
 
-    if (!article) {
+    if (loadError || !article) {
+      const notFound = !loadError || isNotFoundError(loadError);
+
       return (
-        <h1>
-          Article not found
-        </h1>
+        <MainLayout>
+          <ResourceErrorState
+            title={notFound ? "Article not found" : "Unable to load article"}
+            message={
+              notFound
+                ? "The article you are looking for may have been removed or the link may be incorrect."
+                : getUserFriendlyError(loadError, "Unable to load the article. Please try again.")
+            }
+            backTo="/news-updates"
+            backLabel="Back to News & Updates"
+            onRetry={notFound ? undefined : () => window.location.reload()}
+          />
+        </MainLayout>
       );
     }
 

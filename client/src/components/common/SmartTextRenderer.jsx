@@ -231,7 +231,7 @@ const parseLooseNumberedSections = (lines, startIndex) => {
 
     sections.push({
       title,
-      body: bodyLines.join(" "),
+      body: bodyLines.join("\n"),
     });
 
     while (index < lines.length && !lines[index].trim()) {
@@ -299,7 +299,7 @@ const SmartTextRenderer = ({
 
   const pushParagraph = (paragraphLines) => {
     const paragraph = paragraphLines
-      .join(" ")
+      .join("\n")
       .trim();
 
     if (!paragraph) return;
@@ -475,7 +475,7 @@ const SmartTextRenderer = ({
           className="my-8 border-l-4 border-blue-700 bg-blue-50/70 px-6 py-4 italic leading-8 text-slate-700"
         >
           {renderInline(
-            quoteLines.join(" "),
+            quoteLines.join("\n"),
             `quote-${elements.length}`
           )}
         </blockquote>

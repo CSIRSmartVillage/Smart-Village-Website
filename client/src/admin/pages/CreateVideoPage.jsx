@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import {
   useNavigate,
 } from "react-router-dom";
@@ -36,14 +37,10 @@ const CreateVideoPage =
 
         } catch (error) {
 
-  console.error(
-    error.response?.data
-  );
+  console.error(error);
 
   alert(
-    JSON.stringify(
-      error.response?.data
-    )
+    getUserFriendlyError(error, "Unable to create the video. Please try again.")
   );
 }
       };

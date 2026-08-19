@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
@@ -31,8 +32,7 @@ const NewsFeatureManagementPage = () => {
     queryFn: getAdminNewsItems,
   });
   const error = queryError
-    ? queryError?.response?.data?.message ||
-      "Failed to load News & Updates items."
+    ? getUserFriendlyError(queryError, "Unable to load News & Updates items. Please refresh the page.")
     : "";
 
   const handleFeatureChange = async (item, checked) => {
@@ -66,8 +66,7 @@ const NewsFeatureManagementPage = () => {
     } catch (requestError) {
       console.error(requestError);
       toast.error(
-        requestError?.response?.data?.message ||
-          "Failed to update Home Page feature status."
+        getUserFriendlyError(requestError, "Unable to update the Home Page feature status. Please try again.")
       );
     } finally {
       setUpdatingId(null);

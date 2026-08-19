@@ -94,12 +94,12 @@ const villageCoordinates =
         </p>
       </div>
 
-      <div className="h-[600px] w-full">
+      <div className="relative z-[1] isolate h-[600px] w-full">
         <MapContainer
           center={center}
           zoom={zoom}
           scrollWheelZoom
-          className="h-full w-full"
+          className="relative z-[1] h-full w-full"
         >
           <TileLayer
             attribution="&copy; OpenStreetMap contributors"

@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -40,8 +41,7 @@ const CreateDevelopmentPlanPage = () => {
       console.error(error);
 
       alert(
-        error?.response?.data?.message ||
-          "Failed to create Development Plan."
+        getUserFriendlyError(error, "Unable to create the development plan. Please try again.")
       );
     } finally {
       setLoading(false);

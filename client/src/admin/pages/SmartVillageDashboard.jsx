@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -135,7 +136,7 @@ export default function SmartVillageDashboard() {
       navigate(`/admin/village-profiles/${profile._id}/edit`);
     } catch (error) {
       window.alert(
-        error.response?.data?.message || "Unable to open the village profile."
+        getUserFriendlyError(error, "Unable to open the village profile. Please try again.")
       );
     }
   };
@@ -154,7 +155,7 @@ export default function SmartVillageDashboard() {
       queryClient.invalidateQueries({ queryKey: ["villages"] });
     } catch (error) {
       window.alert(
-        error.response?.data?.message || "Unable to delete the village."
+        getUserFriendlyError(error, "Unable to delete the village. Please try again.")
       );
     }
   };

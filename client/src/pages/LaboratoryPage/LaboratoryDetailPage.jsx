@@ -13,6 +13,12 @@ import SmartTextRenderer
   from "../../components/common/SmartTextRenderer";
 import { normalizeDisplayList }
   from "../../utils/listText";
+import ResourceErrorState
+  from "../../components/common/ResourceErrorState";
+import {
+  getUserFriendlyError,
+  isNotFoundError,
+} from "../../utils/userFriendlyError";
 
 const LaboratoryDetailPage = () => {
   const { slug } =
@@ -25,6 +31,10 @@ const LaboratoryDetailPage = () => {
   const [loading,
     setLoading] =
     useState(true);
+
+  const [loadError,
+    setLoadError] =
+    useState(null);
 
   useEffect(() => {
     const loadLaboratory =
@@ -42,6 +52,7 @@ const LaboratoryDetailPage = () => {
           console.error(
             error
           );
+          setLoadError(error);
         } finally {
           setLoading(
             false
@@ -60,11 +71,23 @@ const LaboratoryDetailPage = () => {
     );
   }
 
-  if (!laboratory) {
+  if (loadError || !laboratory) {
+    const notFound = !loadError || isNotFoundError(loadError);
+
     return (
-      <div className="py-20 text-center">
-        Laboratory not found
-      </div>
+      <MainLayout>
+        <ResourceErrorState
+          title={notFound ? "Laboratory not found" : "Unable to load laboratory"}
+          message={
+            notFound
+              ? "The laboratory you are looking for may have been removed or the link may be incorrect."
+              : getUserFriendlyError(loadError, "Unable to load the laboratory. Please try again.")
+          }
+          backTo="/csir-laboratories/participating-labs"
+          backLabel="Back to Laboratories"
+          onRetry={notFound ? undefined : () => window.location.reload()}
+        />
+      </MainLayout>
     );
   }
 
@@ -151,7 +174,10 @@ return (
         <div className="space-y-2">
           {laboratory.directorName && (
             <p>
-              Director: {laboratory.directorName}
+              <span>Director: </span>
+              <span className="text-lg font-semibold">
+                {laboratory.directorName}
+              </span>
             </p>
           )}
 

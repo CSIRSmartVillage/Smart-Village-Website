@@ -8,6 +8,8 @@ import {
 import { sendContactMessage } from "../../services/contact.service";
 import SmartTextRenderer
   from "../../components/common/SmartTextRenderer";
+import { getUserFriendlyError }
+  from "../../utils/userFriendlyError";
 
 const ContactForm = ({ data = {} }) => {
   const [formData, setFormData] = useState({
@@ -48,9 +50,7 @@ const ContactForm = ({ data = {} }) => {
       });
     } catch (err) {
 setError(
-  err?.response?.data?.errors?.[0]?.message ||
-  err?.response?.data?.message ||
-  "Failed to send message."
+  getUserFriendlyError(err, "Unable to send your message. Please try again.")
 );
     } finally {
       setLoading(false);

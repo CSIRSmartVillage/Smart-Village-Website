@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, useMemo } from "react";
 
 import * as eventService from "../admin/services/event.service";
 import { useDebounce } from "use-debounce";
+import { getUserFriendlyError } from "../utils/userFriendlyError";
 
 const useEvents = (initialFilters = {}) => {
   const [events, setEvents] = useState([]);
@@ -93,8 +94,7 @@ const response =
       console.error(err);
 
       setError(
-        err?.response?.data?.message ||
-          "Failed to load events."
+        getUserFriendlyError(err, "Unable to load events. Please refresh the page.")
       );
     } finally {
       setLoading(false);
@@ -122,8 +122,7 @@ const response =
         return {
           success: false,
           message:
-            error?.response?.data?.message ||
-            "Failed to delete event.",
+            getUserFriendlyError(error, "Unable to delete the event. Please try again."),
         };
       }
     },
@@ -156,8 +155,7 @@ const response =
         return {
           success: false,
           message:
-            error?.response?.data?.message ||
-            "Failed to update publish status.",
+            getUserFriendlyError(error, "Unable to update the publication status. Please try again."),
         };
       }
     },
@@ -190,8 +188,7 @@ const response =
         return {
           success: false,
           message:
-            error?.response?.data?.message ||
-            "Failed to update featured status.",
+            getUserFriendlyError(error, "Unable to update the featured status. Please try again."),
         };
       }
     },

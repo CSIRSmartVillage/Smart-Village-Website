@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../../utils/userFriendlyError";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -81,10 +82,7 @@ const EventForm = ({
       console.error(error);
 
       toast.error(
-        error?.response?.data?.error?.message ||
-          error?.response?.data?.message ||
-          error?.message ||
-          "Failed to create event."
+        getUserFriendlyError(error, "Unable to save the event. Please try again.")
       );
     } finally {
       setSaving(false);

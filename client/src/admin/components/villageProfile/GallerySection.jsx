@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../../utils/userFriendlyError";
 import { useState } from "react";
 import { Loader2, Upload } from "lucide-react";
 import toast from "react-hot-toast";
@@ -120,10 +121,7 @@ export default function GallerySection({
     } catch (error) {
       console.error(error);
       toast.error(
-        error?.response?.data?.error?.message ||
-          error?.response?.data?.message ||
-          error?.message ||
-          "Failed to upload image."
+        getUserFriendlyError(error, { action: "upload", fallback: "Unable to upload the image. Please try again." })
       );
     } finally {
       setUploadingIndex(null);

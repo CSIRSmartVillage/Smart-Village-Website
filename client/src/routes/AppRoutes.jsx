@@ -83,6 +83,10 @@ const ContactPage = lazy(() =>
 const SupportersPage = lazy(() =>
   import("../pages/SupportersPage/SupportersPage")
 );
+
+const NotFoundPage = lazy(() =>
+  import("../pages/NotFoundPage")
+);
 const AnnouncementDetailPage = lazy(() =>
   import(
     "../pages/AnnouncementPage/AnnouncementDetailPage"
@@ -310,6 +314,8 @@ const AppRoutes = () => {
   />
 
      </Route>
+
+      <Route path="*" element={<NotFoundPage />} />
 
     </Routes>
     </Suspense>

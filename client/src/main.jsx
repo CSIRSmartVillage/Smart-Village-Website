@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import "./index.css";
 import AppRoutes from "./routes/AppRoutes";
 import queryClient from "./lib/queryClient";
+import AppErrorBoundary from "./components/common/AppErrorBoundary";
 import {
   startPerformanceMonitoring,
 } from "./lib/performanceMonitoring";
@@ -15,34 +16,36 @@ startPerformanceMonitoring();
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AppRoutes />
+      <AppErrorBoundary>
+        <BrowserRouter>
+          <AppRoutes />
 
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              borderRadius: "12px",
-              background: "#ffffff",
-              color: "#0f172a",
-              border: "1px solid #e2e8f0",
-            },
-            success: {
-              iconTheme: {
-                primary: "#16a34a",
-                secondary: "#ffffff",
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                borderRadius: "12px",
+                background: "#ffffff",
+                color: "#0f172a",
+                border: "1px solid #e2e8f0",
               },
-            },
-            error: {
-              iconTheme: {
-                primary: "#dc2626",
-                secondary: "#ffffff",
+              success: {
+                iconTheme: {
+                  primary: "#16a34a",
+                  secondary: "#ffffff",
+                },
               },
-            },
-          }}
-        />
-      </BrowserRouter>
+              error: {
+                iconTheme: {
+                  primary: "#dc2626",
+                  secondary: "#ffffff",
+                },
+              },
+            }}
+          />
+        </BrowserRouter>
+      </AppErrorBoundary>
     </QueryClientProvider>
   // </React.StrictMode>
 );

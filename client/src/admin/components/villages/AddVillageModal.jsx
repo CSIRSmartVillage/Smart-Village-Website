@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../../utils/userFriendlyError";
 import { useEffect, useMemo, useState } from "react";
 import { Loader2, MapPinned, X } from "lucide-react";
 import toast from "react-hot-toast";
@@ -31,9 +32,9 @@ const slugify = (value) =>
     .replace(/^-+|-+$/g, "");
 
 const getErrorMessage = (error) =>
-  error?.response?.data?.error?.message ||
-  error?.response?.data?.message ||
-  "Unable to create the village. Please try again.";
+  getUserFriendlyError(error,
+    "Unable to create the village. Please try again."
+  );
 
 const FieldError = ({ children }) =>
   children ? (

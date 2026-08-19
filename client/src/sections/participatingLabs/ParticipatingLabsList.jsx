@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -11,6 +11,21 @@ const ParticipatingLabsList = () => {
 
   const [loading, setLoading] =
     useState(true);
+
+  const sortedLabs = useMemo(
+    () =>
+      [...labs].sort((a, b) =>
+        a.name.localeCompare(
+          b.name,
+          undefined,
+          {
+            sensitivity: "base",
+            numeric: true,
+          }
+        )
+      ),
+    [labs]
+  );
 
   useEffect(() => {
     const loadLabs =
@@ -72,7 +87,7 @@ const ParticipatingLabsList = () => {
 
         <div className="grid md:grid-cols-2 gap-4">
 
-          {labs.map((lab) => (
+          {sortedLabs.map((lab) => (
             <Link
               key={lab._id}
               to={`/participating-labs/${lab.slug}`}

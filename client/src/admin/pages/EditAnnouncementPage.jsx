@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import {
   useEffect,
   useState,
@@ -70,9 +71,7 @@ const EditAnnouncementPage = () => {
         );
 
         alert(
-          error.response?.data
-            ?.error?.message ||
-            "Failed to update announcement"
+          getUserFriendlyError(error, "Unable to update the announcement. Please try again.")
         );
       }
     };

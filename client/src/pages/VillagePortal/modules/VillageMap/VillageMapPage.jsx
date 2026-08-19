@@ -9,6 +9,7 @@ import EmptyState from "./components/EmptyState";
 import FacilityFilters from "./components/FacilityFilters";
 import { useVillageLocation } from "../../../../hooks/useVillageLocation";
 import Legend from "./components/Legend";
+import { getUserFriendlyError } from "../../../../utils/userFriendlyError";
 
 const VillageMapPage = () => {
   const { slug } = useParams();
@@ -60,8 +61,7 @@ const filteredFacilities = useMemo(() => {
       <EmptyState
         title="Unable to load village map"
         description={
-          error?.message ||
-          "Something went wrong while loading the village map."
+          getUserFriendlyError(error, "Unable to load the village map. Please refresh the page.")
         }
       />
     );

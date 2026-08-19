@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useState } from "react";
 import {
   useQuery,
@@ -87,8 +88,7 @@ const EditVillageLocationPage = () => {
       console.error(error);
 
       alert(
-        error?.response?.data?.message ||
-          "Update failed."
+        getUserFriendlyError(error, "Unable to update the village location. Please try again.")
       );
     } finally {
       setSaving(false);

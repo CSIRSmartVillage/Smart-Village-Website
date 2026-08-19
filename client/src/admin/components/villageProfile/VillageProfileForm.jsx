@@ -124,6 +124,7 @@ export default function VillageProfileForm({
   villages = [],
   states = [],
   onSubmit,
+  onCoordinateSave,
   loading = false,
 }) {
   const [formData, setFormData] = useState(() =>
@@ -215,6 +216,8 @@ export default function VillageProfileForm({
           details={formData.administrativeDetails}
           states={states}
           onChange={handleAdministrativeChange}
+          coordinates={initialData?.village?.location?.coordinates}
+          onCoordinateSave={onCoordinateSave}
         />
       ) : null}
 

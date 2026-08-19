@@ -7,6 +7,12 @@ import Navbar from "../../../components/common/Navbar/Navbar";
 import VillageHero from "../components/VillageHero";
 import VillageSidebar from "../components/VillageSidebar";
 import VillageFooter from "../components/VillageFooter";
+import MainLayout from "../../../layouts/MainLayout";
+import ResourceErrorState from "../../../components/common/ResourceErrorState";
+import {
+  getUserFriendlyError,
+  isNotFoundError,
+} from "../../../utils/userFriendlyError";
 
 const VillageLayout = () => {
   const { slug } = useParams();
@@ -29,12 +35,22 @@ const VillageLayout = () => {
   }
 
   if (error || !village) {
+    const notFound = !error || isNotFoundError(error);
+
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg text-red-600">
-          Village not found.
-        </p>
-      </div>
+      <MainLayout>
+        <ResourceErrorState
+          title={notFound ? "Village not found" : "Unable to load village"}
+          message={
+            notFound
+              ? "The village you are looking for may have been removed or the link may be incorrect."
+              : getUserFriendlyError(error, "Unable to load the village. Please try again.")
+          }
+          backTo="/"
+          backLabel="Back to Home"
+          onRetry={notFound ? undefined : () => window.location.reload()}
+        />
+      </MainLayout>
     );
   }
 

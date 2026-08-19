@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useEffect, useState } from "react";
 import {
   AlertCircle,
@@ -56,9 +57,7 @@ const StructuredEditSectionPage = () => {
       } catch (loadError) {
         if (!active) return;
         setError(
-          loadError?.response?.data?.error?.message ||
-            loadError.message ||
-            "Failed to load this section."
+          getUserFriendlyError(loadError, "Unable to load this section. Please refresh the page.")
         );
       } finally {
         if (active) setLoading(false);
@@ -87,9 +86,7 @@ const StructuredEditSectionPage = () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (saveError) {
       setError(
-        saveError?.response?.data?.error?.message ||
-          saveError.message ||
-          "Failed to update this section."
+        getUserFriendlyError(saveError, "Unable to update this section. Please try again.")
       );
     } finally {
       setSaving(false);

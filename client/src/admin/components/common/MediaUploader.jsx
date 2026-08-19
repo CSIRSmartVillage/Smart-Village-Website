@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../../utils/userFriendlyError";
 import { useState, useRef } from "react";
 import { Loader2, ImagePlus, Trash2 } from "lucide-react";
 import { uploadMedia } from "../../services/media.service";
@@ -46,8 +47,7 @@ const handleSelect = async (e) => {
     console.error(error);
 
     alert(
-      error?.response?.data?.message ||
-        "Failed to upload image."
+      getUserFriendlyError(error, { action: "upload", fallback: "Unable to upload the image. Please try again." })
     );
   } finally {
     setUploading(false);

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getPageBySlug } from "../services/cms.service";
+import { getUserFriendlyError } from "../utils/userFriendlyError";
 
 const usePage = (slug) => {
   const {
@@ -21,7 +22,7 @@ const usePage = (slug) => {
   return {
     page: data,
     loading: isLoading,
-    error: error?.message || null,
+    error: error ? getUserFriendlyError(error, "Unable to load this page. Please refresh and try again.") : null,
   };
 };
 

@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -43,8 +44,7 @@ const CreateVillageLocationPage = () => {
       console.error(error);
 
       alert(
-        error?.response?.data?.message ||
-          "Failed to create Village Location."
+        getUserFriendlyError(error, "Unable to create the village location. Please try again.")
       );
     } finally {
       setLoading(false);

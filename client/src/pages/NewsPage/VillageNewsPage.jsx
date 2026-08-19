@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import MainLayout from "../../layouts/MainLayout";
 import { getNewsUpdates } from "../../services/event.service";
 import { getPublicAnnouncements } from "../../services/announcement.service";
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 
 import NewsGrid from "./components/NewsGrid";
 import FeaturedAnnouncement from "./components/FeaturedAnnouncement";
@@ -30,8 +31,7 @@ const VillageNewsPage = () => {
       } catch (requestError) {
         console.error(requestError);
         setError(
-          requestError?.response?.data?.message ||
-            "Unable to load News & Updates."
+          getUserFriendlyError(requestError, "Unable to load News & Updates. Please refresh the page.")
         );
       } finally {
         setLoading(false);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import * as eventService from "../services/event.service";
+import { getUserFriendlyError } from "../utils/userFriendlyError";
 
 const DEFAULT_FILTERS = {
   search: "",
@@ -84,9 +85,7 @@ const usePublicEvents = (initialFilters = {}) => {
 
     loading: isLoading,
     error: error
-      ? error?.response?.data?.message ||
-        error.message ||
-        "Failed to load events."
+      ? getUserFriendlyError(error, "Unable to load events. Please refresh the page.")
       : "",
     refresh: refetch,
   };

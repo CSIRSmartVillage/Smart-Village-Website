@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import {
   useEffect,
   useMemo,
@@ -82,10 +83,7 @@ const MediaLibraryPage = () => {
       );
     } catch (loadError) {
       setError(
-        loadError?.response?.data
-          ?.error?.message ||
-          loadError.message ||
-          "Failed to load media."
+        getUserFriendlyError(loadError, "Unable to load media. Please refresh the page.")
       );
     } finally {
       setLoading(false);
@@ -108,10 +106,7 @@ const MediaLibraryPage = () => {
       .catch((loadError) => {
         if (isActive) {
           setError(
-            loadError?.response?.data
-              ?.error?.message ||
-              loadError.message ||
-              "Failed to load media."
+            getUserFriendlyError(loadError, "Unable to load media. Please refresh the page.")
           );
         }
       })
@@ -155,10 +150,7 @@ const MediaLibraryPage = () => {
       await loadMedia();
     } catch (uploadError) {
       setError(
-        uploadError?.response?.data
-          ?.error?.message ||
-          uploadError.message ||
-          "Failed to upload media."
+        getUserFriendlyError(uploadError, { action: "upload", fallback: "Unable to upload the media. Please try again." })
       );
     } finally {
       setUploading(false);
@@ -183,10 +175,7 @@ const MediaLibraryPage = () => {
         await loadMedia();
       } catch (deleteError) {
         setError(
-          deleteError?.response?.data
-            ?.error?.message ||
-            deleteError.message ||
-            "Failed to delete media."
+          getUserFriendlyError(deleteError, "Unable to delete the media. Please try again.")
         );
       }
     };

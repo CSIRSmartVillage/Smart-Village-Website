@@ -9,9 +9,10 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import CBRILogo from "../../assets/logos/CSIRCBRI-Logo.jpg";
+import CBRILogo from "../../assets/logos/CBRI.png";
 import SmartVillageLogo from "../../assets/logos/SmartVillage.jpeg";
 import { loginAdmin } from "../services/auth.service";
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const LoginPage = () => {
 
       navigate("/admin/dashboard");
     } catch (err) {
-      setError("Invalid username or password.");
+      setError(getUserFriendlyError(err, { context: "login" }));
     } finally {
       setLoading(false);
     }

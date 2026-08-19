@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -34,8 +35,7 @@ const CreateSupporterPage = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        error?.response?.data?.message ||
-          "Failed to create supporter."
+        getUserFriendlyError(error, "Unable to create the supporter. Please try again.")
       );
     } finally {
       setSaving(false);

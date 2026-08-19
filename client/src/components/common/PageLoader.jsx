@@ -1,6 +1,6 @@
 import { Loader2 } from "lucide-react";
 
-import csirLogo from "../../assets/logos/CSIRCBRI-Logo.jpg";
+import csirLogo from "../../assets/logos/CSIR.jpg";
 import smartVillageLogo from "../../assets/logos/SmartVillage.jpeg";
 
 const PageLoader = () => {

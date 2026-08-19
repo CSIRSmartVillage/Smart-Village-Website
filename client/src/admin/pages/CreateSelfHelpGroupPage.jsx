@@ -1,3 +1,4 @@
+import { getUserFriendlyError } from "../../utils/userFriendlyError";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -37,8 +38,7 @@ const CreateSelfHelpGroupPage = () => {
       console.error(error);
 
       toast.error(
-        error?.response?.data?.message ||
-          "Failed to create Self Help Group."
+        getUserFriendlyError(error, "Unable to create the Self Help Group. Please try again.")
       );
     } finally {
       setLoading(false);
