@@ -10,6 +10,7 @@ import {
   getSelfHelpGroupBySlug,
   getSelfHelpGroupsByVillage,
   getAllSelfHelpGroups,
+  getSelfHelpGroupSummary,
   toggleSelfHelpGroupPublish,
 } from "./selfHelpGroup.service.js";
 
@@ -166,13 +167,21 @@ export const getPublicList = asyncHandler(
 
 export const getAll = asyncHandler(
   async (req, res) => {
-    const groups =
-      await getAllSelfHelpGroups(req.query);
+    const [groups, summary] =
+      await Promise.all([
+        getAllSelfHelpGroups(req.query),
+        getSelfHelpGroupSummary(),
+      ]);
+
+    const data = {
+      ...groups,
+      summary,
+    };
 
     return res.json(
       new ApiResponse(
         200,
-        groups,
+        data,
         "Self Help Groups fetched successfully."
       )
     );

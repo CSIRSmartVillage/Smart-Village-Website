@@ -1,7 +1,5 @@
 import {
   useEffect,
-  useMemo,
-  useRef,
   useState,
 } from "react";
 
@@ -22,8 +20,6 @@ const SuccessStoriesPage = () => {
   const [villages, setVillages] = useState([]);
   const [pageData, setPageData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const sliderRef = useRef(null);
-  const [isHovered, setIsHovered] = useState(false);
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
@@ -58,55 +54,6 @@ const SuccessStoriesPage = () => {
     }
   }, [loading]);
 
-  const videoVillages = useMemo(() => {
-    return villages.filter((village) => {
-      const video = village.video;
-
-      if (!video) return false;
-
-      if (
-        video.type === "YOUTUBE" &&
-        (video.embedUrl || video.url)
-      ) {
-        return true;
-      }
-
-      if (
-        video.type === "UPLOAD" &&
-        (video.media?.url || video.url)
-      ) {
-        return true;
-      }
-
-      if (
-        video.type === "EXTERNAL" &&
-        video.url
-      ) {
-        return true;
-      }
-
-      return false;
-    });
-  }, [villages]);
-
-  // Autoplay effect for the horizontal video slider
-  useEffect(() => {
-    if (loading || videoVillages.length <= 1 || isHovered) return;
-
-    const interval = setInterval(() => {
-      if (sliderRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
-        const cardWidth = 390; // approx card width + gap
-        if (scrollLeft + clientWidth >= scrollWidth - 15) {
-          sliderRef.current.scrollTo({ left: 0, behavior: "smooth" });
-        } else {
-          sliderRef.current.scrollBy({ left: cardWidth, behavior: "smooth" });
-        }
-      }
-    }, 2500);
-
-    return () => clearInterval(interval);
-  }, [loading, videoVillages, isHovered]);
 
   const heroSection =
     pageData?.sections?.find(
@@ -116,15 +63,15 @@ const SuccessStoriesPage = () => {
     );
 
   const heroEyebrow =
-    heroSection?.subtitle ||
-    "CSIR Smart Village Mission";
+    heroSection?.subtitle ??
+    "REAL IMPACT FROM SMART VILLAGE INITIATIVES";
 
   const heroTitle =
-    heroSection?.title ||
+    heroSection?.title ??
     "Success Stories";
 
   const heroDescription =
-    heroSection?.content?.description ||
+    heroSection?.content?.description ??
     "Discover how innovation, science, community participation, and sustainable development initiatives are transforming villages under the CSIR Smart Village Mission.";
 
   const heroImage =
@@ -132,19 +79,6 @@ const SuccessStoriesPage = () => {
     heroSection?.content?.heroImage?.url ||
     "";
 
-  const scrollSlider = (direction) => {
-    if (!sliderRef.current) return;
-
-    const scrollAmount = 390;
-
-    sliderRef.current.scrollBy({
-      left:
-        direction === "left"
-          ? -scrollAmount
-          : scrollAmount,
-      behavior: "smooth",
-    });
-  };
 
   if (loading) {
     return <SuccessStoriesSkeleton />;
@@ -189,109 +123,9 @@ const SuccessStoriesPage = () => {
           </div>
         </section>
 
-        {/* VIDEO SECTION */}
-        <section className="max-w-7xl mx-auto px-6 py-16 md:py-20">
-          <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-10">
-            <div className="max-w-3xl">
-              <p className="text-xs font-bold tracking-[0.16em] uppercase text-blue-700 mb-2">
-                Village Impact Videos
-              </p>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-normal mt-3">
-                Watch transformation stories from participating villages
-              </h2>
-              <p className="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">
-                A quick visual look at how CSIR Smart Village initiatives are improving rural infrastructure, livelihoods and sustainability.
-              </p>
-            </div>
-
-            {videoVillages.length > 1 && (
-              <div className="flex items-center gap-3 shrink-0 self-end">
-                <button
-                  type="button"
-                  onClick={() => scrollSlider("left")}
-                  className="group h-11 w-11 flex items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm hover:shadow hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 active:scale-95 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
-                  aria-label="Scroll Left"
-                >
-                  <svg className="w-5 h-5 transform group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => scrollSlider("right")}
-                  className="group h-11 w-11 flex items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm hover:shadow hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 active:scale-95 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
-                  aria-label="Scroll Right"
-                >
-                  <svg className="w-5 h-5 transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-            )}
-          </div>
-
-          {videoVillages.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/50 p-12 text-center max-w-lg mx-auto flex flex-col items-center">
-              <div className="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-4">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-1">No Video Stories Available</h3>
-              <p className="text-sm text-slate-500">Transformative videos from participating villages are under preparation and will be uploaded soon.</p>
-            </div>
-          ) : (
-            <div
-              ref={sliderRef}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-              className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide scroll-smooth"
-            >
-              {videoVillages.map((village) => (
-                <div
-                  key={village._id}
-                  className="w-[300px] sm:w-[350px] md:w-[380px] shrink-0 snap-start rounded-xl overflow-hidden border border-slate-200/80 bg-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="aspect-video bg-black overflow-hidden relative group/video">
-                      {renderVillageVideoPreview(village)}
-                    </div>
-
-                    <div className="p-5">
-                      <span className="text-[10px] font-bold text-blue-600 tracking-wider uppercase mb-1 block">
-                        CSIR Smart Village
-                      </span>
-                      <h3 className="text-lg font-bold text-slate-900 tracking-tight hover:text-blue-800 transition-colors">
-                        {village.name}
-                      </h3>
-
-                      <p className="mt-2 text-slate-600 text-sm leading-relaxed line-clamp-3">
-                        {village.shortDescription ||
-                          "Success stories and impact highlights from this village."}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-5 pt-0">
-                    <Link
-                      to={`/success-stories/${village.slug}`}
-                      className="group/link inline-flex items-center text-sm font-semibold text-blue-700 hover:text-blue-900 transition-colors outline-none focus-visible:underline"
-                    >
-                      Explore this village
-                      <span className="inline-block transform group-hover/link:translate-x-1 transition-transform duration-200 ml-1">
-                        →
-                      </span>
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
 
         {/* VILLAGE CARDS */}
-        <section className="max-w-7xl mx-auto px-6 pb-20 md:pb-28">
+        <section className="max-w-7xl mx-auto px-6 py-16 md:py-20 md:pb-28">
           <div className="mb-10 max-w-3xl">
             <p className="text-xs font-bold tracking-[0.16em] uppercase text-blue-700 mb-2">
               Explore Village Success Stories
@@ -397,26 +231,8 @@ const SuccessStoriesSkeleton = () => {
           </div>
         </div>
 
-        {/* VIDEOS CAROUSEL SKELETON */}
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <div className="h-4 w-28 bg-slate-200 rounded mb-3 animate-pulse"></div>
-          <div className="h-8 w-2/3 bg-slate-200 rounded mb-4 animate-pulse"></div>
-          <div className="h-4 w-1/2 bg-slate-200 rounded mb-10 animate-pulse"></div>
-
-          <div className="flex gap-6 overflow-hidden">
-            {[1, 2, 3].map((n) => (
-              <div key={n} className="w-[300px] sm:w-[350px] md:w-[380px] shrink-0 border border-slate-200/80 rounded-xl bg-white p-5 animate-pulse">
-                <div className="aspect-video bg-slate-200 rounded-lg mb-4"></div>
-                <div className="h-5 w-2/3 bg-slate-200 rounded mb-3"></div>
-                <div className="h-4 w-full bg-slate-200 rounded mb-2"></div>
-                <div className="h-4 w-4/5 bg-slate-200 rounded"></div>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* VILLAGES GRID SKELETON */}
-        <div className="max-w-7xl mx-auto px-6 pb-20">
+        <div className="max-w-7xl mx-auto px-6 py-16 md:py-20">
           <div className="h-4 w-32 bg-slate-200 rounded mb-3 animate-pulse"></div>
           <div className="h-8 w-1/2 bg-slate-200 rounded mb-8 animate-pulse"></div>
 
@@ -438,138 +254,5 @@ const SuccessStoriesSkeleton = () => {
   );
 };
 
-function renderVillageVideoPreview(village) {
-  const video = village.video;
-
-  if (!video) {
-    return (
-      <div className="w-full h-full bg-slate-200" />
-    );
-  }
-
-  // YOUTUBE
-  if (video.type === "YOUTUBE") {
-    const embedUrl =
-      video.embedUrl ||
-      getEmbedUrl(video.url);
-
-    if (!embedUrl) {
-      return (
-        <div className="w-full h-full bg-slate-200" />
-      );
-    }
-
-    return (
-      <iframe
-        src={embedUrl}
-        title={village.name}
-        className="w-full h-full"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      />
-    );
-  }
-
-  // UPLOAD
-  if (video.type === "UPLOAD") {
-    const uploadedVideoUrl =
-      video.media?.url ||
-      video.url ||
-      "";
-
-    if (!uploadedVideoUrl) {
-      return (
-        <div className="w-full h-full bg-slate-200" />
-      );
-    }
-
-    return (
-      <video
-        controls
-        className="w-full h-full object-cover"
-      >
-        <source src={uploadedVideoUrl} />
-        Your browser does not support the video tag.
-      </video>
-    );
-  }
-
-  // EXTERNAL
-  if (
-    video.type === "EXTERNAL" &&
-    video.url
-  ) {
-    const previewImage =
-      village.bannerImage?.url ||
-      village.coverImage?.url ||
-      "";
-
-    return (
-      <div className="relative w-full h-full bg-slate-100 flex items-center justify-center">
-        {previewImage ? (
-          <img
-            src={previewImage}
-            alt={village.name}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        ) : null}
-
-        <div className="absolute inset-0 bg-black/45" />
-
-        <div className="relative z-10 text-center px-6">
-          <p className="text-white text-lg font-semibold mb-4">
-            External Village Video
-          </p>
-
-          <a
-            href={video.url}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center px-5 py-3 rounded-lg bg-white text-slate-900 font-medium hover:bg-slate-100 transition"
-          >
-            Watch Video
-          </a>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="w-full h-full bg-slate-200" />
-  );
-}
-
-function getEmbedUrl(url = "") {
-  if (!url) return "";
-
-  if (url.includes("youtube.com/watch?v=")) {
-    const videoId =
-      url
-        .split("v=")[1]
-        ?.split("&")[0];
-
-    return `https://www.youtube.com/embed/${videoId}`;
-  }
-
-  if (url.includes("youtube.com/shorts/")) {
-    const videoId =
-      url
-        .split("youtube.com/shorts/")[1]
-        ?.split("?")[0];
-
-    return `https://www.youtube.com/embed/${videoId}`;
-  }
-
-  if (url.includes("youtu.be/")) {
-    const videoId =
-      url
-        .split("youtu.be/")[1]
-        ?.split("?")[0];
-
-    return `https://www.youtube.com/embed/${videoId}`;
-  }
-
-  return url;
-}
 
 export default SuccessStoriesPage;

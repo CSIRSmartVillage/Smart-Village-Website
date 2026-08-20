@@ -43,6 +43,9 @@ const SelfHelpGroupsPage = () => {
   });
 
   const groups = data?.data || [];
+  const totalGroups = Number(
+    data?.total ?? data?.pagination?.total ?? groups.length
+  );
 
   if (isLoading) {
     return <ShgSkeleton />;
@@ -66,7 +69,7 @@ const SelfHelpGroupsPage = () => {
       <section className="mx-auto max-w-[1000px] rounded-3xl border border-blue-100 bg-white p-8 shadow-sm">
         <div className="max-w-3xl">
           <h1 className="text-3xl font-bold text-slate-900">
-            Self Help Groups
+            {totalGroups} Self Help {totalGroups === 1 ? "Group" : "Groups"}
           </h1>
 
           <p className="mt-4 text-lg leading-8 text-slate-600">
@@ -77,7 +80,7 @@ const SelfHelpGroupsPage = () => {
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           <StatCard
             label="Published Groups"
-            value={groups.length}
+            value={totalGroups}
           />
           <StatCard
             label="Total Members"
@@ -118,7 +121,7 @@ const SelfHelpGroupsPage = () => {
           </p>
         </div>
       ) : (
-        <section className="mx-auto grid max-w-[1000px] gap-6">
+        <section className="mx-auto grid max-w-[1000px] items-stretch gap-6 md:grid-cols-2">
           {groups.map((group) => (
             <ShgCard
               key={group._id}
@@ -153,8 +156,8 @@ const ShgCard = ({
   const imageUrl = group.featuredImage?.url;
 
   return (
-    <article className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-lg md:grid md:grid-cols-[280px_minmax(0,1fr)]">
-      <div className="flex h-52 items-center justify-center bg-slate-100 p-3 md:h-full md:min-h-[260px]">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-lg">
+      <div className="flex h-52 items-center justify-center bg-slate-100 p-3">
         {imageUrl ? (
           <img
             src={imageUrl}
@@ -170,7 +173,7 @@ const ShgCard = ({
         )}
       </div>
 
-      <div className="flex min-h-[260px] flex-col p-6">
+      <div className="flex flex-1 flex-col p-6">
         <div className="flex flex-wrap gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
             <Users size={14} />
@@ -178,7 +181,7 @@ const ShgCard = ({
           </span>
         </div>
 
-        <h2 className="mt-4 text-2xl font-bold text-slate-950">
+        <h2 className="mt-4 line-clamp-2 min-h-14 text-xl font-bold text-slate-950">
           {group.groupName}
         </h2>
 
@@ -220,12 +223,14 @@ const ShgSkeleton = () => (
         <div className="h-28 animate-pulse rounded-2xl bg-slate-100" />
       </div>
     </div>
-    {[1, 2, 3].map((item) => (
-      <div
-        key={item}
-        className="mx-auto h-64 max-w-[1000px] animate-pulse rounded-2xl bg-slate-200"
-      />
-    ))}
+    <div className="mx-auto grid w-full max-w-[1000px] gap-6 md:grid-cols-2">
+      {[1, 2, 3, 4].map((item) => (
+        <div
+          key={item}
+          className="h-[520px] animate-pulse rounded-2xl bg-slate-200"
+        />
+      ))}
+    </div>
   </div>
 );
 

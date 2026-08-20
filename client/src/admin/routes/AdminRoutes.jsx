@@ -10,7 +10,6 @@ const LoginPage = lazy(() => import("../pages/LoginPage"));
 const DashboardPage = lazy(() => import("../pages/DashboardPage"));
 const AdminLayout = lazy(() => import("../layouts/AdminLayout"));
 const PagesPage = lazy(() => import("../pages/PagesPage"));
-const NavigationPage = lazy(() => import("../pages/NavigationPage"));
 const NewsManagementPage = lazy(() => import("../pages/NewsFeatureManagementPage"));
 const SuccessStoriesPage = lazy(() => import("../pages/SuccessStoriesPage"));
 const PageEditPage = lazy(() => import("../pages/PageEditPage"));
@@ -23,8 +22,6 @@ const CreateSuccessStoryPage = lazy(() => import("../pages/CreateSuccessStoryPag
 const CreateLaboratoryPage = lazy(() => import("../pages/CreateLaboratoryPage"));
 const EditLaboratoryPage = lazy(() => import("../pages/EditLaboratoryPage"));
 const EditSuccessStoryPage = lazy(() => import("../pages/EditSuccessStoryPage"));
-const CreateNavigationPage = lazy(() => import("../pages/CreateNavigationPage"));
-const EditNavigationPage = lazy(() => import("../pages/EditNavigationPage"));
 const MediaLibraryPage = lazy(() => import("../pages/MediaLibraryPage"));
 const VideosPage = lazy(() => import("../pages/VideosPage"));
 const CreateVideoPage = lazy(() => import("../pages/CreateVideoPage"));
@@ -32,7 +29,6 @@ const EditVideoPage = lazy(() => import("../pages/EditVideoPage"));
 const AnnouncementsPage = lazy(() => import("../pages/AnnouncementsPage"));
 const CreateAnnouncementPage = lazy(() => import("../pages/CreateAnnouncementPage"));
 const EditAnnouncementPage = lazy(() => import("../pages/EditAnnouncementPage"));
-const HomeSectionsPage = lazy(() => import("../pages/HomeSectionsPage"));
 const SuccessStoryVillagesPage = lazy(() => import("../pages/SuccessStoryVillagesPage"));
 const CreateSuccessStoryVillagePage = lazy(() => import("../pages/CreateSuccessStoryVillagePage"));
 const EditSuccessStoryVillagePage = lazy(() => import("../pages/EditSuccessStoryVillagePage"));
@@ -104,10 +100,6 @@ const AdminRoutes = () => {
     element={<PagesPage />}
   />
 
-  <Route
-    path="/navigation"
-    element={<NavigationPage />}
-  />
 
   <Route
     path="/news"
@@ -357,19 +349,6 @@ const AdminRoutes = () => {
 
 
 
-<Route
-  path="/navigation/create"
-  element={
-    <CreateNavigationPage />
-  }
-/>
-
-<Route
-  path="/navigation/:id"
-  element={
-    <EditNavigationPage />
-  }
-/>
 
 <Route
   path="/media"
@@ -402,12 +381,6 @@ const AdminRoutes = () => {
   }
 />
 
-<Route
-  path="home-sections"
-  element={
-    <HomeSectionsPage />
-  }
-/>
 
 </Route>
 

@@ -86,12 +86,14 @@ const SelfHelpGroupsPage = () => {
       return {
         groups: groupsData?.data || EMPTY_LIST,
         pagination: groupsData?.pagination,
+        summary: groupsData?.summary,
         villages: villagesData,
       };
     },
   });
 
   const groups = data?.groups || EMPTY_LIST;
+  const summary = data?.summary;
   const villages = data?.villages || EMPTY_LIST;
   const pagination = data?.pagination
     ? {
@@ -195,7 +197,7 @@ const SelfHelpGroupsPage = () => {
         </button>
       </div>
 
-      <SelfHelpGroupStats groups={groups} />
+      <SelfHelpGroupStats groups={groups} summary={summary} />
 
       <SelfHelpGroupFilters
         search={search}

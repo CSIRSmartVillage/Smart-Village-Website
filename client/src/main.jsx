@@ -10,8 +10,12 @@ import AppErrorBoundary from "./components/common/AppErrorBoundary";
 import {
   startPerformanceMonitoring,
 } from "./lib/performanceMonitoring";
+import {
+  startAdminSessionHandling,
+} from "./admin/services/adminSession.service";
 
 startPerformanceMonitoring();
+startAdminSessionHandling();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>

@@ -10,6 +10,16 @@ import {
 import { Link }
   from "react-router-dom";
 
+const PAGE_SLUGS_MANAGED_ELSEWHERE =
+  new Set([
+    "participating-labs",
+    "news-updates",
+    "nodal-lab",
+    "csir-smart-village",
+    "csir-laboratories",
+  ]);
+
+
 const PagesPage = () => {
   const [pages, setPages] =
     useState([]);
@@ -62,14 +72,6 @@ const PagesPage = () => {
               </th>
 
               <th className="text-left p-4">
-                Slug
-              </th>
-
-              <th className="text-left p-4">
-                Type
-              </th>
-
-              <th className="text-left p-4">
                 Status
               </th>
 
@@ -87,7 +89,14 @@ const PagesPage = () => {
 
           <tbody>
 
-            {pages.map(
+            {pages
+              .filter(
+                (page) =>
+                  !PAGE_SLUGS_MANAGED_ELSEWHERE.has(
+                    page.slug
+                  )
+              )
+              .map(
               (page) => (
                 <tr
                   key={page._id}
@@ -97,14 +106,6 @@ const PagesPage = () => {
 
                   <td className="p-4">
                     {page.title}
-                  </td>
-
-                  <td className="p-4">
-                    {page.slug}
-                  </td>
-
-                  <td className="p-4">
-                    {page.pageType}
                   </td>
 
                   <td className="p-4">

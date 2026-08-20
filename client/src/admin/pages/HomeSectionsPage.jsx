@@ -3,13 +3,18 @@ import {
   useState,
 } from "react";
 
+import { Link } from "react-router-dom";
+
 import {
   getSectionsByPage,
   updateSection,
 } from "../services/sectionManagement.service";
 
-const HOME_PAGE_ID =
-  "6a2fd2ad6ea52761ac32ca8a";
+import {
+  getHomeSectionPresentation,
+  HOME_PAGE_ID,
+  isManageableHomeSection,
+} from "../utils/homeSectionPresentation";
 
 const HomeSectionsPage =
   () => {
@@ -19,22 +24,26 @@ const HomeSectionsPage =
     ] = useState([]);
 
     useEffect(() => {
+      const loadSections =
+        async () => {
+          try {
+            const data =
+              await getSectionsByPage(
+                HOME_PAGE_ID
+              );
+
+            setSections(
+              data.filter(
+                isManageableHomeSection
+              )
+            );
+          } catch (error) {
+            console.error(error);
+          }
+        };
+
       loadSections();
     }, []);
-
-    const loadSections =
-      async () => {
-        try {
-          const data =
-            await getSectionsByPage(
-              HOME_PAGE_ID
-            );
-
-          setSections(data);
-        } catch (error) {
-          console.error(error);
-        }
-      };
 
     const handleOrderChange =
       (
@@ -100,9 +109,13 @@ const HomeSectionsPage =
             mb-8
           "
         >
-          Home Sections
+          Manage Home Page Sections
         </h1>
 
+
+        <p className="mb-6 max-w-3xl text-sm leading-6 text-slate-600">
+          Update homepage sections with editable settings. Sections without editable settings are hidden; automatically updated content is identified below.
+        </p>
         <div
           className="
             bg-white
@@ -122,6 +135,10 @@ const HomeSectionsPage =
                 <th className="p-4 text-left">
                   Order
                 </th>
+
+                <th className="p-4 text-left">
+                  Action
+                </th>
               </tr>
             </thead>
 
@@ -138,9 +155,16 @@ const HomeSectionsPage =
                     className="border-t"
                   >
                     <td className="p-4">
-                      {
-                        section.sectionType
-                      }
+                      <p className="font-semibold text-slate-900">
+                        {getHomeSectionPresentation(
+                          section.sectionType
+                        )?.name}
+                      </p>
+                      <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">
+                        {getHomeSectionPresentation(
+                          section.sectionType
+                        )?.description}
+                      </p>
                     </td>
 
                     <td className="p-4">
@@ -168,8 +192,18 @@ const HomeSectionsPage =
                         "
                       />
                     </td>
+
+                    <td className="p-4">
+                      <Link
+                        to={`/admin/sections/${section._id}`}
+                        className="font-semibold text-blue-700 hover:text-blue-900"
+                      >
+                        Edit section
+                      </Link>
+                    </td>
                   </tr>
                 )
+
               )}
 
             </tbody>

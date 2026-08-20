@@ -141,7 +141,10 @@ const NodalLabPage = () => {
           <div className="space-y-2">
             {laboratory.directorName && (
               <p>
-                Director: {laboratory.directorName}
+                <span>Director: </span>
+                <span className="text-lg font-semibold">
+                  {laboratory.directorName}
+                </span>
               </p>
             )}
 

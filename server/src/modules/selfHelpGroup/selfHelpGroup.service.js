@@ -185,19 +185,18 @@ export const getSelfHelpGroupsByVillage =
     }
 
     const {
-      page = 1,
-      limit = 10,
       search,
       sortBy = "displayOrder",
       sortOrder = "asc",
     } = query;
 
-    const filter = {
+    const villageFilter = {
       village: village._id,
       isPublished: true,
       status: "PUBLISHED",
       isDeleted: false,
     };
+    const filter = { ...villageFilter };
 
     if (search) {
       filter.$or = [
@@ -222,32 +221,48 @@ export const getSelfHelpGroupsByVillage =
       ];
     }
 
-    const pageNumber = Number(page);
-    const limitNumber = Number(limit);
-    const skip = (pageNumber - 1) * limitNumber;
-
     const [groups, total] = await Promise.all([
       SelfHelpGroup.find(filter)
         .sort({
           [sortBy]: sortOrder === "desc" ? -1 : 1,
           createdAt: -1,
         })
-        .skip(skip)
-        .limit(limitNumber)
         .lean(),
 
-      SelfHelpGroup.countDocuments(filter),
+      SelfHelpGroup.countDocuments(villageFilter),
     ]);
 
     return {
       village,
       data: groups,
+      total,
       pagination: {
-        total,
-        page: pageNumber,
-        limit: limitNumber,
-        totalPages: Math.ceil(total / limitNumber),
+        total: groups.length,
+        page: 1,
+        limit: groups.length,
+        totalPages: groups.length > 0 ? 1 : 0,
       },
+    };
+  };
+
+export const getSelfHelpGroupSummary =
+  async () => {
+    const activeFilter = {
+      isDeleted: false,
+    };
+
+    const [totalSHGs, publishedSHGs] =
+      await Promise.all([
+        SelfHelpGroup.countDocuments(activeFilter),
+        SelfHelpGroup.countDocuments({
+          ...activeFilter,
+          isPublished: true,
+        }),
+      ]);
+
+    return {
+      totalSHGs,
+      publishedSHGs,
     };
   };
 

@@ -5,16 +5,26 @@ import {
   Shield,
   X,
 } from "lucide-react";
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { logoutAdmin } from "../services/auth.service";
+import { clearAdminSession } from "../services/adminSession.service";
 
 const AdminLayout = () => {
+  const navigate = useNavigate();
   const admin = JSON.parse(localStorage.getItem("admin"));
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("admin");
-    window.location.href = "/admin/login";
+  const handleLogout = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+
+    try {
+      await logoutAdmin(accessToken);
+    } catch {
+      // Local logout must still complete if the server session has expired.
+    } finally {
+      clearAdminSession();
+      navigate("/admin/login", { replace: true });
+    }
   };
 
   const navClass = ({ isActive }) =>
@@ -43,10 +53,6 @@ const AdminLayout = () => {
           path: "/admin/pages",
         },
         {
-          label: "Navigation",
-          path: "/admin/navigation",
-        },
-        {
           label: "Media Library",
           path: "/admin/media",
         },
@@ -67,10 +73,6 @@ const AdminLayout = () => {
         {
           label: "Videos",
           path: "/admin/videos",
-        },
-        {
-          label: "Home Sections",
-          path: "/admin/home-sections",
         },
         {
           label: "Success Stories",

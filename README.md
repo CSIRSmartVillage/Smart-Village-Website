@@ -428,10 +428,10 @@ The admin panel at `/admin/*` is a fully protected CMS.
 
 ### Authentication Flow
 1. Admin visits `/admin/login` and submits credentials
-2. Server validates and returns `accessToken` (25 min) and `refreshToken` (7 days)
+2. Server validates and returns `accessToken` (8 hours) and `refreshToken` (7 days)
 3. `accessToken` stored in `localStorage`, sent as `Authorization: Bearer <token>` header
 4. `ProtectedRoute` component checks token presence; redirects to login if missing
-5. Token refresh handled via `/auth/refresh`
+5. Expired access tokens are renewed transparently via `/auth/refresh`; an invalid or expired refresh session redirects to login
 
 ### Admin Roles
 
@@ -537,7 +537,7 @@ Request → CORS → Helmet (CSP, XSS headers) → Compression → Cookie Parser
 
 | Token | Expiry | Storage | Use |
 |---|---|---|---|
-| Access Token | 25 minutes | localStorage (client) | API Authorization header |
+| Access Token | 8 hours | localStorage (client) | API Authorization header |
 | Refresh Token | 7 days | MongoDB (server) | Token renewal |
 
 ### CORS Configuration
@@ -592,7 +592,7 @@ MONGODB_URI=mongodb+srv://<user>:<pass>@cluster0.xxxx.mongodb.net/?appName=Clust
 # JWT Secrets
 JWT_ACCESS_SECRET=your_strong_access_secret_here
 JWT_REFRESH_SECRET=your_strong_refresh_secret_here
-ACCESS_TOKEN_EXPIRY=25m
+ACCESS_TOKEN_EXPIRY=8h
 REFRESH_TOKEN_EXPIRY=7d
 
 # Cloudinary

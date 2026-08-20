@@ -934,6 +934,7 @@ const StructuredContentEditor = ({
   value,
   media = [],
   sectionType,
+  hiddenFields = [],
   isVisible = true,
   onChange,
   onVisibilityChange,
@@ -944,7 +945,8 @@ const StructuredContentEditor = ({
   const hasPolicy = isObject(policy);
   const visibleEntries = Object.entries(contentValue).filter(
     ([fieldKey]) =>
-      !hasPolicy || Object.prototype.hasOwnProperty.call(policy, fieldKey)
+      !hiddenFields.includes(fieldKey) &&
+      (!hasPolicy || Object.prototype.hasOwnProperty.call(policy, fieldKey))
   );
   const mediaEntries = visibleEntries.filter(
     ([fieldKey]) => isImageKey(fieldKey) || isImageArrayKey(fieldKey)

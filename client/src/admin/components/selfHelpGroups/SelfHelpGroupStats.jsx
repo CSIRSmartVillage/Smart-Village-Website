@@ -1,4 +1,4 @@
-import { Users, CheckCircle2, Clock, Image } from "lucide-react";
+import { Users, CheckCircle2, Clock } from "lucide-react";
 import { useMemo } from "react";
 
 const StatCard = ({
@@ -24,32 +24,32 @@ const StatCard = ({
 
 const SelfHelpGroupStats = ({
   groups = [],
+  summary,
 }) => {
   const stats = useMemo(() => {
-    const total = groups.length;
-    const published = groups.filter(
-      (group) => group.isPublished
-    ).length;
+    const total = Number(
+      summary?.totalSHGs ?? groups.length
+    );
+    const published = Number(
+      summary?.publishedSHGs ?? groups.filter(
+        (group) => group.isPublished
+      ).length
+    );
     const members = groups.reduce(
       (sum, group) =>
         sum + Number(group.members?.length || 0),
       0
     );
 
-    const withImages = groups.filter(
-      (group) => group.featuredImage?.url
-    ).length;
-
     return {
       total,
       published,
       members,
-      withImages,
     };
-  }, [groups]);
+  }, [groups, summary]);
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
       <StatCard
         title="Total SHGs"
         value={stats.total}
@@ -64,14 +64,6 @@ const SelfHelpGroupStats = ({
         icon={<CheckCircle2 size={26} />}
         iconBg="bg-emerald-100"
         iconColor="text-emerald-600"
-      />
-
-      <StatCard
-        title="With Image"
-        value={stats.withImages}
-        icon={<Image size={26} />}
-        iconBg="bg-amber-100"
-        iconColor="text-amber-600"
       />
 
       <StatCard

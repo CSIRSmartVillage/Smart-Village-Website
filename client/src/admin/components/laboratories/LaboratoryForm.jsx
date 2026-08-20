@@ -201,13 +201,25 @@ const LaboratoryForm = ({
         </select>
       </div>
 
-      <input
-        name="directorName"
-        placeholder="Director Name"
-        value={formData.directorName}
-        onChange={handleChange}
-        className="w-full border p-3 rounded"
-      />
+      <div>
+        <label
+          htmlFor="directorName"
+          className="mb-2 block font-medium text-slate-700"
+        >
+          Director Name
+        </label>
+        <input
+          id="directorName"
+          name="directorName"
+          placeholder="Enter director name"
+          value={formData.directorName || ""}
+          onChange={handleChange}
+          className="w-full border p-3 rounded"
+        />
+        <p className="mt-1 text-sm text-slate-500">
+          Shown as Director: [Director Name] in Contact Information.
+        </p>
+      </div>
 
       <textarea
         name="overview"

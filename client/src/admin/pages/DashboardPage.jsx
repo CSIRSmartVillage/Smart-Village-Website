@@ -60,10 +60,6 @@ const DashboardPage = () => {
       label: "Upload Media",
       href: "/admin/media",
     },
-    {
-      label: "Edit Navigation",
-      href: "/admin/navigation",
-    },
   ];
 
   return (
