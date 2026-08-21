@@ -79,10 +79,6 @@ const AdminLayout = () => {
           path: "/admin/success-stories",
         },
         {
-          label: "Success Story Villages",
-          path: "/admin/success-story-villages",
-        },
-        {
           label: "Supporters",
           path: "/admin/supporters",
         },

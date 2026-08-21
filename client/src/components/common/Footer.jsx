@@ -28,6 +28,9 @@ const Footer = () => {
   const { settings } = useSiteSettings();
   const [developerIndex, setDeveloperIndex] =
     useState(null);
+  const primaryContactPhone =
+    settings?.contactPhone ||
+    "+91-1332-272243";
 
   const developerNames = [
     "Sagar Tomar",
@@ -376,6 +379,13 @@ const Footer = () => {
                   csirsmartvillage@gmail.com
                 </a>
 
+                <a
+                  href="mailto:director.cbri@csir.res.in"
+                  className="mt-1 block text-sm text-slate-600 hover:text-blue-700 transition"
+                >
+                  director.cbri@csir.res.in
+                </a>
+
               </div>
 
             </div>
@@ -392,13 +402,25 @@ const Footer = () => {
                   Phone
                 </p>
 
-                <a
-                  href={`tel:${settings?.contactPhone}`}
-                  className="mt-1 block text-sm text-slate-600 hover:text-blue-700 transition"
-                >
-                  {settings?.contactPhone ||
-                    "+91 96635 30674"}
-                </a>
+                <p className="mt-1 text-sm text-slate-600">
+                  <a
+                    href={`tel:${primaryContactPhone.replace(/[^\d+]/g, "")}`}
+                    className="hover:text-blue-700 transition"
+                  >
+                    +91-1332-272243
+                  </a>{" "}
+                  (Director&apos;s Office)
+                </p>
+
+                <p className="mt-1 text-sm text-slate-600">
+                  <a
+                    href="tel:+919663530674"
+                    className="hover:text-blue-700 transition"
+                  >
+                    +91 96635 30674
+                  </a>{" "}
+                  (Nodal Scientist)
+                </p>
 
               </div>
 

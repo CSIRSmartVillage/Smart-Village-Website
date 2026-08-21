@@ -40,19 +40,19 @@ const EditSuccessStoryPage =
             setStory({
               title:
                 data.title || "",
-              slug:
-                data.slug || "",
               village:
                 data.village?._id ||
                 "",
+              villageName:
+                data.village?.name?.en ||
+                data.village?.name?.regional ||
+                data.village?.name ||
+                "",
               featuredImage:
-                data.featuredImage
-                  ?._id || "",
+                data.featuredImage ||
+                null,
               galleryImages:
-                data.galleryImages?.map(
-                  (img) =>
-                    img._id
-                ) || [],
+                data.galleryImages || [],
               videoUrl:
                 data.videoUrl || "",
               summary:
@@ -61,12 +61,6 @@ const EditSuccessStoryPage =
                 data.story || "",
               impact:
                 data.impact || "",
-              beneficiaries:
-                data.beneficiaries ||
-                0,
-              isFeatured:
-                data.isFeatured ||
-                false,
               status:
                 data.status ||
                 "DRAFT",

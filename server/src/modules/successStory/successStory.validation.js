@@ -3,48 +3,49 @@ import { z } from "zod";
 export const createSuccessStorySchema =
   z.object({
     body: z.object({
-      title: z
-        .string()
-        .min(3),
+      title:
+        z.string().nullable().optional(),
 
-      slug: z
-        .string()
-        .min(2),
-
-      village: z
-        .string()
-        .min(1),
+      village:
+        z.string().nullable().optional(),
 
       featuredImage:
-        z.string().optional(),
+        z.string().nullable().optional(),
 
       galleryImages:
-        z.array(z.string()).optional(),
+        z.array(z.string()).nullable().optional(),
 
       videoUrl:
-        z.string().optional(),
+        z.string().nullable().optional(),
 
       summary:
-        z.string().optional(),
+        z.string().nullable().optional(),
 
       story:
-        z.string().optional(),
+        z.string().nullable().optional(),
 
       impact:
-        z.string().optional(),
+        z.string().nullable().optional(),
 
       beneficiaries:
-        z.number().optional(),
+        z.union([
+          z.number(),
+          z.literal(""),
+        ]).nullable().optional(),
 
       isFeatured:
-        z.boolean().optional(),
+        z.boolean().nullable().optional(),
 
       status:
-        z.enum([
-          "DRAFT",
-          "PUBLISHED",
-          "ARCHIVED",
-        ]).optional(),
+        z.union([
+          z.enum([
+            "DRAFT",
+            "PUBLISHED",
+            "ARCHIVED",
+          ]),
+          z.literal(""),
+        ])
+          .nullable().optional(),
     }),
   });
 
@@ -52,43 +53,47 @@ export const updateSuccessStorySchema =
   z.object({
     body: z.object({
       title:
-        z.string().min(3).optional(),
-
-      slug:
-        z.string().min(2).optional(),
+        z.string().nullable().optional(),
 
       village:
-        z.string().optional(),
+        z.string().nullable().optional(),
 
       featuredImage:
-        z.string().optional(),
+        z.string().nullable().optional(),
 
       galleryImages:
-        z.array(z.string()).optional(),
+        z.array(z.string()).nullable().optional(),
 
       videoUrl:
-        z.string().optional(),
+        z.string().nullable().optional(),
 
       summary:
-        z.string().optional(),
+        z.string().nullable().optional(),
 
       story:
-        z.string().optional(),
+        z.string().nullable().optional(),
 
       impact:
-        z.string().optional(),
+        z.string().nullable().optional(),
 
       beneficiaries:
-        z.number().optional(),
+        z.union([
+          z.number(),
+          z.literal(""),
+        ]).nullable().optional(),
 
       isFeatured:
-        z.boolean().optional(),
+        z.boolean().nullable().optional(),
 
       status:
-        z.enum([
-          "DRAFT",
-          "PUBLISHED",
-          "ARCHIVED",
-        ]).optional(),
+        z.union([
+          z.enum([
+            "DRAFT",
+            "PUBLISHED",
+            "ARCHIVED",
+          ]),
+          z.literal(""),
+        ])
+          .nullable().optional(),
     }),
   });

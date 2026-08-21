@@ -28,6 +28,11 @@ router.get(
 );
 
 router.get(
+  "/villages/published",
+  successStoryController.getPublishedStoryVillages
+);
+
+router.get(
   "/village/:villageSlug",
   successStoryController.getStoriesByVillageSlug
 );
@@ -41,6 +46,7 @@ router.get(
 |--------------------------------------------------------------------------
 | Admin
 |--------------------------------------------------------------------------
+
 */
 
 router.get(

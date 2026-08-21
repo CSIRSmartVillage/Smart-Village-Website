@@ -226,7 +226,7 @@ const HeroSection = ({ data = {} }) => {
                           : "lazy"
                       }
                       sizes="(min-width: 1280px) 68vw, (min-width: 1024px) 70vw, (min-width: 768px) 76vw, 86vw"
-                      className="
+                      className={`
                         block
                         relative
                         z-[1]
@@ -244,10 +244,17 @@ const HeroSection = ({ data = {} }) => {
                         lg:max-w-[70vw]
                         xl:max-h-[500px]
                         xl:max-w-[min(68vw,1100px)]
-                      "
+                        transition-[filter,opacity]
+                        duration-700
+                        ease-in-out
+                        ${active
+                          ? "blur-0 opacity-100"
+                          : "opacity-35 blur-[7px] sm:opacity-45 sm:blur-[6px] lg:opacity-60 lg:blur-[5px]"
+                        }
+                      `}
                     />
 
-                    {/* Directional edge fades for the neighboring previews */}
+                    {/* Blue fade for the neighboring previews */}
 
                     <div
                       aria-hidden="true"
@@ -259,38 +266,13 @@ const HeroSection = ({ data = {} }) => {
                         transition-opacity
                         duration-700
                         ease-in-out
-                        [--hero-side-fade-start:90%]
-                        sm:[--hero-side-fade-start:88%]
-                        md:[--hero-side-fade-start:84%]
-                        lg:[--hero-side-fade-start:82%]
-                        ${side === "previous" ? "opacity-100" : "opacity-0"}
+                        ${side === "previous"
+                          ? "bg-gradient-to-r from-blue-950/95 via-blue-900/55 to-transparent opacity-100"
+                          : side === "next"
+                            ? "bg-gradient-to-l from-blue-950/95 via-blue-900/55 to-transparent opacity-100"
+                            : "opacity-0"
+                        }
                       `}
-                      style={{
-                        backgroundImage:
-                          "linear-gradient(to right, var(--color-slate-800) 0%, color-mix(in srgb, var(--color-slate-800) 70%, transparent) 12%, color-mix(in srgb, var(--color-slate-800) 30%, transparent) 25%, transparent 42%)",
-                      }}
-                    />
-
-                    <div
-                      aria-hidden="true"
-                      className={`
-                        pointer-events-none
-                        absolute
-                        inset-0
-                        z-[2]
-                        transition-opacity
-                        duration-700
-                        ease-in-out
-                        [--hero-side-fade-start:90%]
-                        sm:[--hero-side-fade-start:88%]
-                        md:[--hero-side-fade-start:84%]
-                        lg:[--hero-side-fade-start:82%]
-                        ${side === "next" ? "opacity-100" : "opacity-0"}
-                      `}
-                      style={{
-                        backgroundImage:
-                          "linear-gradient(to left, var(--color-slate-800) 0%, color-mix(in srgb, var(--color-slate-800) 70%, transparent) 12%, color-mix(in srgb, var(--color-slate-800) 30%, transparent) 25%, transparent 42%)",
-                      }}
                     />
 
                     {/* Active Border */}

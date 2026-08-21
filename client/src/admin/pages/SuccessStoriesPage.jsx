@@ -24,7 +24,21 @@ const SuccessStoriesPage = () => {
     };
 
   useEffect(() => {
-    loadStories();
+    let isActive = true;
+
+    getAllStories()
+      .then((data) => {
+        if (isActive) {
+          setStories(data);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    return () => {
+      isActive = false;
+    };
   }, []);
 
   const handleDelete =
@@ -95,7 +109,8 @@ const SuccessStoriesPage = () => {
                 >
 
                   <td className="p-4">
-                    {story.title}
+                    {story.title ||
+                      "Untitled Success Story"}
                   </td>
 
                   <td className="p-4">

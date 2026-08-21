@@ -29,9 +29,6 @@ const EditVideoPage = lazy(() => import("../pages/EditVideoPage"));
 const AnnouncementsPage = lazy(() => import("../pages/AnnouncementsPage"));
 const CreateAnnouncementPage = lazy(() => import("../pages/CreateAnnouncementPage"));
 const EditAnnouncementPage = lazy(() => import("../pages/EditAnnouncementPage"));
-const SuccessStoryVillagesPage = lazy(() => import("../pages/SuccessStoryVillagesPage"));
-const CreateSuccessStoryVillagePage = lazy(() => import("../pages/CreateSuccessStoryVillagePage"));
-const EditSuccessStoryVillagePage = lazy(() => import("../pages/EditSuccessStoryVillagePage"));
 const SmartVillageDashboard = lazy(() => import("../pages/SmartVillageDashboard"));
 const VillageProfilesPage = lazy(() => import("../pages/VillageProfilesPage"));
 const CreateVillageProfilePage = lazy(() => import("../pages/CreateVillageProfilePage"));
@@ -113,28 +110,14 @@ const AdminRoutes = () => {
 
 
   <Route
-  path="/success-story-villages"
-  element={
-    <SuccessStoryVillagesPage />
-  }
-/>
-
-
-
-
-<Route
-  path="/success-story-villages/create"
-  element={
-    <CreateSuccessStoryVillagePage />
-  }
-/>
-
-<Route
-  path="/success-story-villages/:id"
-  element={
-    <EditSuccessStoryVillagePage />
-  }
-/>
+    path="/success-story-villages/*"
+    element={
+      <Navigate
+        to="/admin/success-stories"
+        replace
+      />
+    }
+  />
 
 
 <Route

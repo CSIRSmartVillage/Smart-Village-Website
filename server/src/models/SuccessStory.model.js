@@ -5,7 +5,7 @@ const successStorySchema =
     {
       title: {
         type: String,
-        required: true,
+        default: "",
         trim: true,
       },
 
@@ -16,11 +16,22 @@ const successStorySchema =
         trim: true,
       },
 
+      villageModel: {
+        type: String,
+        enum: [
+          "SuccessStoryVillage",
+          "Village",
+        ],
+      },
+
       village: {
         type:
           mongoose.Schema.Types.ObjectId,
-        ref: "SuccessStoryVillage",
-        required: true,
+        ref() {
+          return this.villageModel ||
+            "SuccessStoryVillage";
+        },
+        default: null,
       },
 
       summary: {

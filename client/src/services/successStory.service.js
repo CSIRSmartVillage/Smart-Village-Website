@@ -4,13 +4,26 @@ const API_URL =
   import.meta.env.VITE_API_URL;
 
 /**
+ * Public: all published success stories
+ */
+export const getPublishedSuccessStories =
+  async () => {
+    const response =
+      await axios.get(
+        `${API_URL}/success-stories/published`
+      );
+
+    return response.data.data;
+  };
+
+/**
  * Public: published success story villages
  */
 export const getPublishedSuccessStoryVillages =
   async () => {
     const response =
       await axios.get(
-        `${API_URL}/success-story-villages/published`
+        `${API_URL}/success-stories/villages/published`
       );
 
     return response.data.data;

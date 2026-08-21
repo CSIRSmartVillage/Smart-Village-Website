@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import MainLayout from "../../layouts/MainLayout";
 
 import {
-  getPublishedSuccessStoryVillages,
+  getPublishedSuccessStories,
 } from "../../services/successStory.service";
 
 import {
@@ -17,7 +17,7 @@ import {
 import SmartTextRenderer
   from "../../components/common/SmartTextRenderer";
 const SuccessStoriesPage = () => {
-  const [villages, setVillages] = useState([]);
+  const [stories, setStories] = useState([]);
   const [pageData, setPageData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [animate, setAnimate] = useState(false);
@@ -27,14 +27,14 @@ const SuccessStoriesPage = () => {
     const loadData = async () => {
       try {
         const [
-          villagesData,
+          storiesData,
           successStoriesPage,
         ] = await Promise.all([
-          getPublishedSuccessStoryVillages(),
+          getPublishedSuccessStories(),
           getPageBySlug("success-stories"),
         ]);
 
-        setVillages(villagesData || []);
+        setStories(storiesData || []);
         setPageData(successStoriesPage || null);
       } catch (error) {
         console.error(error);
@@ -124,88 +124,97 @@ const SuccessStoriesPage = () => {
         </section>
 
 
-        {/* VILLAGE CARDS */}
+        {/* PUBLISHED STORY CARDS */}
         <section className="max-w-7xl mx-auto px-6 py-16 md:py-20 md:pb-28">
           <div className="mb-10 max-w-3xl">
             <p className="text-xs font-bold tracking-[0.16em] uppercase text-blue-700 mb-2">
-              Explore Village Success Stories
+              Published Success Stories
             </p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-normal mt-3">
-              Browse village-specific transformation journeys
+              Transformation stories from Smart Villages
             </h2>
             <p className="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">
-              Explore initiatives, outcomes and stories emerging from each village under the CSIR Smart Village Mission.
+              Explore published initiatives, outcomes and community stories from across the CSIR Smart Village Mission.
             </p>
           </div>
 
-          {villages.length === 0 ? (
+          {stories.length === 0 ? (
             <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50/50 p-12 text-center max-w-lg mx-auto flex flex-col items-center">
               <div className="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-4">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-1">No Villages Registered</h3>
-              <p className="text-sm text-slate-500">There are currently no active success stories or villages registered in this portal.</p>
+              <h3 className="text-lg font-bold text-slate-900 mb-1">No Stories Published</h3>
+              <p className="text-sm text-slate-500">There are currently no published success stories. Please check back later.</p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
-              {villages.map((village) => {
-                const imageUrl =
-                  village.coverImage?.url ||
-                  village.bannerImage?.url ||
-                  "";
+              {stories.map((story) => {
+                const displayTitle =
+                  story.title ||
+                  "Untitled Success Story";
 
                 return (
-                  <Link
-                    key={village._id}
-                    to={`/success-stories/${village.slug}`}
-                    className="group flex flex-col h-full justify-between rounded-xl overflow-hidden border border-slate-200/80 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
-                  >
-                    <div>
-                      <div className="relative h-56 bg-slate-100 overflow-hidden">
-                        {imageUrl ? (
-                          <img
-                            src={imageUrl}
-                            alt={village.name}
-                            loading="lazy"
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-blue-50 to-slate-150 flex items-center justify-center text-blue-900/20 text-sm">
-                            No Cover Image
-                          </div>
+                <Link
+                  key={story._id}
+                  to={`/success-stories/story/${story.slug}`}
+                  className="group flex flex-col h-full justify-between rounded-xl overflow-hidden border border-slate-200/80 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+                >
+                  <div>
+                    <div className="h-56 bg-slate-100 overflow-hidden relative">
+                      {story.featuredImage?.url ? (
+                        <img
+                          src={story.featuredImage.url}
+                          alt={displayTitle}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center text-blue-900/20 text-sm">
+                          No Cover Image
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="p-5">
+                      <div className="flex flex-wrap items-center gap-2">
+                        {story.village?.name && (
+                          <span className="text-[10px] font-bold text-blue-700 tracking-wider uppercase bg-blue-50 px-2 py-1 rounded">
+                            {story.village.name}
+                          </span>
                         )}
 
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-
-                        <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
-                          <span className="text-[10px] font-bold text-blue-300 tracking-wider uppercase mb-1 block">
-                            PARTICIPATING VILLAGE
+                        {story.isFeatured && (
+                          <span className="text-[10px] px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200/50 font-bold uppercase tracking-wider">
+                            Featured
                           </span>
-                          <h3 className="text-xl font-bold leading-tight tracking-tight">
-                            {village.name}
-                          </h3>
-                        </div>
+                        )}
                       </div>
 
-                      <div className="p-5">
-                        <p className="text-slate-600 text-sm leading-relaxed line-clamp-3">
-                          {village.shortDescription ||
-                            "Explore success stories, initiatives and outcomes from this village."}
-                        </p>
-                      </div>
-                    </div>
+                      <h3 className="text-lg font-bold mt-3 text-slate-900 tracking-tight leading-snug group-hover:text-blue-800 transition-colors">
+                        {displayTitle}
+                      </h3>
 
-                    <div className="p-5 pt-0">
-                      <div className="inline-flex items-center text-sm font-semibold text-blue-700 group-hover:text-blue-900 transition-colors">
-                        View stories
-                        <span className="inline-block transform group-hover:translate-x-1 transition-transform duration-200 ml-1">
-                          →
-                        </span>
-                      </div>
+                      <SmartTextRenderer
+                        text={
+                          story.summary ||
+                          "Story details will be updated soon."
+                        }
+                        className="mt-2 max-w-none space-y-0 [&_p]:mb-0 [&_p]:line-clamp-3 [&_p]:text-sm [&_p]:leading-relaxed [&_p]:text-slate-600 [&_p]:text-left"
+                      />
                     </div>
-                  </Link>
+                  </div>
+
+                  <div className="p-5 pt-0">
+                    <div className="inline-flex items-center text-sm font-semibold text-blue-700 group-hover:text-blue-900 transition-colors">
+                      Read story
+                      <span className="inline-block transform group-hover:translate-x-1 transition-transform duration-200 ml-1">
+                        →
+                      </span>
+                    </div>
+                  </div>
+                </Link>
                 );
               })}
             </div>
@@ -231,7 +240,7 @@ const SuccessStoriesSkeleton = () => {
           </div>
         </div>
 
-        {/* VILLAGES GRID SKELETON */}
+        {/* STORIES GRID SKELETON */}
         <div className="max-w-7xl mx-auto px-6 py-16 md:py-20">
           <div className="h-4 w-32 bg-slate-200 rounded mb-3 animate-pulse"></div>
           <div className="h-8 w-1/2 bg-slate-200 rounded mb-8 animate-pulse"></div>

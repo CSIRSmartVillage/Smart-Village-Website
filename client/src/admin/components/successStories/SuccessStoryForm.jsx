@@ -4,12 +4,11 @@ import {
 } from "react";
 
 import {
-  getAllMedia,
-} from "../../services/media.service";
+  getAllVillages,
+} from "../../services/village.service";
 
-import {
-  getAllSuccessStoryVillages,
-} from "../../services/successStoryVillage.service";
+import MediaUploader
+  from "../common/MediaUploader";
 
 const SuccessStoryForm = ({
   initialValues,
@@ -18,32 +17,29 @@ const SuccessStoryForm = ({
   const [formData, setFormData] =
     useState(initialValues);
 
-  const [media, setMedia] =
-    useState([]);
-
   const [villages, setVillages] =
     useState([]);
 
-  useEffect(() => {
-    setFormData(initialValues);
-  }, [initialValues]);
+  const [villagesLoading, setVillagesLoading] =
+    useState(true);
 
   useEffect(() => {
     const loadData =
       async () => {
         try {
-          const [
-            mediaData,
-            villagesData,
-          ] = await Promise.all([
-            getAllMedia(),
-            getAllSuccessStoryVillages(),
-          ]);
+          const villagesData =
+            await getAllVillages();
 
-          setMedia(mediaData);
-          setVillages(villagesData);
+          setVillages(
+            Array.isArray(villagesData)
+              ? villagesData
+              : []
+          );
         } catch (error) {
           console.error(error);
+          setVillages([]);
+        } finally {
+          setVillagesLoading(false);
         }
       };
 
@@ -59,40 +55,38 @@ const SuccessStoryForm = ({
 
       setFormData({
         ...formData,
-        [name]:
-          name === "beneficiaries"
-            ? Number(value)
-            : value,
-      });
-    };
-
-  const handleGalleryChange =
-    (e) => {
-      const selectedValues =
-        Array.from(
-          e.target.selectedOptions
-        ).map(
-          (option) => option.value
-        );
-
-      setFormData({
-        ...formData,
-        galleryImages:
-          selectedValues,
+        [name]: value,
       });
     };
 
   const handleSubmit =
     (e) => {
       e.preventDefault();
-      onSubmit(formData);
+
+      const mediaId =
+        (item) =>
+          typeof item === "string"
+            ? item
+            : item?._id || null;
+
+      onSubmit({
+        ...formData,
+        featuredImage:
+          mediaId(
+            formData.featuredImage
+          ),
+        galleryImages:
+          (formData.galleryImages || [])
+            .map(mediaId)
+            .filter(Boolean),
+      });
     };
 
-  const imageMedia =
-    media.filter(
-      (item) =>
-        item.resourceType ===
-        "image"
+  const hasSelectedVillage =
+    villages.some(
+      (village) =>
+        String(village._id) ===
+        String(formData.village)
     );
 
   return (
@@ -100,21 +94,18 @@ const SuccessStoryForm = ({
       onSubmit={handleSubmit}
       className="space-y-5"
     >
-      <input
-        name="title"
-        placeholder="Title"
-        value={formData.title}
-        onChange={handleChange}
-        className="w-full border p-3 rounded"
-      />
-
-      <input
-        name="slug"
-        placeholder="Slug"
-        value={formData.slug}
-        onChange={handleChange}
-        className="w-full border p-3 rounded"
-      />
+      <div>
+        <label className="block mb-2">
+          Story Title
+        </label>
+        <input
+          name="title"
+          placeholder="Story Title"
+          value={formData.title || ""}
+          onChange={handleChange}
+          className="w-full border p-3 rounded"
+        />
+      </div>
 
       <div>
         <label className="block mb-2">
@@ -129,8 +120,21 @@ const SuccessStoryForm = ({
           onChange={handleChange}
           className="w-full border p-3 rounded"
         >
+          {formData.village &&
+            !hasSelectedVillage && (
+              <option value={formData.village}>
+                {formData.villageName
+                  ? formData.villageName + " (current selection)"
+                  : "Current village selection"}
+              </option>
+            )}
+
           <option value="">
-            Select Village
+            {villagesLoading
+              ? "Loading villages..."
+              : villages.length === 0
+                ? "No villages available"
+                : "Select Village"}
           </option>
 
           {villages.map(
@@ -139,78 +143,51 @@ const SuccessStoryForm = ({
                 key={village._id}
                 value={village._id}
               >
-                {village.name}
+                {village.name?.en ||
+                  village.name?.regional ||
+                  village.name ||
+                  "Unnamed Village"}
               </option>
             )
           )}
         </select>
-      </div>
-
-      <div>
-        <label className="block mb-2">
-          Featured Image
-        </label>
-
-        <select
-          name="featuredImage"
-          value={
-            formData.featuredImage ||
-            ""
-          }
-          onChange={handleChange}
-          className="w-full border p-3 rounded"
-        >
-          <option value="">
-            Select Image
-          </option>
-
-          {imageMedia.map(
-            (item) => (
-              <option
-                key={item._id}
-                value={item._id}
-              >
-                {item.originalName}
-              </option>
-            )
+        {!villagesLoading &&
+          villages.length === 0 && (
+            <p className="mt-1 text-sm text-gray-500">
+              No villages available
+            </p>
           )}
-        </select>
       </div>
 
-      <div>
-        <label className="block mb-2">
-          Gallery Images
-        </label>
+      <MediaUploader
+        label="Featured Image"
+        multiple={false}
+        value={
+          formData.featuredImage ||
+          null
+        }
+        onChange={(featuredImage) =>
+          setFormData((current) => ({
+            ...current,
+            featuredImage,
+          }))
+        }
+      />
 
-        <select
-          multiple
-          value={
-            formData.galleryImages ||
-            []
-          }
-          onChange={
-            handleGalleryChange
-          }
-          className="w-full border p-3 rounded min-h-[160px]"
-        >
-          {imageMedia.map(
-            (item) => (
-              <option
-                key={item._id}
-                value={item._id}
-              >
-                {item.originalName}
-              </option>
-            )
-          )}
-        </select>
-
-        <p className="text-sm text-gray-500 mt-1">
-          Hold Ctrl / Cmd to
-          select multiple
-          images.
-        </p>
-      </div>
+      <MediaUploader
+        label="Village Gallery"
+        multiple
+        value={
+          formData.galleryImages ||
+          []
+        }
+        onChange={(galleryImages) =>
+          setFormData((current) => ({
+            ...current,
+            galleryImages,
+          }))
+        }
+      />
 
       <input
         name="videoUrl"
@@ -255,18 +232,6 @@ const SuccessStoryForm = ({
         className="w-full border p-3 rounded"
       />
 
-      <input
-        name="beneficiaries"
-        type="number"
-        placeholder="Beneficiaries"
-        value={
-          formData.beneficiaries ??
-          0
-        }
-        onChange={handleChange}
-        className="w-full border p-3 rounded"
-      />
-
       <div>
         <label className="block mb-2">
           Status
@@ -292,24 +257,6 @@ const SuccessStoryForm = ({
           </option>
         </select>
       </div>
-
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          checked={
-            formData.isFeatured ||
-            false
-          }
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              isFeatured:
-                e.target.checked,
-            })
-          }
-        />
-        Featured Story
-      </label>
 
       <button
         type="submit"

@@ -17,7 +17,7 @@ import {
 import SmartTextRenderer
   from "../../components/common/SmartTextRenderer";
 const SuccessStoryDetailPage = () => {
-  const { villageSlug, storySlug } = useParams();
+  const { storySlug } = useParams();
   const [story, setStory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [animate, setAnimate] = useState(false);
@@ -69,6 +69,10 @@ const SuccessStoryDetailPage = () => {
       </MainLayout>
     );
   }
+  const displayTitle =
+    story.title ||
+    "Untitled Success Story";
+
 
   return (
     <MainLayout>
@@ -76,11 +80,11 @@ const SuccessStoryDetailPage = () => {
         {/* HERO DETAILS ROW */}
         <section className="max-w-6xl mx-auto px-6 pt-12 pb-8">
           <Link
-            to={`/success-stories/${villageSlug}`}
+            to="/success-stories"
             className="group inline-flex items-center gap-1.5 mb-6 text-sm font-semibold text-blue-700 hover:text-blue-900 transition outline-none focus-visible:underline"
           >
             <span className="transform group-hover:-translate-x-1 transition-transform duration-250">←</span>
-            Back to Village Stories
+            Back to Success Stories
           </Link>
 
           <div className="grid lg:grid-cols-[1.3fr_0.7fr] gap-10 items-start">
@@ -106,7 +110,7 @@ const SuccessStoryDetailPage = () => {
               </div>
 
               <h1 className="text-3xl md:text-5xl font-bold tracking-normal text-slate-900 leading-tight">
-                {story.title}
+                {displayTitle}
               </h1>
 
               <div className="mt-4 text-xs font-semibold text-slate-500 flex items-center gap-2">
@@ -132,7 +136,7 @@ const SuccessStoryDetailPage = () => {
               {story.featuredImage?.url ? (
                 <img
                   src={story.featuredImage.url}
-                  alt={story.title}
+                  alt={displayTitle}
                   loading="lazy"
                   className="w-full h-full object-contain bg-slate-100/50 hover:scale-103 transition duration-500"
                 />
@@ -199,7 +203,7 @@ const SuccessStoryDetailPage = () => {
                   <div className="aspect-video">
                     <iframe
                       src={getEmbedUrl(story.videoUrl)}
-                      title={story.title}
+                      title={displayTitle}
                       className="w-full h-full"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
@@ -231,7 +235,7 @@ const SuccessStoryDetailPage = () => {
                     {image?.url ? (
                       <img
                         src={image.url}
-                        alt={image.originalName || story.title}
+                        alt={image.originalName || displayTitle}
                         loading="lazy"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                       />

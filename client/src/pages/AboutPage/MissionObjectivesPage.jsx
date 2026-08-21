@@ -1,16 +1,6 @@
-import { useEffect, useState } from "react";
-
-import { getPageBySlug }
-  from "../../services/cms.service";
-
-import Header
-  from "../../components/common/Header/Header";
-
-import Navbar
-  from "../../components/common/Navbar/Navbar";
-
-import Footer
-  from "../../components/common/Footer";
+import usePage from "../../hooks/usePage";
+import MainLayout from "../../layouts/MainLayout";
+import AboutPageRenderer from "./AboutPageRenderer";
 
 import ObjectivesHero
   from "../../sections/missionObjectives/ObjectivesHero";
@@ -26,39 +16,16 @@ import ObjectivesOutcomes
 
 const MissionObjectivesPage =
   () => {
-    const [
-      sections,
-      setSections,
-    ] = useState([]);
+    const missionPage = usePage(
+      "mission-objectives"
+    );
+    const aboutPage =
+      usePage("about");
 
-    const [
-      loading,
-      setLoading,
-    ] = useState(true);
-
-    useEffect(() => {
-      loadPage();
-    }, []);
-
-    const loadPage =
-      async () => {
-        try {
-          const page =
-            await getPageBySlug(
-              "mission-objectives"
-            );
-
-          setSections(
-            page.sections || []
-          );
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-    if (loading) {
+    if (
+      missionPage.loading ||
+      aboutPage.loading
+    ) {
       return (
         <div className="py-20 text-center">
           Loading...
@@ -66,58 +33,118 @@ const MissionObjectivesPage =
       );
     }
 
-   return (
-  <>
-    <Header />
-    <Navbar />
+    if (
+      missionPage.error ||
+      aboutPage.error
+    ) {
+      return (
+        <MainLayout>
+          <div className="py-20 text-center">
+            {missionPage.error ||
+              aboutPage.error}
+          </div>
+        </MainLayout>
+      );
+    }
 
-    {sections.map(
-      (section) => {
-        switch (
-          section.sectionType
-        ) {
+    const missionSections =
+      missionPage.page?.sections || [];
+    const aboutSections =
+      aboutPage.page?.sections || [];
 
-          case "OBJECTIVES_HERO":
-            return (
-              <ObjectivesHero
-                key={section._id}
-                data={section.content}
-              />
-            );
+    const missionHeroSections =
+      missionSections.filter(
+        (section) =>
+          section.sectionType ===
+          "OBJECTIVES_HERO"
+      );
+    const missionDetailSections =
+      missionSections.filter(
+        (section) =>
+          section.sectionType !==
+          "OBJECTIVES_HERO"
+      );
+    const aboutInformationalSections =
+      aboutSections.filter(
+        (section) =>
+          section.sectionType !==
+          "ABOUT_QUICK_LINKS"
+      );
+    const aboutQuickLinkSections =
+      aboutSections.filter(
+        (section) =>
+          section.sectionType ===
+          "ABOUT_QUICK_LINKS"
+      );
 
-          case "OBJECTIVES_CONTENT":
-            return (
-              <ObjectivesContent
-                key={section._id}
-                data={section.content}
-              />
-            );
+    const renderMissionSections =
+      (pageSections) =>
+        pageSections.map(
+          (section) => {
+            switch (
+              section.sectionType
+            ) {
+              case "OBJECTIVES_HERO":
+                return (
+                  <ObjectivesHero
+                    key={section._id}
+                    data={section.content}
+                  />
+                );
 
-          case "OBJECTIVES_FOCUS_AREAS":
-            return (
-              <ObjectivesFocusAreas
-                key={section._id}
-                data={section.content}
-              />
-            );
+              case "OBJECTIVES_CONTENT":
+                return (
+                  <ObjectivesContent
+                    key={section._id}
+                    data={section.content}
+                  />
+                );
 
-          case "OBJECTIVES_OUTCOMES":
-            return (
-              <ObjectivesOutcomes
-                key={section._id}
-                data={section.content}
-              />
-            );
+              case "OBJECTIVES_FOCUS_AREAS":
+                return (
+                  <ObjectivesFocusAreas
+                    key={section._id}
+                    data={section.content}
+                  />
+                );
 
-          default:
-            return null;
-        }
-      }
-    )}
+              case "OBJECTIVES_OUTCOMES":
+                return (
+                  <ObjectivesOutcomes
+                    key={section._id}
+                    data={section.content}
+                  />
+                );
 
-    <Footer />
-  </>
-);
+              default:
+                return null;
+            }
+          }
+        );
+
+    return (
+      <MainLayout>
+        {renderMissionSections(
+          missionHeroSections
+        )}
+
+        <AboutPageRenderer
+          sections={
+            aboutInformationalSections
+          }
+        />
+
+        {renderMissionSections(
+          missionDetailSections
+        )}
+
+        <AboutPageRenderer
+          sections={
+            aboutQuickLinkSections
+          }
+        />
+      </MainLayout>
+    );
   };
 
 export default MissionObjectivesPage;

@@ -6,6 +6,7 @@ import {
 import {
   Routes,
   Route,
+  Navigate,
 } from "react-router-dom";
 
 import PageLoader from "../components/common/PageLoader";
@@ -18,9 +19,6 @@ const HomePage = lazy(() =>
   import("../pages/HomePage/HomePage")
 );
 
-const AboutPage = lazy(() =>
-  import("../pages/AboutPage/AboutPage")
-);
 
 const MissionObjectivesPage = lazy(() =>
   import("../pages/AboutPage/MissionObjectivesPage")
@@ -61,12 +59,6 @@ const NewsDetailPage = lazy(() =>
 const SuccessStoriesPage = lazy(() =>
   import(
     "../pages/SuccessStoriesPage/SuccessStoriesPage"
-  )
-);
-
-const VillageSuccessStoriesPage = lazy(() =>
-  import(
-    "../pages/SuccessStoriesPage/VillageSuccessStoriesPage"
   )
 );
 
@@ -176,7 +168,15 @@ const AppRoutes = () => {
 
       {/* About */}
 
-      <Route path="/about" element={<AboutPage />} />
+      <Route
+        path="/about"
+        element={
+          <Navigate
+            to="/about/mission-objectives"
+            replace
+          />
+        }
+      />
 
       <Route
         path="/about/mission-objectives"
@@ -237,13 +237,23 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/success-stories/:villageSlug"
-        element={<VillageSuccessStoriesPage />}
+        path="/success-stories/story/:storySlug"
+        element={<SuccessStoryDetailPage />}
       />
 
       <Route
         path="/success-stories/:villageSlug/:storySlug"
         element={<SuccessStoryDetailPage />}
+      />
+
+      <Route
+        path="/success-stories/:villageSlug"
+        element={
+          <Navigate
+            to="/success-stories"
+            replace
+          />
+        }
       />
 
       {/* Our Supporters */}

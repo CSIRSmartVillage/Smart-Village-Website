@@ -30,6 +30,20 @@ export const getPublishedStories =
         "Published success stories fetched successfully"
       )
     );
+
+  };
+export const getPublishedStoryVillages =
+  async (req, res) => {
+    const villages =
+      await successStoryService.getPublishedStoryVillages();
+
+    return res.json(
+      new ApiResponse(
+        200,
+        villages,
+        "Success story villages fetched successfully"
+      )
+    );
   };
 
 export const getStoriesByVillageSlug =

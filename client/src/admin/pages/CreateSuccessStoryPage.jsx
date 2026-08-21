@@ -35,16 +35,13 @@ const CreateSuccessStoryPage =
         <SuccessStoryForm
           initialValues={{
             title: "",
-            slug: "",
             village: "",
-            featuredImage: "",
+            featuredImage: null,
             galleryImages: [],
             videoUrl: "",
             summary: "",
             story: "",
             impact: "",
-            beneficiaries: 0,
-            isFeatured: false,
             status: "DRAFT",
           }}
           onSubmit={handleCreate}

@@ -1,28 +1,167 @@
+import slugify from "slugify";
+
 import SuccessStory
   from "../../models/SuccessStory.model.js";
 
 import SuccessStoryVillage
   from "../../models/SuccessStoryVillage.model.js";
+import Village
+  from "../../models/Village.model.js";
 
 import ApiError
   from "../../utils/ApiError.js";
+const normalizeVillage =
+  (village) => {
+    if (!village) {
+      return village;
+    }
+
+    const normalized = {
+      ...village,
+    };
+
+    if (
+      normalized.name &&
+      typeof normalized.name === "object"
+    ) {
+      normalized.name =
+        normalized.name.en ||
+        normalized.name.regional ||
+        "";
+    }
+
+    return normalized;
+  };
+
+const normalizeStory =
+  (story) => ({
+    ...story,
+    village:
+      normalizeVillage(story.village),
+  });
+
+const generateUniqueSlug =
+  async (title, excludeId = null) => {
+    const baseSlug =
+      slugify(title, {
+        lower: true,
+        strict: true,
+        trim: true,
+      }) || "success-story";
+
+    let candidate = baseSlug;
+    let suffix = 2;
+
+    while (
+      await SuccessStory.exists({
+        slug: candidate,
+        ...(excludeId
+          ? { _id: { $ne: excludeId } }
+          : {}),
+      })
+    ) {
+      candidate =
+        baseSlug + "-" + suffix;
+      suffix += 1;
+    }
+
+    return candidate;
+  };
+const hasOwn =
+
+  (object, key) =>
+    Object.prototype.hasOwnProperty.call(
+      object,
+      key
+    );
+
+const normalizeStoryPayload =
+  (payload = {}) => {
+    const normalized = {
+      ...payload,
+    };
+
+    [
+      "title",
+      "videoUrl",
+      "summary",
+      "story",
+      "impact",
+    ].forEach((field) => {
+      if (
+        hasOwn(normalized, field) &&
+        normalized[field] == null
+      ) {
+        normalized[field] = "";
+      }
+    });
+
+    if (
+      hasOwn(normalized, "village")
+    ) {
+      normalized.village =
+        normalized.village || null;
+    }
+
+    if (
+      hasOwn(
+        normalized,
+        "featuredImage"
+      )
+    ) {
+      normalized.featuredImage =
+        normalized.featuredImage ||
+        null;
+    }
+
+    if (
+      hasOwn(
+        normalized,
+        "galleryImages"
+      )
+    ) {
+      normalized.galleryImages =
+        Array.isArray(
+          normalized.galleryImages
+        )
+          ? normalized.galleryImages
+              .filter(Boolean)
+          : [];
+    }
+
+    if (
+      hasOwn(
+        normalized,
+        "beneficiaries"
+      ) &&
+      (normalized.beneficiaries == null ||
+        normalized.beneficiaries === "")
+    ) {
+      normalized.beneficiaries = null;
+    }
+
+    if (
+      hasOwn(normalized, "isFeatured") &&
+      normalized.isFeatured == null
+    ) {
+      normalized.isFeatured = false;
+    }
+
+    if (
+      hasOwn(normalized, "status") &&
+      !normalized.status
+    ) {
+      delete normalized.status;
+    }
+
+    return normalized;
+  };
+
 
 export const getAllStories =
   async () => {
-    return SuccessStory.find()
-      .populate("featuredImage")
-      .populate("galleryImages")
-      .populate("village")
-      .sort({
-        createdAt: -1,
-      });
-  };
-
-export const getPublishedStories =
-  async () => {
-    return SuccessStory.find({
-      status: "PUBLISHED",
-    })
+    const stories =
+      await SuccessStory.find()
       .populate("featuredImage")
       .populate("galleryImages")
       .populate("village")
@@ -30,6 +169,101 @@ export const getPublishedStories =
         createdAt: -1,
       })
       .lean();
+
+    return stories.map(
+      normalizeStory
+    );
+  };
+
+export const getPublishedStories =
+  async () => {
+    const stories =
+      await SuccessStory.find({
+        status: "PUBLISHED",
+      })
+      .populate("featuredImage")
+      .populate("galleryImages")
+      .populate("village")
+      .sort({
+        createdAt: -1,
+      })
+      .lean();
+
+    return stories.map(
+      normalizeStory
+    );
+  };
+
+export const getPublishedStoryVillages =
+  async () => {
+    const legacyReferences =
+      await SuccessStory.find({
+        status: "PUBLISHED",
+        villageModel: {
+          $ne: "Village",
+        },
+      })
+        .distinct("village");
+
+    const [
+      mainVillages,
+      legacyVillages,
+    ] = await Promise.all([
+      Village.find({
+        isPublished: true,
+        status: "ACTIVE",
+        isActive: true,
+      })
+        .populate("coverImage")
+        .sort({
+          sortOrder: 1,
+          createdAt: 1,
+        })
+        .lean(),
+      legacyReferences.length
+        ? SuccessStoryVillage.find({
+            _id: {
+              $in: legacyReferences,
+            },
+            isPublished: true,
+          })
+            .populate("coverImage")
+            .populate("bannerImage")
+            .populate("video.media")
+            .lean()
+        : [],
+    ]);
+
+    const villagesBySlug =
+      new Map();
+
+    mainVillages.forEach(
+      (village) => {
+        villagesBySlug.set(
+          village.slug,
+          normalizeVillage(village)
+        );
+      }
+    );
+
+    legacyVillages.forEach(
+      (village) => {
+        if (
+          !villagesBySlug.has(
+            village.slug
+          )
+        ) {
+          villagesBySlug.set(
+            village.slug,
+            normalizeVillage(village)
+          );
+        }
+      }
+    );
+
+    return Array.from(
+      villagesBySlug.values()
+    );
   };
 
 export const getStoryBySlug =
@@ -50,7 +284,9 @@ export const getStoryBySlug =
       );
     }
 
-    return story;
+    return normalizeStory(
+      story
+    );
   };
 
 export const getStoryById =
@@ -59,7 +295,8 @@ export const getStoryById =
       await SuccessStory.findById(id)
         .populate("featuredImage")
         .populate("galleryImages")
-        .populate("village");
+        .populate("village")
+        .lean();
 
     if (!story) {
       throw new ApiError(
@@ -68,32 +305,75 @@ export const getStoryById =
       );
     }
 
-    return story;
+    return normalizeStory(
+      story
+    );
   };
 
 export const getStoriesByVillageSlug =
   async (villageSlug) => {
-    const village =
-      await SuccessStoryVillage.findOne({
+    const [
+      mainVillage,
+      legacyVillage,
+    ] = await Promise.all([
+      Village.findOne({
+        slug: villageSlug,
+        isPublished: true,
+        status: "ACTIVE",
+        isActive: true,
+      })
+        .populate("coverImage")
+        .lean(),
+      SuccessStoryVillage.findOne({
         slug: villageSlug,
         isPublished: true,
       })
         .populate("coverImage")
         .populate("bannerImage")
         .populate("video.media")
-        .lean();
+        .lean(),
+    ]);
 
-    if (!village) {
+    if (
+      !mainVillage &&
+      !legacyVillage
+    ) {
       throw new ApiError(
         404,
-        "Success story village not found"
+        "Village not found"
       );
+    }
+
+    const villageFilters = [];
+
+    if (mainVillage) {
+      villageFilters.push({
+        village: mainVillage._id,
+        villageModel: "Village",
+      });
+    }
+
+    if (legacyVillage) {
+      villageFilters.push({
+        village: legacyVillage._id,
+        $or: [
+          {
+            villageModel:
+              "SuccessStoryVillage",
+          },
+          {
+            villageModel: {
+              $exists: false,
+            },
+          },
+        ],
+      });
     }
 
     const stories =
       await SuccessStory.find({
-        village: village._id,
         status: "PUBLISHED",
+        $or: villageFilters,
       })
         .populate("featuredImage")
         .populate("galleryImages")
@@ -104,49 +384,60 @@ export const getStoriesByVillageSlug =
         .lean();
 
     return {
-      village,
-      stories,
+      village: normalizeVillage(
+        mainVillage ||
+          legacyVillage
+      ),
+      stories: stories.map(
+        normalizeStory
+      ),
     };
   };
 
 export const createStory =
   async (payload, adminId) => {
-    const existing =
-      await SuccessStory.findOne({
-        slug: payload.slug,
-      });
+    const storyPayload =
+      normalizeStoryPayload(payload);
 
-    if (existing) {
-      throw new ApiError(
-        400,
-        "Success story with this slug already exists"
-      );
+    if (storyPayload.village) {
+      const village =
+        await Village.findById(
+          storyPayload.village
+        );
+
+      if (!village) {
+        throw new ApiError(
+          404,
+          "Selected village not found"
+        );
+      }
     }
 
-    const village =
-      await SuccessStoryVillage.findById(
-        payload.village
+    const generatedSlug =
+      await generateUniqueSlug(
+        storyPayload.title || ""
       );
-
-    if (!village) {
-      throw new ApiError(
-        404,
-        "Selected success story village not found"
-      );
-    }
 
     const story =
       await SuccessStory.create({
-        ...payload,
+        ...storyPayload,
+        slug: generatedSlug,
+        villageModel:
+          storyPayload.village
+            ? "Village"
+            : undefined,
         createdBy: adminId || null,
         updatedBy: adminId || null,
         publishedAt:
-          payload.status === "PUBLISHED"
+          storyPayload.status ===
+            "PUBLISHED"
             ? new Date()
             : null,
       });
 
-    return story;
+    return getStoryById(
+      story._id
+    );
   };
 
 export const updateStory =
@@ -165,42 +456,72 @@ export const updateStory =
       );
     }
 
+    const updatePayload =
+      normalizeStoryPayload(payload);
+
+    delete updatePayload.slug;
+    delete updatePayload.villageModel;
+
     if (
-      payload.slug &&
-      payload.slug !== story.slug
+      hasOwn(
+        updatePayload,
+        "title"
+      ) &&
+      updatePayload.title !==
+        story.title
     ) {
-      const existing =
-        await SuccessStory.findOne({
-          slug: payload.slug,
-          _id: { $ne: id },
-        });
-
-      if (existing) {
-        throw new ApiError(
-          400,
-          "Success story with this slug already exists"
+      updatePayload.slug =
+        await generateUniqueSlug(
+          updatePayload.title,
+          story._id
         );
-      }
     }
-
-    if (payload.village) {
-      const village =
-        await SuccessStoryVillage.findById(
-          payload.village
-        );
-
-      if (!village) {
-        throw new ApiError(
-          404,
-          "Selected success story village not found"
-        );
-      }
-    }
-
-    Object.assign(story, payload);
 
     if (
-      payload.status === "PUBLISHED" &&
+      hasOwn(updatePayload, "village")
+    ) {
+      if (!updatePayload.village) {
+        story.village = null;
+        story.villageModel =
+          undefined;
+      } else {
+        const villageChanged =
+          String(
+            updatePayload.village
+          ) !==
+          String(story.village);
+
+        if (villageChanged) {
+          const village =
+            await Village.findById(
+              updatePayload.village
+            );
+
+          if (!village) {
+            throw new ApiError(
+              404,
+              "Selected village not found"
+            );
+          }
+
+          story.village =
+            updatePayload.village;
+          story.villageModel =
+            "Village";
+        }
+      }
+
+      delete updatePayload.village;
+    }
+
+    Object.assign(
+      story,
+      updatePayload
+    );
+
+    if (
+      updatePayload.status ===
+        "PUBLISHED" &&
       !story.publishedAt
     ) {
       story.publishedAt =
@@ -212,7 +533,9 @@ export const updateStory =
 
     await story.save();
 
-    return story;
+    return getStoryById(
+      story._id
+    );
   };
 
 export const deleteStory =
