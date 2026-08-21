@@ -149,9 +149,9 @@ const SuccessStoryDetailPage = () => {
           </div>
         </section>
 
-        {/* CONTENT NARRATIVE + STORY HIGHLIGHTS SIDEBOX */}
+        {/* CONTENT NARRATIVE */}
         <section className="max-w-6xl mx-auto px-6 pb-12">
-          <div className="grid lg:grid-cols-[1.3fr_0.7fr] gap-10 items-start">
+          <div className={story.videoUrl ? "grid lg:grid-cols-[1.3fr_0.7fr] gap-10 items-start" : ""}>
             <div className="prose prose-slate max-w-none bg-white p-6 md:p-8 rounded-xl border border-slate-200/70 shadow-sm">
               <h2 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">Project Narrative</h2>
               <SmartTextRenderer
@@ -170,34 +170,6 @@ const SuccessStoryDetailPage = () => {
               )}
             </div>
 
-            <div className="space-y-6">
-              {/* SIDEBAR CARD */}
-              <div className="rounded-xl border border-slate-200/80 bg-white p-6 shadow-sm">
-                <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Story Highlights
-                </h3>
-
-                <div className="mt-4 space-y-3.5 text-sm text-slate-700">
-                  <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-2.5 last:border-b-0 last:pb-0">
-                    <span className="font-semibold text-slate-500">Village</span>
-                    <span className="font-medium text-slate-900">{story.village?.name || "-"}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-2.5 last:border-b-0 last:pb-0">
-                    <span className="font-semibold text-slate-500">Beneficiaries Impacted</span>
-                    <span className="font-bold text-blue-700">{story.beneficiaries ? story.beneficiaries.toLocaleString() : "0"} +</span>
-                  </div>
-
-                  <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-2.5 last:border-b-0 last:pb-0">
-                    <span className="font-semibold text-slate-500">Status</span>
-                    <span className="font-semibold text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded">{story.status || "-"}</span>
-                  </div>
-                </div>
-              </div>
-
               {story.videoUrl && (
                 <div className="rounded-xl overflow-hidden border border-slate-200/80 bg-white shadow-sm">
                   <div className="aspect-video">
@@ -211,7 +183,6 @@ const SuccessStoryDetailPage = () => {
                   </div>
                 </div>
               )}
-            </div>
           </div>
         </section>
 
@@ -281,15 +252,13 @@ const SuccessStoryDetailSkeleton = () => {
 
         {/* CONTENT SKELETON */}
         <section className="max-w-6xl mx-auto px-6 pb-14 animate-pulse">
-          <div className="grid lg:grid-cols-[1.3fr_0.7fr] gap-10">
+          <div>
             <div>
               <div className="h-6 w-32 bg-slate-200 rounded mb-4"></div>
               <div className="h-4 w-full bg-slate-200 rounded mb-2"></div>
               <div className="h-4 w-full bg-slate-200 rounded mb-2"></div>
               <div className="h-4 w-5/6 bg-slate-200 rounded mb-8"></div>
             </div>
-
-            <div className="h-48 bg-slate-200 rounded-xl border border-slate-200 animate-pulse"></div>
           </div>
         </section>
       </div>
