@@ -76,80 +76,18 @@ const getYouTubeEmbedUrl = (url = "") => {
   }
 };
 
-const VideoDescriptionPreview = ({
-  description,
-  onReadMore,
-}) => {
-  const descriptionRef = useRef(null);
-  const [isTruncated, setIsTruncated] =
-    useState(false);
-
-  useEffect(() => {
-    const descriptionElement =
-      descriptionRef.current;
-
-    if (!descriptionElement) return undefined;
-
-    const updateTruncation = () => {
-      setIsTruncated(
-        descriptionElement.scrollHeight >
-          descriptionElement.clientHeight + 1
-      );
-    };
-
-    updateTruncation();
-
-    if (typeof ResizeObserver === "undefined") {
-      window.addEventListener(
-        "resize",
-        updateTruncation
-      );
-
-      return () =>
-        window.removeEventListener(
-          "resize",
-          updateTruncation
-        );
-    }
-
-    const resizeObserver = new ResizeObserver(
-      updateTruncation
-    );
-    resizeObserver.observe(descriptionElement);
-
-    return () => resizeObserver.disconnect();
-  }, [description]);
-
-  if (!description) return null;
-
-  return (
-    <div>
-      <p
-        ref={descriptionRef}
-        className="line-clamp-2 text-sm text-slate-600"
-      >
-        {description}
-      </p>
-
-      {isTruncated && (
-        <button
-          type="button"
-          onClick={onReadMore}
-          className="mt-1 text-sm font-semibold text-blue-600 hover:text-blue-800"
-        >
-          Read More
-        </button>
-      )}
-    </div>
-  );
-};
 
 const VideoModal = ({
+  isOpen,
   video,
   onClose,
   playerRef,
 }) => {
-  if (!video || typeof document === "undefined") {
+  if (
+    !isOpen ||
+    !video ||
+    typeof document === "undefined"
+  ) {
     return null;
   }
 
@@ -240,9 +178,12 @@ const VideoSection = () => {
   const [videos, setVideos] =
     useState([]);
 
-  const [activeVideo,
-    setActiveVideo] =
+  const [selectedVideo,
+    setSelectedVideo] =
     useState(null);
+  const [isModalOpen,
+    setIsModalOpen] =
+    useState(false);
   const videoPlayerRef = useRef(null);
 
   const [swiper,
@@ -269,19 +210,21 @@ const VideoSection = () => {
     loadVideos();
   }, []);
 
-  const openVideo = useCallback((video) => {
-    setActiveVideo(video);
+  const handleOpenVideo = useCallback((video) => {
+    setSelectedVideo(video);
+    setIsModalOpen(true);
     swiper?.autoplay?.stop();
   }, [swiper]);
 
   const closeVideo = useCallback(() => {
     videoPlayerRef.current?.pause();
-    setActiveVideo(null);
+    setIsModalOpen(false);
+    setSelectedVideo(null);
     swiper?.autoplay?.start();
   }, [swiper]);
 
   useEffect(() => {
-    if (!activeVideo) return undefined;
+    if (!isModalOpen) return undefined;
 
     const previousOverflow =
       document.body.style.overflow;
@@ -307,7 +250,7 @@ const VideoSection = () => {
         handleKeyDown
       );
     };
-  }, [activeVideo, closeVideo]);
+  }, [isModalOpen, closeVideo]);
 
   return (
     <section className="bg-slate-50 py-20">
@@ -376,15 +319,25 @@ const VideoSection = () => {
               <SwiperSlide
                 key={video._id}
               >
-                <div className="h-full cursor-pointer overflow-hidden rounded-2xl bg-white shadow-lg transition duration-300 hover:shadow-2xl">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      openVideo(video)
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onClick={() =>
+                    handleOpenVideo(video)
+                  }
+                  onKeyDown={(event) => {
+                    if (
+                      event.key === "Enter" ||
+                      event.key === " "
+                    ) {
+                      event.preventDefault();
+                      handleOpenVideo(video);
                     }
-                    className="group relative block w-full cursor-pointer overflow-hidden"
-                    aria-label={`Play ${video.title}`}
-                  >
+                  }}
+                  aria-label={`Play ${video.title}`}
+                  className="group h-full cursor-pointer overflow-hidden rounded-2xl bg-white shadow-lg transition duration-300 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  <div className="relative block w-full overflow-hidden">
                     {thumbnailUrl ? (
                       <img
                         src={thumbnailUrl}
@@ -410,17 +363,18 @@ const VideoSection = () => {
                         />
                       </span>
                     </span>
-                  </button>
+                  </div>
 
                   <div className="p-4">
                     <h3 className="mb-3 line-clamp-2 text-lg font-bold text-slate-900">
                       {video.title}
                     </h3>
 
-                    <VideoDescriptionPreview
-                      description={video.description}
-                      onReadMore={() => openVideo(video)}
-                    />
+                    {video.description && (
+                      <p className="line-clamp-2 text-sm text-slate-600">
+                        {video.description}
+                      </p>
+                    )}
                   </div>
                 </div>
               </SwiperSlide>
@@ -430,7 +384,8 @@ const VideoSection = () => {
       </div>
 
       <VideoModal
-        video={activeVideo}
+        isOpen={isModalOpen}
+        video={selectedVideo}
         onClose={closeVideo}
         playerRef={videoPlayerRef}
       />
