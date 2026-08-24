@@ -31,38 +31,45 @@ const seedMissionObjectives =
       await PageSection.insertMany([
         {
           pageId: page._id,
-          sectionType:
-            "OBJECTIVES_HERO",
-          title:
-            "Hero",
+          sectionType: "ABOUT_OVERVIEW",
+          title: "About Mission",
           order: 1,
         },
-
         {
           pageId: page._id,
-          sectionType:
-            "OBJECTIVES_CONTENT",
-          title:
-            "Content",
+          sectionType: "ABOUT_GALLERY",
+          title: "Three Informational Images",
           order: 2,
         },
-
         {
           pageId: page._id,
-          sectionType:
-            "OBJECTIVES_FOCUS_AREAS",
-          title:
-            "Focus Areas",
+          sectionType: "OBJECTIVES_CONTENT",
+          title: "Mission Statement",
           order: 3,
         },
-
         {
           pageId: page._id,
-          sectionType:
-            "OBJECTIVES_OUTCOMES",
-          title:
-            "Outcomes",
+          sectionType: "OBJECTIVES_FOCUS_AREAS",
+          title: "Focus Areas",
           order: 4,
+        },
+        {
+          pageId: page._id,
+          sectionType: "OBJECTIVES_OUTCOMES",
+          title: "Expected Outcomes",
+          order: 5,
+        },
+        {
+          pageId: page._id,
+          sectionType: "ABOUT_HISTORY",
+          title: "History",
+          order: 6,
+        },
+        {
+          pageId: page._id,
+          sectionType: "ABOUT_QUICK_LINKS",
+          title: "Quick Links",
+          order: 7,
         },
       ]);
 

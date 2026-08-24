@@ -17,6 +17,7 @@ const PAGE_SLUGS_MANAGED_ELSEWHERE =
     "nodal-lab",
     "csir-smart-village",
     "csir-laboratories",
+    "about",
   ]);
 
 

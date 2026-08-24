@@ -24,6 +24,21 @@ import {
   isManageableHomeSection,
 } from "../utils/homeSectionPresentation";
 
+const MISSION_OBJECTIVES_SECTION_ORDER =
+  new Map([
+    ["ABOUT_OVERVIEW", 1],
+    ["ABOUT_GALLERY", 2],
+    ["OBJECTIVES_CONTENT", 3],
+    ["OBJECTIVES_FOCUS_AREAS", 4],
+    ["ABOUT_OBJECTIVES", 5],
+    ["OBJECTIVES_OUTCOMES", 6],
+  ]);
+
+const sortMissionObjectivesSections =
+  (left, right) =>
+    (MISSION_OBJECTIVES_SECTION_ORDER.get(left.sectionType) ?? 100 + left.order) -
+    (MISSION_OBJECTIVES_SECTION_ORDER.get(right.sectionType) ?? 100 + right.order);
+
 const PageSectionsPage = () => {
   const { pageId } =
     useParams();
@@ -67,6 +82,8 @@ const PageSectionsPage = () => {
     pageId === HOME_PAGE_ID;
   const isSuccessStoriesPage =
     pageSlug === "success-stories";
+  const isMissionObjectivesPage =
+    pageSlug === "mission-objectives";
 
   const displayedSections =
     isHomePage
@@ -79,6 +96,14 @@ const PageSectionsPage = () => {
               section.sectionType !==
               "SUCCESS_STORIES_INTRO"
           )
+        : isMissionObjectivesPage
+          ? sections
+              .filter(
+                (section) =>
+                  section.sectionType !== "OBJECTIVES_HERO" &&
+                  section.sectionType !== "ABOUT_HERO"
+              )
+              .sort(sortMissionObjectivesSections)
         : sections;
   const handleOrderChange = (id, value) => {
     setSections((currentSections) =>

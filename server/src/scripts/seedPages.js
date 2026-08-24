@@ -14,8 +14,8 @@ const pages = [
     title: "About",
     slug: "about",
     pageType: "ABOUT",
-    status: "PUBLISHED",
-    isVisible: true,
+    status: "ARCHIVED",
+    isVisible: false,
   },
 
   {
@@ -75,7 +75,7 @@ const pages = [
   },
 
   {
-  title: "Mission Objectives",
+  title: "Mission & Objectives",
   slug: "mission-objectives",
   pageType: "MISSION_OBJECTIVES",
   status: "PUBLISHED",

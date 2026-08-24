@@ -19,8 +19,8 @@ const sectionDisplayNames = {
   CUSTOM: "Additional Content",
 
   ABOUT_HERO: "Top Banner",
-  ABOUT_GALLERY: "Image Gallery",
-  ABOUT_OVERVIEW: "About Overview",
+  ABOUT_GALLERY: "Three Informational Images",
+  ABOUT_OVERVIEW: "About Mission",
   ABOUT_VISION: "Vision",
   ABOUT_MISSION: "Mission",
   ABOUT_OBJECTIVES: "Objectives",
@@ -30,9 +30,9 @@ const sectionDisplayNames = {
   ABOUT_QUICK_LINKS: "Quick Links",
 
   OBJECTIVES_HERO: "Top Banner",
-  OBJECTIVES_CONTENT: "Mission Objectives Content",
+  OBJECTIVES_CONTENT: "Mission Statement",
   OBJECTIVES_FOCUS_AREAS: "Focus Areas",
-  OBJECTIVES_OUTCOMES: "Outcomes",
+  OBJECTIVES_OUTCOMES: "Expected Outcomes",
 
   PROFILE_HERO: "Top Banner",
   PROFILE_MESSAGE: "Profile Message",

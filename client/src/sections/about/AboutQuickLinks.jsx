@@ -5,6 +5,20 @@ import SmartTextRenderer
 const AboutQuickLinks = ({
   data,
 }) => {
+  const quickLinks =
+    data?.links?.filter(
+      (item) =>
+        item.path !==
+          "/about/mission-objectives" &&
+        item.title !==
+          "Mission Objectives"
+    ) || [];
+
+  const quickLinkIcons = {
+    "/about/dg-desk": "👨‍💼",
+    "/about/director-desk": "🏛️",
+  };
+
   return (
     <section className="py-24 bg-white">
 
@@ -38,11 +52,14 @@ const AboutQuickLinks = ({
         <div
           className="
             grid
-            md:grid-cols-3
+            auto-rows-fr
+            md:grid-cols-2
             gap-8
+            max-w-4xl
+            mx-auto
           "
         >
-          {data?.links?.map(
+          {quickLinks.map(
             (
               item,
               index
@@ -58,19 +75,15 @@ const AboutQuickLinks = ({
                   hover:shadow-xl
                   transition
                   hover:-translate-y-2
+                  h-full
                 "
               >
                 <div className="text-5xl mb-5">
-
-                  {index === 0 &&
-                    "🎯"}
-
-                  {index === 1 &&
-                    "👨‍💼"}
-
-                  {index === 2 &&
-                    "🏛️"}
-
+                  {
+                    quickLinkIcons[
+                      item.path
+                    ]
+                  }
                 </div>
 
                 <h3

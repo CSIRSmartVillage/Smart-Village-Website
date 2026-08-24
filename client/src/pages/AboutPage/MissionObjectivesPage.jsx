@@ -1,9 +1,10 @@
 import usePage from "../../hooks/usePage";
 import MainLayout from "../../layouts/MainLayout";
 import AboutPageRenderer from "./AboutPageRenderer";
+import MissionObjectivesBackdrop
+  from "./MissionObjectivesBackdrop";
 
-import ObjectivesHero
-  from "../../sections/missionObjectives/ObjectivesHero";
+import "./MissionObjectivesPage.css";
 
 import ObjectivesContent
   from "../../sections/missionObjectives/ObjectivesContent";
@@ -19,13 +20,8 @@ const MissionObjectivesPage =
     const missionPage = usePage(
       "mission-objectives"
     );
-    const aboutPage =
-      usePage("about");
 
-    if (
-      missionPage.loading ||
-      aboutPage.loading
-    ) {
+    if (missionPage.loading) {
       return (
         <div className="py-20 text-center">
           Loading...
@@ -33,15 +29,11 @@ const MissionObjectivesPage =
       );
     }
 
-    if (
-      missionPage.error ||
-      aboutPage.error
-    ) {
+    if (missionPage.error) {
       return (
         <MainLayout>
           <div className="py-20 text-center">
-            {missionPage.error ||
-              aboutPage.error}
+            {missionPage.error}
           </div>
         </MainLayout>
       );
@@ -50,25 +42,58 @@ const MissionObjectivesPage =
     const missionSections =
       missionPage.page?.sections || [];
     const aboutSections =
-      aboutPage.page?.sections || [];
+      missionSections;
 
-    const missionHeroSections =
+    const missionStatementSections =
       missionSections.filter(
         (section) =>
           section.sectionType ===
-          "OBJECTIVES_HERO"
+          "OBJECTIVES_CONTENT"
       );
-    const missionDetailSections =
+    const missionFocusAreaSections =
       missionSections.filter(
         (section) =>
-          section.sectionType !==
-          "OBJECTIVES_HERO"
+          section.sectionType ===
+          "OBJECTIVES_FOCUS_AREAS"
       );
-    const aboutInformationalSections =
+    const missionOutcomeSections =
+      missionSections.filter(
+        (section) =>
+          section.sectionType ===
+          "OBJECTIVES_OUTCOMES"
+      );
+    const aboutMissionSections =
       aboutSections.filter(
         (section) =>
-          section.sectionType !==
-          "ABOUT_QUICK_LINKS"
+          section.sectionType ===
+          "ABOUT_OVERVIEW"
+      );
+    const aboutGallerySections =
+      aboutSections.filter(
+        (section) =>
+          section.sectionType ===
+          "ABOUT_GALLERY"
+      );
+    const aboutObjectiveSections =
+      aboutSections.filter(
+        (section) =>
+          section.sectionType ===
+          "ABOUT_OBJECTIVES"
+      );
+    const remainingAboutSections =
+      aboutSections.filter(
+        (section) =>
+          section.sectionType.startsWith(
+            "ABOUT_"
+          ) &&
+          ![
+            "ABOUT_OVERVIEW",
+            "ABOUT_GALLERY",
+            "ABOUT_OBJECTIVES",
+            "ABOUT_QUICK_LINKS",
+          ].includes(
+            section.sectionType
+          )
       );
     const aboutQuickLinkSections =
       aboutSections.filter(
@@ -84,14 +109,6 @@ const MissionObjectivesPage =
             switch (
               section.sectionType
             ) {
-              case "OBJECTIVES_HERO":
-                return (
-                  <ObjectivesHero
-                    key={section._id}
-                    data={section.content}
-                  />
-                );
-
               case "OBJECTIVES_CONTENT":
                 return (
                   <ObjectivesContent
@@ -124,25 +141,58 @@ const MissionObjectivesPage =
 
     return (
       <MainLayout>
-        {renderMissionSections(
-          missionHeroSections
-        )}
+        <div className="mission-objectives-theme">
+          <MissionObjectivesBackdrop />
+          <div className="mission-section mission-section--about">
+            <AboutPageRenderer
+              sections={aboutMissionSections}
+            />
+          </div>
 
-        <AboutPageRenderer
-          sections={
-            aboutInformationalSections
-          }
-        />
+          <div className="mission-section mission-section--gallery">
+            <AboutPageRenderer
+              sections={aboutGallerySections}
+            />
+          </div>
 
-        {renderMissionSections(
-          missionDetailSections
-        )}
+          <div className="mission-section mission-section--statement">
+            {renderMissionSections(
+              missionStatementSections
+            )}
+          </div>
 
-        <AboutPageRenderer
-          sections={
-            aboutQuickLinkSections
-          }
-        />
+          <div className="mission-section mission-section--focus">
+            {renderMissionSections(
+              missionFocusAreaSections
+            )}
+          </div>
+
+          <div className="mission-section mission-section--objectives">
+            <AboutPageRenderer
+              sections={aboutObjectiveSections}
+            />
+          </div>
+
+          <div className="mission-section mission-section--outcomes">
+            {renderMissionSections(
+              missionOutcomeSections
+            )}
+          </div>
+
+          <div className="mission-section mission-section--additional">
+            <AboutPageRenderer
+              sections={remainingAboutSections}
+            />
+          </div>
+
+          <div className="mission-section mission-section--links">
+            <AboutPageRenderer
+              sections={
+                aboutQuickLinkSections
+              }
+            />
+          </div>
+        </div>
       </MainLayout>
     );
   };

@@ -9,7 +9,8 @@
     "seed:admin": "node src/scripts/createSuperAdmin.js",
     "seed:states": "node src/scripts/seedStates.js",
     "seed:villages": "node src/scripts/seedVillages.js",
-    "migrate:survey-titles": "node src/scripts/migrateSurveyTitles.js"
+    "migrate:survey-titles": "node src/scripts/migrateSurveyTitles.js",
+    "migrate:merge-about-page": "node src/scripts/migrateAboutIntoMissionObjectives.js"
   },
   "keywords": [],
   "author": "",

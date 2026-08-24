@@ -14,12 +14,12 @@ const seedAboutContent =
 
       const aboutPage =
         await Page.findOne({
-          slug: "about",
+          slug: "mission-objectives",
         });
 
       if (!aboutPage) {
         throw new Error(
-          "About page not found"
+          "Mission & Objectives page not found"
         );
       }
 
