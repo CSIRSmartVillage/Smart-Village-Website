@@ -1,10 +1,15 @@
 import {
+  useCallback,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
+import { createPortal } from "react-dom";
+
 import {
   Play,
+  X,
 } from "lucide-react";
 
 import {
@@ -38,13 +43,207 @@ const getThumbnailUrl =
     video.media?.thumbnailUrl ||
     "";
 
+const getYouTubeEmbedUrl = (url = "") => {
+  if (!url) return "";
+
+  try {
+    const parsedUrl = new URL(url);
+    const hostname = parsedUrl.hostname.replace(/^www\./, "");
+    let videoId = "";
+
+    if (hostname === "youtu.be") {
+      videoId = parsedUrl.pathname.split("/").filter(Boolean)[0] || "";
+    } else if (
+      hostname === "youtube.com" ||
+      hostname === "m.youtube.com" ||
+      hostname === "youtube-nocookie.com"
+    ) {
+      videoId = parsedUrl.searchParams.get("v") || "";
+
+      if (!videoId) {
+        const pathMatch = parsedUrl.pathname.match(
+          /^\/(?:embed|shorts|live)\/([^/?]+)/
+        );
+        videoId = pathMatch?.[1] || "";
+      }
+    }
+
+    if (!/^[\w-]{6,}$/.test(videoId)) return "";
+
+    return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
+  } catch {
+    return "";
+  }
+};
+
+const VideoDescriptionPreview = ({
+  description,
+  onReadMore,
+}) => {
+  const descriptionRef = useRef(null);
+  const [isTruncated, setIsTruncated] =
+    useState(false);
+
+  useEffect(() => {
+    const descriptionElement =
+      descriptionRef.current;
+
+    if (!descriptionElement) return undefined;
+
+    const updateTruncation = () => {
+      setIsTruncated(
+        descriptionElement.scrollHeight >
+          descriptionElement.clientHeight + 1
+      );
+    };
+
+    updateTruncation();
+
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener(
+        "resize",
+        updateTruncation
+      );
+
+      return () =>
+        window.removeEventListener(
+          "resize",
+          updateTruncation
+        );
+    }
+
+    const resizeObserver = new ResizeObserver(
+      updateTruncation
+    );
+    resizeObserver.observe(descriptionElement);
+
+    return () => resizeObserver.disconnect();
+  }, [description]);
+
+  if (!description) return null;
+
+  return (
+    <div>
+      <p
+        ref={descriptionRef}
+        className="line-clamp-2 text-sm text-slate-600"
+      >
+        {description}
+      </p>
+
+      {isTruncated && (
+        <button
+          type="button"
+          onClick={onReadMore}
+          className="mt-1 text-sm font-semibold text-blue-600 hover:text-blue-800"
+        >
+          Read More
+        </button>
+      )}
+    </div>
+  );
+};
+
+const VideoModal = ({
+  video,
+  onClose,
+  playerRef,
+}) => {
+  if (!video || typeof document === "undefined") {
+    return null;
+  }
+
+  const uploadedVideoUrl =
+    getUploadedVideoUrl(video);
+  const youTubeEmbedUrl =
+    getYouTubeEmbedUrl(video.youtubeUrl);
+  const thumbnailUrl = getThumbnailUrl(video);
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/75 p-4 backdrop-blur-sm sm:p-6"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      }}
+      role="presentation"
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="video-modal-title"
+        className="relative max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-2xl bg-white shadow-2xl"
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          autoFocus
+          aria-label="Close video"
+          className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/70 text-white shadow-lg transition hover:bg-black focus:outline-none focus:ring-2 focus:ring-white sm:right-4 sm:top-4"
+        >
+          <X className="h-6 w-6" />
+        </button>
+
+        <div className="aspect-video w-full overflow-hidden rounded-t-2xl bg-black">
+          {uploadedVideoUrl ? (
+            <video
+              ref={playerRef}
+              src={uploadedVideoUrl}
+              poster={thumbnailUrl}
+              controls
+              autoPlay
+              playsInline
+              className="h-full w-full object-contain"
+            />
+          ) : youTubeEmbedUrl ? (
+            <iframe
+              src={youTubeEmbedUrl}
+              title={video.title}
+              allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+              allowFullScreen
+              className="h-full w-full border-0"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center px-6 text-center text-white">
+              This video is currently unavailable.
+            </div>
+          )}
+        </div>
+
+        <div className="p-5 sm:p-7 lg:p-8">
+          <h3
+            id="video-modal-title"
+            className="pr-10 text-2xl font-bold leading-tight text-slate-900 sm:text-3xl"
+          >
+            {video.title}
+          </h3>
+
+          {video.description && (
+            <div className="mt-5 border-t border-slate-200 pt-5">
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+                Description
+              </h4>
+              <p className="mt-3 whitespace-pre-line text-base leading-7 text-slate-700 sm:text-[17px]">
+                {video.description}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+};
+
 const VideoSection = () => {
   const [videos, setVideos] =
     useState([]);
 
-  const [playingId,
-    setPlayingId] =
+  const [activeVideo,
+    setActiveVideo] =
     useState(null);
+  const videoPlayerRef = useRef(null);
 
   const [swiper,
     setSwiper] =
@@ -70,15 +269,45 @@ const VideoSection = () => {
     loadVideos();
   }, []);
 
-  const startPlaying = (id) => {
-    setPlayingId(id);
+  const openVideo = useCallback((video) => {
+    setActiveVideo(video);
     swiper?.autoplay?.stop();
-  };
+  }, [swiper]);
 
-  const resumeCarousel = () => {
-    setPlayingId(null);
+  const closeVideo = useCallback(() => {
+    videoPlayerRef.current?.pause();
+    setActiveVideo(null);
     swiper?.autoplay?.start();
-  };
+  }, [swiper]);
+
+  useEffect(() => {
+    if (!activeVideo) return undefined;
+
+    const previousOverflow =
+      document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        closeVideo();
+      }
+    };
+
+    document.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
+
+    return () => {
+      document.body.style.overflow =
+        previousOverflow;
+      document.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+    };
+  }, [activeVideo, closeVideo]);
 
   return (
     <section className="bg-slate-50 py-20">
@@ -143,136 +372,55 @@ const VideoSection = () => {
                 video
               );
 
-            const isUploadedVideo =
-              Boolean(
-                uploadedVideoUrl
-              );
-
             return (
               <SwiperSlide
                 key={video._id}
               >
                 <div className="h-full cursor-pointer overflow-hidden rounded-2xl bg-white shadow-lg transition duration-300 hover:shadow-2xl">
-                  {isUploadedVideo &&
-                  playingId ===
-                    video._id ? (
-                    <video
-                      src={
-                        uploadedVideoUrl
-                      }
-                      poster={
-                        thumbnailUrl
-                      }
-                      controls
-                      autoPlay
-                      playsInline
-                      onEnded={
-                        resumeCarousel
-                      }
-                      className="h-44 w-full bg-black object-cover"
-                    />
-                  ) : isUploadedVideo ? (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        startPlaying(
-                          video._id
-                        )
-                      }
-                      className="group relative block w-full overflow-hidden"
-                      aria-label={`Play ${video.title}`}
-                    >
-                      {thumbnailUrl ? (
-                        <img
-                          src={
-                            thumbnailUrl
-                          }
-                          alt={video.title}
-                          className="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                      ) : (
-                        <video
-                          src={
-                            uploadedVideoUrl
-                          }
-                          muted
-                          preload="metadata"
-                          className="h-44 w-full object-cover"
-                        />
-                      )}
-
-                      <span className="absolute inset-0 flex items-center justify-center bg-black/30">
-                        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white font-bold text-blue-600 shadow-lg">
-                          <Play
-                            size={20}
-                            fill="currentColor"
-                          />
-                        </span>
-                      </span>
-                    </button>
-                  ) : (
-                    <a
-                      href={
-                        video.youtubeUrl
-                      }
-                      target="_blank"
-                      rel="noreferrer"
-                      className="group relative block overflow-hidden"
-                    >
+                  <button
+                    type="button"
+                    onClick={() =>
+                      openVideo(video)
+                    }
+                    className="group relative block w-full cursor-pointer overflow-hidden"
+                    aria-label={`Play ${video.title}`}
+                  >
+                    {thumbnailUrl ? (
                       <img
-                        src={
-                          thumbnailUrl
-                        }
+                        src={thumbnailUrl}
                         alt={video.title}
                         className="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
+                    ) : uploadedVideoUrl ? (
+                      <video
+                        src={uploadedVideoUrl}
+                        muted
+                        preload="metadata"
+                        className="h-44 w-full object-cover"
+                      />
+                    ) : (
+                      <span className="block h-44 w-full bg-slate-900" />
+                    )}
 
-                      <span className="absolute inset-0 flex items-center justify-center bg-black/30">
-                        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white font-bold text-blue-600 shadow-lg">
-                          <Play
-                            size={20}
-                            fill="currentColor"
-                          />
-                        </span>
+                    <span className="absolute inset-0 flex items-center justify-center bg-black/30">
+                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white font-bold text-blue-600 shadow-lg">
+                        <Play
+                          size={20}
+                          fill="currentColor"
+                        />
                       </span>
-                    </a>
-                  )}
+                    </span>
+                  </button>
 
                   <div className="p-4">
                     <h3 className="mb-3 line-clamp-2 text-lg font-bold text-slate-900">
                       {video.title}
                     </h3>
 
-                    <p className="line-clamp-2 text-sm text-slate-600">
-                      {
-                        video.description
-                      }
-                    </p>
-
-                    {isUploadedVideo ? (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          startPlaying(
-                            video._id
-                          )
-                        }
-                        className="mt-4 inline-block font-semibold text-blue-600 hover:text-blue-800"
-                      >
-                        Watch Video →
-                      </button>
-                    ) : (
-                      <a
-                        href={
-                          video.youtubeUrl
-                        }
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-4 inline-block font-semibold text-blue-600 hover:text-blue-800"
-                      >
-                        Watch Video →
-                      </a>
-                    )}
+                    <VideoDescriptionPreview
+                      description={video.description}
+                      onReadMore={() => openVideo(video)}
+                    />
                   </div>
                 </div>
               </SwiperSlide>
@@ -280,6 +428,12 @@ const VideoSection = () => {
           })}
         </Swiper>
       </div>
+
+      <VideoModal
+        video={activeVideo}
+        onClose={closeVideo}
+        playerRef={videoPlayerRef}
+      />
     </section>
   );
 };

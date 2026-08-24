@@ -343,8 +343,9 @@
   --mission-tint: #f0fdfa;
 }
 
-.mission-section--focus article > div:first-child {
-  background: var(--mission-accent) !important;
+.mission-section--focus article > .focus-area-icon {
+  color: var(--mission-accent);
+  background: color-mix(in srgb, var(--mission-accent) 12%, white) !important;
   box-shadow: 0 7px 16px color-mix(in srgb, var(--mission-accent) 28%, transparent) !important;
 }
 
@@ -491,8 +492,11 @@
   --mission-tint: #f0fdfa;
 }
 
-.mission-section--statement ol > li > span {
-  background: var(--mission-accent) !important;
+.mission-section--statement ol > li > span.mission-target-marker {
+  color: var(--mission-accent);
+  background: color-mix(in srgb, var(--mission-accent) 10%, white) !important;
+  border: 1px solid color-mix(in srgb, var(--mission-accent) 24%, white);
+  border-radius: 9999px;
   box-shadow: 0 6px 14px color-mix(in srgb, var(--mission-accent) 24%, transparent);
 }
 

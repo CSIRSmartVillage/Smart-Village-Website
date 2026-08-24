@@ -29,6 +29,7 @@ const ObjectivesContent = ({
         <div className="group rounded-[20px] border border-blue-100 border-l-[6px] border-l-[#2563EB] bg-white p-8 shadow-lg shadow-blue-900/[0.06] transition-all duration-300 hover:-translate-y-1 hover:border-l-[#3B82F6] hover:shadow-xl hover:shadow-blue-900/10 md:p-10">
           <SmartTextRenderer
             text={data?.description}
+            numberedSectionMarker="target"
             className="max-w-none [&_p]:mb-0 [&_p]:text-[18px] [&_p]:leading-[1.8] [&_p]:text-[#4B5563]"
           />
         </div>

@@ -1,6 +1,29 @@
 const containerClass =
   "mx-auto max-w-4xl space-y-6 text-gray-700 tracking-normal";
 
+const MissionTargetIcon = () => (
+  <svg
+    aria-hidden="true"
+    className="h-10 w-10"
+    viewBox="0 0 40 40"
+    fill="none"
+  >
+    <circle cx="17" cy="22" r="10.5" stroke="currentColor" strokeWidth="2.75" />
+    <circle cx="17" cy="22" r="6" stroke="currentColor" strokeWidth="2.75" />
+    <circle cx="17" cy="22" r="2.25" fill="currentColor" />
+    <path
+      d="M30 9 20.4 18.6"
+      stroke="currentColor"
+      strokeWidth="2.75"
+      strokeLinecap="round"
+    />
+    <path
+      d="M17 22 19.1 17.1 21.9 19.9Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
 const renderInline = (text = "", keyPrefix = "inline") => {
   const parts = String(text).split(
     /(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\)|https?:\/\/[^\s]+)/g
@@ -290,6 +313,7 @@ const parseTable = (lines, startIndex) => {
 const SmartTextRenderer = ({
   text = "",
   className = "",
+  numberedSectionMarker = "number",
 }) => {
   if (!String(text).trim()) return null;
 
@@ -497,8 +521,18 @@ const SmartTextRenderer = ({
               key={`loose-ol-${elements.length}-${sectionIndex}`}
               className="grid gap-4 rounded-xl border border-slate-200 bg-white/70 p-5 shadow-sm sm:grid-cols-[3rem_1fr]"
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-700 text-base font-bold text-white">
-                {sectionIndex + 1}
+              <span
+                className={
+                  numberedSectionMarker === "target"
+                    ? "mission-target-marker flex h-10 w-10 items-center justify-center"
+                    : "flex h-10 w-10 items-center justify-center rounded-full bg-blue-700 text-base font-bold text-white"
+                }
+              >
+                {numberedSectionMarker === "target" ? (
+                  <MissionTargetIcon />
+                ) : (
+                  sectionIndex + 1
+                )}
               </span>
 
               <div>
