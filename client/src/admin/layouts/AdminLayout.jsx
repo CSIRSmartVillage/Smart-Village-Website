@@ -67,7 +67,7 @@ const AdminLayout = () => {
           path: "/admin/news",
         },
         {
-          label: "Announcements",
+          label: "Announcements / Updates",
           path: "/admin/announcements",
         },
         {

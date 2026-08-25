@@ -59,7 +59,7 @@ const EditAnnouncementPage = () => {
         );
 
         alert(
-          "Announcement updated successfully"
+          "Announcement / update saved successfully"
         );
 
         navigate(
@@ -71,7 +71,7 @@ const EditAnnouncementPage = () => {
         );
 
         alert(
-          getUserFriendlyError(error, "Unable to update the announcement. Please try again.")
+          getUserFriendlyError(error, "Unable to save the announcement / update. Please try again.")
         );
       }
     };
@@ -94,7 +94,7 @@ const EditAnnouncementPage = () => {
           mb-6
         "
       >
-        Edit Announcement
+        Edit Announcement / Update
       </h1>
 
       <AnnouncementForm

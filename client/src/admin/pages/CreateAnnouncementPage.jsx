@@ -19,7 +19,7 @@ const CreateAnnouncementPage = () => {
         );
 
         alert(
-          "Announcement created successfully"
+          "Announcement / update created successfully"
         );
 
         navigate(
@@ -31,7 +31,7 @@ const CreateAnnouncementPage = () => {
         );
 
         alert(
-          getUserFriendlyError(error, "Unable to create the announcement. Please try again.")
+          getUserFriendlyError(error, "Unable to create the announcement / update. Please try again.")
         );
       }
     };
@@ -46,7 +46,7 @@ const CreateAnnouncementPage = () => {
           mb-6
         "
       >
-        Create Announcement
+        Create Announcement / Update
       </h1>
 
       <AnnouncementForm

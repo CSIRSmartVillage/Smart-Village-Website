@@ -24,7 +24,7 @@ const DashboardPage = () => {
     {
       label: "News & Updates",
       value: "Publish",
-      helper: "Create announcements and news",
+      helper: "Create announcements / updates and news",
       icon: Newspaper,
       href: "/admin/news",
       color: "bg-emerald-50 text-emerald-700",
@@ -53,7 +53,7 @@ const DashboardPage = () => {
       href: "/admin/news/create",
     },
     {
-      label: "Add Announcement",
+      label: "Add Announcement / Update",
       href: "/admin/announcements/create",
     },
     {
@@ -81,7 +81,7 @@ const DashboardPage = () => {
 
             <p className="mt-3 max-w-2xl text-slate-600">
               Manage website content, village information, media,
-              announcements, and Smart Village records from one place.
+              announcements / updates, and Smart Village records from one place.
             </p>
           </div>
 

@@ -42,7 +42,7 @@ const AnnouncementsPage = () => {
     async (id) => {
       const confirmed =
         window.confirm(
-          "Delete this announcement?"
+          "Delete this announcement / update?"
         );
 
       if (!confirmed) {
@@ -79,7 +79,7 @@ const AnnouncementsPage = () => {
             font-bold
           "
         >
-          Announcements
+          Announcements / Updates
         </h1>
 
         <Link
@@ -92,7 +92,7 @@ const AnnouncementsPage = () => {
             rounded
           "
         >
-          Add Announcement
+          Add Announcement / Update
         </Link>
       </div>
 

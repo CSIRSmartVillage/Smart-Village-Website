@@ -60,8 +60,8 @@ const NewsFeatureManagementPage = () => {
 
       toast.success(
         checked
-          ? "Item added to Home Page News & Announcements."
-          : "Item removed from Home Page News & Announcements."
+          ? "Item added to Home Page News & Announcements / Updates."
+          : "Item removed from Home Page News & Announcements / Updates."
       );
     } catch (requestError) {
       console.error(requestError);
@@ -82,7 +82,7 @@ const NewsFeatureManagementPage = () => {
 
         <p className="mt-1 text-slate-500">
           Select which published village Events, Achievements, and Visits
-          appear in Home Page News & Announcements.
+          appear in Home Page News & Announcements / Updates.
         </p>
       </div>
 

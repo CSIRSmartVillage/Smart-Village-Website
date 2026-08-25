@@ -206,7 +206,7 @@ const handleSubmit =
           rounded
         "
       >
-        Save Announcement
+        Save Announcement / Update
       </button>
     </form>
   );

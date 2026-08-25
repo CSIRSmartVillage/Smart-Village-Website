@@ -27,7 +27,7 @@ const FeaturedAnnouncement = ({
           font-semibold
         "
       >
-        📢 Featured Announcement
+        📢 Featured Update
       </span>
 
       <h2
@@ -54,7 +54,7 @@ const FeaturedAnnouncement = ({
           font-semibold
         "
       >
-        Read Announcement →
+        Read Update →
       </Link>
     </section>
   );
