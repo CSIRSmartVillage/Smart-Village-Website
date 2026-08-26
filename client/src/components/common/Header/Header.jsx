@@ -83,7 +83,7 @@ const Header = () => {
                 fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif',
               }}
             >
-              Connective STI to Rural India
+              CSIR-SMART VILLAGE MANAGEMENT PORTAL
             </p>
 
           </div>
@@ -221,7 +221,7 @@ const Header = () => {
                 fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif',
               }}
             >
-              Connective STI to Rural India
+              CSIR-SMART VILLAGE MANAGEMENT PORTAL
             </p>
 
           </div>

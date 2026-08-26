@@ -286,7 +286,7 @@ const Footer = () => {
                     ग्रामसेतु
                   </span>
                   <span className="text-base font-semibold tracking-normal text-slate-700 sm:text-lg">
-                    - Connective STI to Rural India
+                    - CSIR-SMART Village Portal
                   </span>
                 </span>
               )}
