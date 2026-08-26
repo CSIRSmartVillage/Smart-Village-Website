@@ -17,7 +17,7 @@ const useNavigation = () => {
 
     refetchOnMount: false,
     refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    refetchOnReconnect: true,
   });
 
   return {

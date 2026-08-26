@@ -33,7 +33,7 @@ export default function useSiteSettings() {
 
     refetchOnMount: false,
     refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    refetchOnReconnect: true,
   });
 
   return {

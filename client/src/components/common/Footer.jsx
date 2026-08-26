@@ -256,10 +256,40 @@ const Footer = () => {
 
           <div className="mt-7">
 
-            <h2 className="text-2xl font-bold tracking-wide text-slate-900">
+            <h2 className="text-2xl font-bold text-slate-900">
 
-              {settings?.siteName ||
-                "Smart Village Management Portal"}
+              {settings?.siteName?.trim() &&
+              settings.siteName.trim() !== "Smart Village Management Portal" ? (
+                settings.siteName
+              ) : (
+                <span className="inline-flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                  <span
+                    className="tracking-wide"
+                    style={{
+                      fontFamily:
+                        '"Montserrat", Arial, "Segoe UI", sans-serif',
+                      fontWeight: 700,
+                    }}
+                  >
+                    CSIR
+                  </span>
+                  <span
+                    lang="hi"
+                    className="text-[1.18em] leading-[1.2]"
+                    style={{
+                      fontFamily:
+                        '"Tiro Devanagari Hindi", "Nirmala UI", Mangal, serif',
+                      fontSynthesis: "weight",
+                      fontWeight: 700,
+                    }}
+                  >
+                    ग्रामसेतु
+                  </span>
+                  <span className="text-base font-semibold tracking-normal text-slate-700 sm:text-lg">
+                    - Connective STI to Rural India
+                  </span>
+                </span>
+              )}
 
             </h2>
 
