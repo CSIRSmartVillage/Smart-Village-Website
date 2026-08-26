@@ -2,6 +2,7 @@ import cbriLogo from "../../../assets/logos/CBRI.png";
 import csirLogo from "../../../assets/logos/CSIR.jpg";
 import smartVillageLogo from "../../../assets/logos/SmartVillage.jpeg";
 import eightyYearsLogo from "../../../assets/logos/80year.jpg";
+import headingImage from "../../../assets/logos/heading.jpeg";
 
 const Header = () => {
   return (
@@ -10,7 +11,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto">
 
         {/* Desktop Header */}
-        <div className="hidden xl:grid grid-cols-[1fr_auto_1fr] items-center gap-4 px-6 py-4">
+        <div className="hidden xl:grid grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)_minmax(0,1fr)] items-center gap-4 px-6 py-4">
 
           {/* Left Logos */}
           <div className="flex min-w-0 items-center justify-start gap-2 lg:gap-3">
@@ -35,57 +36,16 @@ const Header = () => {
 
           </div>
 
-          {/* Center Title */}
-          <div className="px-4 text-center">
-
-            <h1
-              className="
-                flex
-                items-baseline
-                justify-center
-                gap-2
-                text-3xl
-                font-bold
-                text-slate-900
-              "
-            >
-              <span
-                className="tracking-wide"
-                style={{
-                  fontFamily: '"Montserrat", Arial, "Segoe UI", sans-serif',
-                  fontWeight: 700,
-                }}
-              >
-                CSIR
-              </span>
-              <span
-                lang="hi"
-                className="text-[1.18em] leading-[1.2]"
-                style={{
-                  fontFamily:
-                    '"Tiro Devanagari Hindi", "Nirmala UI", Mangal, serif',
-                  fontSynthesis: "weight",
-                  fontWeight: 700,
-                }}
-              >
-                ग्रामसेतु
-              </span>
-            </h1>
-
-            <p
-              className="
-                text-slate-600
-                mt-2
-                text-lg
-                font-normal
-              "
-              style={{
-                fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif',
-              }}
-            >
-              CSIR-SMART VILLAGE MANAGEMENT PORTAL
-            </p>
-
+          {/* Center Heading */}
+          <div className="flex min-w-0 items-center justify-center px-4">
+            <img
+              src={headingImage}
+              alt="CSIR Gramsetu — CSIR Smart Village Management Portal"
+              decoding="async"
+              fetchPriority="high"
+              loading="eager"
+              className="h-24 w-full object-contain"
+            />
           </div>
 
           {/* Right Logos */}
@@ -169,61 +129,16 @@ const Header = () => {
 
           </div>
 
-          {/* Title */}
-          <div className="text-center">
-
-            <h1
-              className="
-                flex
-                items-baseline
-                justify-center
-                gap-2
-                text-xl
-                md:text-2xl
-                font-bold
-                text-slate-900
-                leading-tight
-              "
-            >
-              <span
-                className="tracking-wide"
-                style={{
-                  fontFamily: '"Montserrat", Arial, "Segoe UI", sans-serif',
-                  fontWeight: 700,
-                }}
-              >
-                CSIR
-              </span>
-              <span
-                lang="hi"
-                className="text-[1.18em] leading-[1.2]"
-                style={{
-                  fontFamily:
-                    '"Tiro Devanagari Hindi", "Nirmala UI", Mangal, serif',
-                  fontSynthesis: "weight",
-                  fontWeight: 700,
-                }}
-              >
-                ग्रामसेतु
-              </span>
-            </h1>
-
-            <p
-              className="
-                text-xs
-                md:text-base
-                text-slate-600
-                mt-2
-                leading-relaxed
-                font-normal
-              "
-              style={{
-                fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif',
-              }}
-            >
-              CSIR-SMART VILLAGE MANAGEMENT PORTAL
-            </p>
-
+          {/* Heading */}
+          <div className="flex min-w-0 items-center justify-center px-2 sm:px-4">
+            <img
+              src={headingImage}
+              alt="CSIR Gramsetu — CSIR Smart Village Management Portal"
+              decoding="async"
+              fetchPriority="high"
+              loading="eager"
+              className="h-16 w-full object-contain sm:h-20 md:h-24"
+            />
           </div>
 
         </div>
