@@ -6,6 +6,8 @@ import Video
 
 import Supporter
   from "../supporter/supporter.model.js";
+import SupporterLogo
+  from "../supporter/supporterLogo.model.js";
 
 import {
   deleteFile,
@@ -184,6 +186,19 @@ export const deleteMedia =
       throw new ApiError(
         409,
         "This image is in use by a supporter. Update or delete the supporter before removing it from the Media Library."
+      );
+    }
+
+    const isUsedBySupporterLogo =
+      await SupporterLogo.exists({
+        "logo.publicId": media.publicId,
+        isDeleted: false,
+      });
+
+    if (isUsedBySupporterLogo) {
+      throw new ApiError(
+        409,
+        "This image is in use by the supporter logo strip. Delete it from Supporter Logos before removing it from the Media Library."
       );
     }
 

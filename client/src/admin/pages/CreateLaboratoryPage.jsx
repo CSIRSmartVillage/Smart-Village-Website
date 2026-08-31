@@ -45,6 +45,7 @@ const CreateLaboratoryPage =
             phone: "",
             email: "",
             website: "",
+            members: [],
             isPublished: true,
           }}
           onSubmit={

@@ -6,6 +6,30 @@ import {
 import {
   getAllMedia,
 } from "../../services/media.service";
+import MediaUploader
+  from "../common/MediaUploader";
+
+const normalizeMedia = (value) => {
+  if (
+    value &&
+    typeof value === "object"
+  ) {
+    return value;
+  }
+
+  return value ? { _id: value } : null;
+};
+
+const normalizeMember = (member = {}) => ({
+  ...(member._id
+    ? { _id: member._id }
+    : {}),
+  photo: normalizeMedia(member.photo),
+  name: member.name || "",
+  designation: member.designation || "",
+  email: member.email || "",
+  phone: member.phone || "",
+});
 
 const normalizeList = (value) => {
   if (Array.isArray(value)) {
@@ -19,10 +43,10 @@ const normalizeList = (value) => {
   return String(value)
     .replace(/\r\n/g, "\n")
     .replace(/\r/g, "\n")
-    .split(/\s*(?:\n|(?=\d+[\).]\s*)|(?=\u2022\s*)|(?=-\s+))\s*/)
+    .split(/\s*(?:\n|(?=\d+[).]\s*)|(?=\u2022\s*)|(?=-\s+))\s*/)
     .map((item) =>
       item
-        .replace(/^\d+[\).]\s*/, "")
+        .replace(/^\d+[).]\s*/, "")
         .replace(/^[\u2022-]\s*/, "")
         .trim()
     )
@@ -36,12 +60,23 @@ const LaboratoryForm = ({
   const [formData, setFormData] =
     useState({
       ...initialValues,
+      heroImage:
+        initialValues.heroImage?._id ||
+        initialValues.heroImage ||
+        "",
       researchAreas: normalizeList(
         initialValues.researchAreas
       ),
       contributions: normalizeList(
         initialValues.contributions
       ),
+      members: Array.isArray(
+        initialValues.members
+      )
+        ? initialValues.members.map(
+            normalizeMember
+          )
+        : [],
     });
 
   const [media, setMedia] =
@@ -82,6 +117,22 @@ const LaboratoryForm = ({
         normalizeList(
           formData.contributions
         ).filter(Boolean),
+      members: (formData.members || []).map(
+        (member) => ({
+          ...(member._id
+            ? { _id: member._id }
+            : {}),
+          photo:
+            member.photo?._id ||
+            member.photo ||
+            null,
+          name: member.name || "",
+          designation:
+            member.designation || "",
+          email: member.email || "",
+          phone: member.phone || "",
+        })
+      ),
     });
   };
 
@@ -129,6 +180,45 @@ const LaboratoryForm = ({
           ? updated
           : [""],
     });
+  };
+
+  const addMember = () => {
+    setFormData((current) => ({
+      ...current,
+      members: [
+        ...(current.members || []),
+        normalizeMember(),
+      ],
+    }));
+  };
+
+  const updateMember = (
+    index,
+    field,
+    value
+  ) => {
+    setFormData((current) => ({
+      ...current,
+      members: current.members.map(
+        (member, memberIndex) =>
+          memberIndex === index
+            ? {
+                ...member,
+                [field]: value,
+              }
+            : member
+      ),
+    }));
+  };
+
+  const removeMember = (index) => {
+    setFormData((current) => ({
+      ...current,
+      members: current.members.filter(
+        (_, memberIndex) =>
+          memberIndex !== index
+      ),
+    }));
   };
 
   return (
@@ -309,6 +399,13 @@ const LaboratoryForm = ({
         className="w-full border p-3 rounded"
       />
 
+      <MembersField
+        members={formData.members || []}
+        onAdd={addMember}
+        onChange={updateMember}
+        onRemove={removeMember}
+      />
+
       <label className="flex items-center gap-2">
         <input
           type="checkbox"
@@ -397,6 +494,136 @@ const ListField = ({
       Add {title.slice(0, -1)}
     </button>
   </div>
+);
+
+const MembersField = ({
+  members,
+  onAdd,
+  onChange,
+  onRemove,
+}) => (
+  <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div>
+        <h2 className="text-lg font-semibold text-slate-900">
+          Scientists / Members
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Add any number of laboratory members. All fields are optional.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        onClick={onAdd}
+        className="shrink-0 rounded bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+      >
+        Add Member
+      </button>
+    </div>
+
+    {members.length === 0 ? (
+      <p className="mt-5 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center text-sm text-slate-500">
+        No scientists or members added yet.
+      </p>
+    ) : (
+      <div className="mt-5 space-y-5">
+        {members.map((member, index) => (
+          <div
+            key={member._id || index}
+            className="rounded-xl border border-slate-200 p-4"
+          >
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <h3 className="font-semibold text-slate-800">
+                Member {index + 1}
+              </h3>
+              <button
+                type="button"
+                onClick={() => onRemove(index)}
+                className="rounded border border-red-200 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+              >
+                Delete Member
+              </button>
+            </div>
+
+            <div className="grid gap-4 lg:grid-cols-[minmax(220px,0.7fr)_minmax(0,1.3fr)]">
+              <MediaUploader
+                label="Photo"
+                value={member.photo || []}
+                onChange={(photo) =>
+                  onChange(
+                    index,
+                    "photo",
+                    photo
+                  )
+                }
+                uploadAreaClassName="p-5"
+                previewImageClassName="object-contain"
+              />
+
+              <div className="grid content-start gap-4 sm:grid-cols-2">
+                <MemberInput
+                  label="Name"
+                  value={member.name}
+                  onChange={(value) =>
+                    onChange(index, "name", value)
+                  }
+                />
+                <MemberInput
+                  label="Designation"
+                  value={member.designation}
+                  onChange={(value) =>
+                    onChange(
+                      index,
+                      "designation",
+                      value
+                    )
+                  }
+                />
+                <MemberInput
+                  label="Email"
+                  type="email"
+                  value={member.email}
+                  onChange={(value) =>
+                    onChange(index, "email", value)
+                  }
+                />
+                <MemberInput
+                  label="Phone"
+                  type="tel"
+                  value={member.phone}
+                  onChange={(value) =>
+                    onChange(index, "phone", value)
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+);
+
+const MemberInput = ({
+  label,
+  type = "text",
+  value,
+  onChange,
+}) => (
+  <label className="block">
+    <span className="mb-2 block text-sm font-medium text-slate-700">
+      {label}
+    </span>
+    <input
+      type={type}
+      value={value || ""}
+      onChange={(event) =>
+        onChange(event.target.value)
+      }
+      className="w-full rounded border border-slate-300 p-3"
+    />
+  </label>
 );
 
 export default LaboratoryForm;

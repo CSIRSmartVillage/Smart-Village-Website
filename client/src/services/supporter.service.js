@@ -15,3 +15,23 @@ export const getSupporters = async () => {
 
   return result.data || [];
 };
+
+export const getSupporterLogos = async () => {
+  const response = await fetch(
+    API_BASE_URL + "/supporters/logos",
+    {
+      cache: "no-store",
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      result.message ||
+        "Failed to fetch supporter logos."
+    );
+  }
+
+  return result.data || [];
+};

@@ -271,7 +271,7 @@ const Footer = () => {
                       fontWeight: 700,
                     }}
                   >
-                    CSIR
+                    
                   </span>
                   <span
                     lang="hi"
@@ -283,10 +283,10 @@ const Footer = () => {
                       fontWeight: 700,
                     }}
                   >
-                    ग्रामसेतु
+                   सीएसआईआर ग्रामसेतु
                   </span>
                   <span className="text-base font-semibold tracking-normal text-slate-700 sm:text-lg">
-                    CSIR Smart Village Management Portal
+                    SMART Village Web Portal
                   </span>
                 </span>
               )}
@@ -377,15 +377,15 @@ const Footer = () => {
 
               <div>
 
-                <p className="text-sm font-semibold text-slate-900">
-                  Address
-                </p>
+                <p className="text-sm font-semibold text-slate-900"> 
+                  Address 
+                </p> 
 
-                <p className="mt-1 text-sm leading-6 text-slate-600">
-                  {settings?.address ||
-                    "CSIR-CBRI, Roorkee, Uttarakhand, India"}
+                <p className="mt-1 text-sm leading-6 text-slate-600"> 
+                  Prof. Pradeep Kumar Ramancharla
+                  <br />
+                  CSIR-CBRI, Roorkee (247667), Uttarakhand, India
                 </p>
-
               </div>
 
             </div>

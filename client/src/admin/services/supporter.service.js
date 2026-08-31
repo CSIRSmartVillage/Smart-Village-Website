@@ -56,3 +56,31 @@ export const deleteSupporter = async (id) => {
 
   return response.data.data;
 };
+
+export const getAdminSupporterLogos = async () => {
+  const response = await axios.get(
+    API_URL + "/logos",
+    authConfig()
+  );
+
+  return response.data.data;
+};
+
+export const createSupporterLogo = async (logo) => {
+  const response = await axios.post(
+    API_URL + "/logos",
+    { logo },
+    authConfig()
+  );
+
+  return response.data.data;
+};
+
+export const deleteSupporterLogo = async (id) => {
+  const response = await axios.delete(
+    API_URL + "/logos/" + id,
+    authConfig()
+  );
+
+  return response.data.data;
+};

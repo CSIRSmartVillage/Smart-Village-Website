@@ -4,9 +4,13 @@ import { createAuditLog } from "../../services/audit.service.js";
 
 import {
   createSupporter,
+  createSupporterLogo,
   deleteSupporter,
+  deleteSupporterLogo,
   getAdminSupporters,
+  getAdminSupporterLogos,
   getPublicSupporters,
+  getPublicSupporterLogos,
   getSupporterById,
   updateSupporter,
 } from "./supporter.service.js";
@@ -121,3 +125,81 @@ export const remove = asyncHandler(async (req, res) => {
     )
   );
 });
+
+export const getPublicLogos =
+  asyncHandler(async (_req, res) => {
+    const logos =
+      await getPublicSupporterLogos();
+
+    return res.json(
+      new ApiResponse(
+        200,
+        logos,
+        "Supporter logos fetched successfully."
+      )
+    );
+  });
+
+export const getAllLogos =
+  asyncHandler(async (_req, res) => {
+    const logos =
+      await getAdminSupporterLogos();
+
+    return res.json(
+      new ApiResponse(
+        200,
+        logos,
+        "Supporter logos fetched successfully."
+      )
+    );
+  });
+
+export const createLogo =
+  asyncHandler(async (req, res) => {
+    const supporterLogo =
+      await createSupporterLogo(
+        req.body,
+        req.admin._id
+      );
+
+    await createAuditLog({
+      actor: req.admin._id,
+      action: "CREATE_SUPPORTER_LOGO",
+      resource: "SupporterLogo",
+      resourceId:
+        supporterLogo._id.toString(),
+      ipAddress: req.ip,
+    });
+
+    return res.status(201).json(
+      new ApiResponse(
+        201,
+        supporterLogo,
+        "Supporter logo added successfully."
+      )
+    );
+  });
+
+export const removeLogo =
+  asyncHandler(async (req, res) => {
+    await deleteSupporterLogo(
+      req.params.id,
+      req.admin._id
+    );
+
+    await createAuditLog({
+      actor: req.admin._id,
+      action: "DELETE_SUPPORTER_LOGO",
+      resource: "SupporterLogo",
+      resourceId: req.params.id,
+      ipAddress: req.ip,
+    });
+
+    return res.json(
+      new ApiResponse(
+        200,
+        null,
+        "Supporter logo deleted successfully."
+      )
+    );
+  });

@@ -16,7 +16,7 @@
   display: flex;
   width: max-content;
   will-change: transform;
-  animation: csr-announcement-scroll 44s linear infinite;
+  animation: csr-announcement-scroll 20s linear infinite;
 }
 
 .csr-announcement:hover .csr-announcement__track {
@@ -31,7 +31,7 @@
   background-clip: text;
   color: transparent;
   font-family: "Poppins", Arial, "Segoe UI", sans-serif;
-  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
   font-style: italic;
   font-weight: 500;
   letter-spacing: 0.015em;

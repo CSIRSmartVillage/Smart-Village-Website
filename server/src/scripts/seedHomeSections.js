@@ -39,10 +39,19 @@ const seedHomeSections =
   {
     pageId: homePage._id,
     sectionType:
+      "ANNOUNCEMENT_LINE",
+    title:
+      "Announcement Line",
+    order: 2,
+  },
+
+  {
+    pageId: homePage._id,
+    sectionType:
       "ABOUT_PREVIEW",
     title:
       "About Preview",
-    order: 2,
+    order: 3,
   },
 
   {
@@ -51,7 +60,7 @@ const seedHomeSections =
       "IMPACT_STATISTICS",
     title:
       "Impact Statistics",
-    order: 3,
+    order: 4,
   },
 
   {
@@ -60,7 +69,7 @@ const seedHomeSections =
       "LATEST_UPDATES",
     title:
       "Latest Updates",
-    order: 4,
+    order: 5,
   },
 
   {
@@ -69,7 +78,7 @@ const seedHomeSections =
       "VILLAGES",
     title:
       "Villages",
-    order: 5,
+    order: 6,
   },
 
   {
@@ -78,7 +87,7 @@ const seedHomeSections =
       "FOOTER",
     title:
       "Footer",
-    order: 6,
+    order: 7,
   },
 ];
 

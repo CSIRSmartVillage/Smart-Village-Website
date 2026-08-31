@@ -7,8 +7,11 @@ import {
 
 import MainLayout from "../../layouts/MainLayout";
 import {
+  getSupporterLogos,
   getSupporters,
 } from "../../services/supporter.service";
+import SupporterLogoStrip
+  from "./SupporterLogoStrip";
 
 const sections = [
   {
@@ -125,6 +128,12 @@ const SupportersPage = () => {
     queryKey: ["public-supporters"],
     queryFn: getSupporters,
   });
+  const {
+    data: supporterLogos = [],
+  } = useQuery({
+    queryKey: ["public-supporter-logos"],
+    queryFn: getSupporterLogos,
+  });
 
   return (
     <MainLayout>
@@ -143,6 +152,10 @@ const SupportersPage = () => {
           </p>
         </div>
       </section>
+
+      <SupporterLogoStrip
+        logos={supporterLogos}
+      />
 
       <div className="mx-auto max-w-7xl space-y-20 px-6 py-16 lg:py-20">
         {isLoading ? (

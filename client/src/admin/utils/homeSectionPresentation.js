@@ -12,6 +12,13 @@ const homeSectionPresentation = {
     description:
       "Controls the rotating banner images shown at the top of the homepage.",
   },
+  ANNOUNCEMENT_LINE: {
+    name: getSectionDisplayName(
+      "ANNOUNCEMENT_LINE"
+    ),
+    description:
+      "Controls the moving announcement line shown below the homepage banner.",
+  },
   IMPACT_STATISTICS: {
     name: getSectionDisplayName("IMPACT_STATISTICS"),
     description:

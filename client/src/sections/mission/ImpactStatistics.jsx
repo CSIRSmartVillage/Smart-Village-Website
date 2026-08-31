@@ -104,13 +104,14 @@ const ImpactStatistics = ({
   }, []);
 
   const {
-    heading =
-      "Smart Village Impact",
+    heading: rawHeading = "SMART Village Impact",
 
     description =
       "Key indicators reflecting rural transformation initiatives.",
 
   } = data;
+
+  const heading = rawHeading.replace(/\bsmart\b/i, "SMART");
 
   const stats = useMemo(
     () => [

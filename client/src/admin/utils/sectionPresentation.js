@@ -1,5 +1,6 @@
 const sectionDisplayNames = {
   HERO: "Home Banner / Top Section",
+  ANNOUNCEMENT_LINE: "Announcement Line",
   MISSION: "Mission Overview",
   MISSION_OBJECTIVES: "Mission Objectives Summary",
   IMPACT_STATISTICS: "Smart Village Impact Summary",

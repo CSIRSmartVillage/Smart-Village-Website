@@ -15,13 +15,22 @@ import * as supporterController from "./supporter.controller.js";
 
 import {
   createSupporterSchema,
+  createSupporterLogoSchema,
   supporterIdSchema,
+  supporterLogoIdSchema,
   supporterQuerySchema,
   updateSupporterSchema,
 } from "./supporter.validation.js";
 
 const router = Router();
 const publicReadCache = publicCache();
+
+router.get(
+  "/logos",
+  publicLimiter,
+  publicReadCache,
+  supporterController.getPublicLogos
+);
 
 router.get(
   "/",
@@ -36,6 +45,23 @@ router.use(
   adminLimiter,
   verifyJWT,
   authorize("SUPER_ADMIN", "ADMIN")
+);
+
+router.get(
+  "/admin/logos",
+  supporterController.getAllLogos
+);
+
+router.post(
+  "/admin/logos",
+  validate(createSupporterLogoSchema),
+  supporterController.createLogo
+);
+
+router.delete(
+  "/admin/logos/:id",
+  validate(supporterLogoIdSchema),
+  supporterController.removeLogo
 );
 
 router.get(

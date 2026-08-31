@@ -6,6 +6,9 @@ import Page
 
 import PageSection
   from "../models/PageSection.model.js";
+import {
+  DEFAULT_HOME_ANNOUNCEMENT,
+} from "../shared/homeAnnouncement.js";
 
 const seedHomeContent =
   async () => {
@@ -54,6 +57,13 @@ const seedHomeContent =
 
               backgroundImage:
                 null,
+            };
+            break;
+
+          case "ANNOUNCEMENT_LINE":
+            section.content = {
+              text:
+                DEFAULT_HOME_ANNOUNCEMENT,
             };
             break;
 

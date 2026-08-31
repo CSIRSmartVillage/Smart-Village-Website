@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 
 import {
   getSectionsByPage,
-  updateSection,
 } from "../services/sectionManagement.service";
 
 import {
@@ -45,60 +44,6 @@ const HomeSectionsPage =
       loadSections();
     }, []);
 
-    const handleOrderChange =
-      (
-        id,
-        value
-      ) => {
-        setSections(
-          sections.map(
-            (section) =>
-              section._id ===
-              id
-                ? {
-                    ...section,
-                    order:
-                      Number(
-                        value
-                      ),
-                  }
-                : section
-          )
-        );
-      };
-
-    const saveChanges =
-      async () => {
-        try {
-          await Promise.all(
-            sections.map(
-              (
-                section
-              ) =>
-                updateSection(
-                  section._id,
-                  {
-                    order:
-                      section.order,
-                    isVisible:
-                      section.isVisible,
-                  }
-                )
-            )
-          );
-
-          alert(
-            "Sections updated successfully"
-          );
-        } catch (
-          error
-        ) {
-          console.error(
-            error
-          );
-        }
-      };
-
     return (
       <div>
 
@@ -133,10 +78,6 @@ const HomeSectionsPage =
                 </th>
 
                 <th className="p-4 text-left">
-                  Order
-                </th>
-
-                <th className="p-4 text-left">
                   Action
                 </th>
               </tr>
@@ -168,32 +109,6 @@ const HomeSectionsPage =
                     </td>
 
                     <td className="p-4">
-                      <input
-                        type="number"
-                        value={
-                          section.order
-                        }
-                        onChange={(
-                          e
-                        ) =>
-                          handleOrderChange(
-                            section._id,
-                            e
-                              .target
-                              .value
-                          )
-                        }
-                        className="
-                          border
-                          rounded-lg
-                          px-3
-                          py-2
-                          w-24
-                        "
-                      />
-                    </td>
-
-                    <td className="p-4">
                       <Link
                         to={`/admin/sections/${section._id}`}
                         className="font-semibold text-blue-700 hover:text-blue-900"
@@ -210,22 +125,6 @@ const HomeSectionsPage =
 
           </table>
         </div>
-
-        <button
-          onClick={
-            saveChanges
-          }
-          className="
-            mt-6
-            px-6
-            py-3
-            bg-blue-600
-            text-white
-            rounded-lg
-          "
-        >
-          Save Changes
-        </button>
 
       </div>
     );

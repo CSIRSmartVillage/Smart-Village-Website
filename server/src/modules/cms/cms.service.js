@@ -6,6 +6,9 @@ import Navigation from "../../models/Navigation.model.js";
 
 import Media
   from "../../models/Media.model.js";
+import {
+  ensureHomeAnnouncementSection,
+} from "../../shared/homeAnnouncement.js";
 
 const resolveSectionMedia = async (sections) => {
   const mediaIds = new Set();
@@ -99,6 +102,10 @@ export const getPageBySlug =
         "Page not found"
       );
     }
+
+    await ensureHomeAnnouncementSection(
+      page
+    );
 
     const sections =
       await PageSection.find({

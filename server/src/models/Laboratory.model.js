@@ -1,5 +1,17 @@
 import mongoose from "mongoose";
 
+const laboratoryMemberSchema = new mongoose.Schema({
+  photo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Media",
+    default: null,
+  },
+  name: { type: String, default: "", trim: true },
+  designation: { type: String, default: "", trim: true },
+  email: { type: String, default: "", trim: true },
+  phone: { type: String, default: "", trim: true },
+});
+
 const laboratorySchema =
   new mongoose.Schema(
     {
@@ -67,6 +79,11 @@ const laboratorySchema =
       website: {
         type: String,
         default: "",
+      },
+
+      members: {
+        type: [laboratoryMemberSchema],
+        default: [],
       },
 
       isPublished: {

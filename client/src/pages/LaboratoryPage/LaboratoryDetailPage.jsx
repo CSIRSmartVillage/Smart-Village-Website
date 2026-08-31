@@ -8,6 +8,8 @@ import {
 import MainLayout from "../../layouts/MainLayout";
 import LaboratoryHero
   from "../../components/laboratories/LaboratoryHero";
+import LaboratoryMembersTable
+  from "../../components/laboratories/LaboratoryMembersTable";
 
 import SmartTextRenderer
   from "../../components/common/SmartTextRenderer";
@@ -166,12 +168,16 @@ return (
         </ol>
       </div>
 
-      <div className="mb-12">
+      <LaboratoryMembersTable
+        members={laboratory.members}
+      />
+
+      <div className="mb-12 pb-4">
         <h2 className="text-3xl font-bold mb-4">
           Contact Information
         </h2>
 
-        <div className="space-y-2">
+        <div className="space-y-4">
           {laboratory.directorName && (
             <p>
               <span>Director: </span>
@@ -193,25 +199,26 @@ return (
             {laboratory.email}
           </p>
         </div>
-      </div>
 
-      {laboratory.website && (
-        <a
-          href={laboratory.website}
-          target="_blank"
-          rel="noreferrer"
-          className="
-            inline-block
-            bg-blue-600
-            text-white
-            px-6
-            py-3
-            rounded-lg
-          "
-        >
-          Visit Official Website
-        </a>
-      )}
+        {laboratory.website && (
+          <a
+            href={laboratory.website}
+            target="_blank"
+            rel="noreferrer"
+            className="
+              mt-6
+              inline-block
+              bg-blue-600
+              text-white
+              px-6
+              py-3
+              rounded-lg
+            "
+          >
+            Visit Official Website
+          </a>
+        )}
+      </div>
 
     </section>
 

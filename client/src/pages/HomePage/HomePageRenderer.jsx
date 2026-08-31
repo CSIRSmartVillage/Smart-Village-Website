@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 import HeroSection
   from "../../sections/hero/HeroSection";
 
@@ -14,11 +12,7 @@ import FeaturedVillageUpdates
   from "../../sections/updates/FeaturedVillageUpdates";
 
 
-  import AboutPreview
-  from "../../sections/about/AboutPreview";
-
-
-  import VideoSection
+import VideoSection
 from "../../sections/videos/VideoSection";
 
 const HeroSkeleton = () => {
@@ -103,18 +97,22 @@ const HomePageRenderer = ({
           ) {
             case "HERO":
               return (
-                <Fragment
+                <HeroSection
                   key={
                     section._id
                   }
-                >
-                  <HeroSection
-                    data={
-                      section.content
-                    }
-                  />
-                  <CSRAnnouncement />
-                </Fragment>
+                  data={
+                    section.content
+                  }
+                />
+              );
+
+            case "ANNOUNCEMENT_LINE":
+              return (
+                <CSRAnnouncement
+                  key={section._id}
+                  text={section.content?.text}
+                />
               );
 
                           case

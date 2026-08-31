@@ -4,14 +4,24 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { ExternalLink, Plus } from "lucide-react";
+import {
+  ExternalLink,
+  ImagePlus,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import ConfirmDialog from "../components/common/ConfirmDialog";
+import MediaUploader
+  from "../components/common/MediaUploader";
 
 import {
+  createSupporterLogo,
+  deleteSupporterLogo,
   deleteSupporter,
+  getAdminSupporterLogos,
   getAdminSupporters,
 } from "../services/supporter.service";
 
@@ -21,6 +31,12 @@ const SupportersPage = () => {
   const [typeFilter, setTypeFilter] = useState("ALL");
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [pendingLogo, setPendingLogo] = useState(null);
+  const [addingLogo, setAddingLogo] = useState(false);
+  const [logoDeleteTarget, setLogoDeleteTarget] =
+    useState(null);
+  const [deletingLogo, setDeletingLogo] =
+    useState(false);
 
   const {
     data: supporters = [],
@@ -29,6 +45,14 @@ const SupportersPage = () => {
   } = useQuery({
     queryKey: ["admin-supporters"],
     queryFn: () => getAdminSupporters(),
+  });
+  const {
+    data: supporterLogos = [],
+    isLoading: logosLoading,
+    isError: logosError,
+  } = useQuery({
+    queryKey: ["admin-supporter-logos"],
+    queryFn: getAdminSupporterLogos,
   });
 
   const visibleSupporters = useMemo(
@@ -67,6 +91,79 @@ const SupportersPage = () => {
     }
   };
 
+  const addLogo = async () => {
+    if (
+      !pendingLogo?.url ||
+      !pendingLogo?.publicId
+    ) {
+      toast.error(
+        "Upload a supporter logo first."
+      );
+      return;
+    }
+
+    try {
+      setAddingLogo(true);
+      await createSupporterLogo({
+        url: pendingLogo.url,
+        publicId: pendingLogo.publicId,
+      });
+
+      setPendingLogo(null);
+      toast.success(
+        "Supporter logo added successfully."
+      );
+      queryClient.invalidateQueries({
+        queryKey: ["admin-supporter-logos"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["public-supporter-logos"],
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        getUserFriendlyError(
+          error,
+          "Unable to add the supporter logo. Please try again."
+        )
+      );
+    } finally {
+      setAddingLogo(false);
+    }
+  };
+
+  const confirmLogoDelete = async () => {
+    if (!logoDeleteTarget) return;
+
+    try {
+      setDeletingLogo(true);
+      await deleteSupporterLogo(
+        logoDeleteTarget._id
+      );
+
+      setLogoDeleteTarget(null);
+      toast.success(
+        "Supporter logo deleted successfully."
+      );
+      queryClient.invalidateQueries({
+        queryKey: ["admin-supporter-logos"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["public-supporter-logos"],
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        getUserFriendlyError(
+          error,
+          "Unable to delete the supporter logo. Please try again."
+        )
+      );
+    } finally {
+      setDeletingLogo(false);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-7xl space-y-8 p-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -91,6 +188,88 @@ const SupportersPage = () => {
           Add Supporter
         </button>
       </div>
+
+      <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <div>
+          <h2 className="text-xl font-semibold text-slate-800">
+            Supporter Logos
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-slate-500">
+            Upload logos for the moving strip on the Our Supporters page. You can add any number of logos.
+          </p>
+        </div>
+
+        <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.2fr)]">
+          <div>
+            <MediaUploader
+              label="Upload Logo"
+              value={pendingLogo}
+              onChange={setPendingLogo}
+              uploadAreaClassName="p-6"
+              previewImageClassName="object-contain bg-white p-3"
+            />
+
+            <button
+              type="button"
+              onClick={addLogo}
+              disabled={
+                addingLogo ||
+                !pendingLogo?.url
+              }
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-3 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <ImagePlus size={18} />
+              {addingLogo
+                ? "Adding Logo..."
+                : "Add Logo"}
+            </button>
+          </div>
+
+          <div>
+            {logosLoading ? (
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-10 text-center text-slate-500">
+                Loading supporter logos...
+              </div>
+            ) : logosError ? (
+              <div className="rounded-xl border border-red-200 bg-red-50 p-10 text-center text-red-600">
+                Unable to load supporter logos.
+              </div>
+            ) : supporterLogos.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center text-slate-500">
+                No supporter logos added yet.
+              </div>
+            ) : (
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {supporterLogos.map((item) => (
+                  <article
+                    key={item._id}
+                    className="rounded-xl border border-slate-200 bg-slate-50 p-3"
+                  >
+                    <div className="flex h-28 items-center justify-center rounded-lg bg-white p-3">
+                      <img
+                        src={item.logo?.url}
+                        alt="Supporter logo"
+                        className="h-full w-full object-contain"
+                      />
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setLogoDeleteTarget(item)
+                      }
+                      className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+                    >
+                      <Trash2 size={16} />
+                      Delete Logo
+                    </button>
+                  </article>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
 
       <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
         <label className="text-sm font-medium text-slate-700">
@@ -236,6 +415,18 @@ const SupportersPage = () => {
         loading={deleting}
         onCancel={() => setDeleteTarget(null)}
         onConfirm={confirmDelete}
+      />
+
+      <ConfirmDialog
+        open={!!logoDeleteTarget}
+        title="Delete Supporter Logo"
+        message="Delete this logo from the moving supporter strip?"
+        confirmText="Delete Logo"
+        loading={deletingLogo}
+        onCancel={() =>
+          setLogoDeleteTarget(null)
+        }
+        onConfirm={confirmLogoDelete}
       />
     </div>
   );

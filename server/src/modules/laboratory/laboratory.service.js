@@ -9,20 +9,24 @@ export const getAllLaboratories =
   async () => {
     return Laboratory.find()
       .populate("heroImage")
+      .populate("members.photo")
       .sort({ createdAt: -1 });
   };
 
 export const getLaboratoryById =
   async (id) => {
     return Laboratory.findById(id)
-      .populate("heroImage");
+      .populate("heroImage")
+      .populate("members.photo");
   };
 
 export const getLaboratoryBySlug =
   async (slug) => {
     return Laboratory.findOne({
       slug,
-    }).populate("heroImage");
+    })
+      .populate("heroImage")
+      .populate("members.photo");
   };
 
 
@@ -31,7 +35,9 @@ export const getLaboratoryBySlug =
     return Laboratory.findOne({
       type: "NODAL",
       isPublished: true,
-    }).populate("heroImage");
+    })
+      .populate("heroImage")
+      .populate("members.photo");
   };
 
 export const updateLaboratory =
@@ -42,7 +48,9 @@ export const updateLaboratory =
       {
         new: true,
       }
-    );
+    )
+      .populate("heroImage")
+      .populate("members.photo");
   };
 
 export const deleteLaboratory =

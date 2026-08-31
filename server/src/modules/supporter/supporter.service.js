@@ -1,4 +1,6 @@
 import Supporter from "./supporter.model.js";
+import SupporterLogo
+  from "./supporterLogo.model.js";
 import ApiError from "../../utils/ApiError.js";
 
 const getSupporterOrThrow = async (id) => {
@@ -113,3 +115,51 @@ export const deleteSupporter = async (id, adminId) => {
 
   return true;
 };
+
+export const createSupporterLogo =
+  async (payload, adminId) =>
+    SupporterLogo.create({
+      ...payload,
+      createdBy: adminId,
+      updatedBy: adminId,
+    });
+
+export const getPublicSupporterLogos =
+  async () =>
+    SupporterLogo.find({
+      isDeleted: false,
+    })
+      .select("logo createdAt")
+      .sort({ createdAt: 1 })
+      .lean();
+
+export const getAdminSupporterLogos =
+  async () =>
+    SupporterLogo.find({
+      isDeleted: false,
+    })
+      .populate("createdBy", "username email")
+      .sort({ createdAt: 1 })
+      .lean();
+
+export const deleteSupporterLogo =
+  async (id, adminId) => {
+    const supporterLogo =
+      await SupporterLogo.findOne({
+        _id: id,
+        isDeleted: false,
+      });
+
+    if (!supporterLogo) {
+      throw new ApiError(
+        404,
+        "Supporter logo not found."
+      );
+    }
+
+    supporterLogo.isDeleted = true;
+    supporterLogo.updatedBy = adminId;
+    await supporterLogo.save();
+
+    return true;
+  };

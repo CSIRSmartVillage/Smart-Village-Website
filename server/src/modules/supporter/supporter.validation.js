@@ -49,6 +49,18 @@ export const supporterIdSchema = z.object({
   }),
 });
 
+export const createSupporterLogoSchema = z.object({
+  body: z.object({
+    logo: logoSchema,
+  }),
+});
+
+export const supporterLogoIdSchema = z.object({
+  params: z.object({
+    id: objectId,
+  }),
+});
+
 export const supporterQuerySchema = z.object({
   query: z.object({
     type: z.enum(SUPPORTER_TYPES).optional(),

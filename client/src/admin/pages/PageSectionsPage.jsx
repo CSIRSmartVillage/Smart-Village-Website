@@ -10,7 +10,6 @@ import {
 
 import {
   getSectionsByPage,
-  updateSection,
 } from "../services/section.service";
 
 import {
@@ -49,10 +48,6 @@ const PageSectionsPage = () => {
     useState("");
   const [pageSlug, setPageSlug] =
     useState("");
-  const [saving, setSaving] =
-    useState(false);
-
-
   useEffect(() => {
     const loadSections =
       async () => {
@@ -79,6 +74,7 @@ const PageSectionsPage = () => {
   }, [pageId]);
 
   const isHomePage =
+    pageSlug === "home" ||
     pageId === HOME_PAGE_ID;
   const isSuccessStoriesPage =
     pageSlug === "success-stories";
@@ -105,41 +101,6 @@ const PageSectionsPage = () => {
               )
               .sort(sortMissionObjectivesSections)
         : sections;
-  const handleOrderChange = (id, value) => {
-    setSections((currentSections) =>
-      currentSections.map((section) =>
-        section._id === id
-          ? {
-              ...section,
-              order: Number(value),
-            }
-          : section
-      )
-    );
-  };
-
-  const saveHomeSectionOrder = async () => {
-    try {
-      setSaving(true);
-
-      await Promise.all(
-        displayedSections.map((section) =>
-          updateSection(section._id, {
-            order: section.order,
-            isVisible: section.isVisible,
-          })
-        )
-      );
-
-      alert("Sections updated successfully");
-    } catch (error) {
-      console.error(error);
-      alert("Unable to update section order.");
-    } finally {
-      setSaving(false);
-    }
-  };
-
   return (
     <div>
 
@@ -175,9 +136,11 @@ const PageSectionsPage = () => {
                 </th>
               )}
 
-              <th className="p-4 text-left">
-                Order
-              </th>
+              {!isHomePage && (
+                <th className="p-4 text-left">
+                  Order
+                </th>
+              )}
 
               <th className="p-4 text-left">
                 Visible
@@ -229,24 +192,11 @@ const PageSectionsPage = () => {
                     </td>
                   )}
 
-                  <td className="p-4">
-                    {isHomePage ? (
-                      <input
-                        type="number"
-                        value={section.order}
-                        onChange={(event) =>
-                          handleOrderChange(
-                            section._id,
-                            event.target.value
-                          )
-                        }
-                        className="w-24 rounded-lg border border-slate-300 px-3 py-2"
-                        aria-label={`Display order for ${section.sectionType}`}
-                      />
-                    ) : (
-                      section.order
-                    )}
-                  </td>
+                  {!isHomePage && (
+                    <td className="p-4">
+                      {section.order}
+                    </td>
+                  )}
 
                   <td className="p-4">
                     {section.isVisible
@@ -272,17 +222,6 @@ const PageSectionsPage = () => {
         </table>
 
       </div>
-      {isHomePage && (
-        <button
-          type="button"
-          onClick={saveHomeSectionOrder}
-          disabled={saving}
-          className="mt-6 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {saving ? "Saving..." : "Save Changes"}
-        </button>
-      )}
-
     </div>
   );
 };

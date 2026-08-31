@@ -12,6 +12,9 @@ const sectionFieldPolicies = {
     subHeading: true,
     heroImages: true,
   },
+  ANNOUNCEMENT_LINE: {
+    text: true,
+  },
   IMPACT_STATISTICS: {
     heading: true,
     description: true,

@@ -16,6 +16,8 @@ const pageSectionSchema =
   enum: [
     "HERO",
 
+    "ANNOUNCEMENT_LINE",
+
     "MISSION",
 
     "MISSION_OBJECTIVES",
