@@ -1,39 +1,52 @@
 import {
-  useLayoutEffect,
+  Component,
+  useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
+
+const getLogoKey = (item, index) =>
+  item._id ||
+  item.logo.publicId ||
+  `${item.logo.url}-${index}`;
 
 const LogoGroup = ({
   logos,
   duplicate = false,
   measureRef,
   className = "",
+  onLogoError,
 }) => (
   <div
     ref={measureRef}
     aria-hidden={duplicate || undefined}
     className={`flex shrink-0 items-center gap-6 sm:gap-10 ${className}`}
   >
-    {logos.map((item, index) => (
-      <div
-        key={`${item._id}-${index}`}
-        className="flex h-20 w-40 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white p-2 shadow-sm sm:h-24 sm:w-48"
-      >
-        <img
-          src={item.logo?.url}
-          alt={
-            duplicate
-              ? ""
-              : `Supporter logo ${index + 1}`
-          }
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full object-contain"
-        />
-      </div>
-    ))}
+    {logos.map((item, index) => {
+      const logoKey = getLogoKey(item, index);
+
+      return (
+        <div
+          key={`${duplicate ? "copy" : "logo"}-${logoKey}`}
+          className="flex h-20 w-40 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white p-2 shadow-sm sm:h-24 sm:w-48"
+        >
+          <img
+            src={item.logo.url}
+            alt={
+              duplicate
+                ? ""
+                : `Supporter logo ${index + 1}`
+            }
+            loading="lazy"
+            decoding="async"
+            onError={() => onLogoError(logoKey)}
+            className="h-full w-full object-contain"
+          />
+        </div>
+      );
+    })}
   </div>
 );
 
@@ -42,28 +55,71 @@ const SupporterLogoStrip = ({ logos = [] }) => {
   const measureRef = useRef(null);
   const [shouldScroll, setShouldScroll] =
     useState(false);
+  const [failedLogoKeys, setFailedLogoKeys] =
+    useState(() => new Set());
 
   const validLogos = useMemo(
-    () =>
-      logos.filter(
-        (item) => item.logo?.url
-      ),
-    [logos]
+    () => {
+      const logoItems = Array.isArray(logos)
+        ? logos
+        : [];
+
+      return logoItems.filter((item, index) => {
+        const url = item?.logo?.url;
+
+        return (
+          typeof url === "string" &&
+          url.trim().length > 0 &&
+          !failedLogoKeys.has(
+            getLogoKey(item, index)
+          )
+        );
+      });
+    },
+    [failedLogoKeys, logos]
   );
 
-  useLayoutEffect(() => {
-    const updateOverflow = () => {
-      if (
-        !viewportRef.current ||
-        !measureRef.current
-      ) {
-        return;
-      }
+  const handleLogoError = useCallback(
+    (logoKey) => {
+      setFailedLogoKeys((currentKeys) => {
+        if (currentKeys.has(logoKey)) {
+          return currentKeys;
+        }
 
-      setShouldScroll(
-        measureRef.current.scrollWidth >
-          viewportRef.current.clientWidth
+        const nextKeys = new Set(currentKeys);
+        nextKeys.add(logoKey);
+        return nextKeys;
+      });
+    },
+    []
+  );
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    const measurement = measureRef.current;
+
+    if (!viewport || !measurement) {
+      return undefined;
+    }
+
+    let animationFrameId;
+
+    const updateOverflow = () => {
+      window.cancelAnimationFrame(
+        animationFrameId
       );
+      animationFrameId =
+        window.requestAnimationFrame(() => {
+          const nextShouldScroll =
+            measurement.scrollWidth >
+            viewport.clientWidth;
+
+          setShouldScroll((currentValue) =>
+            currentValue === nextShouldScroll
+              ? currentValue
+              : nextShouldScroll
+          );
+        });
     };
 
     updateOverflow();
@@ -76,21 +132,29 @@ const SupporterLogoStrip = ({ logos = [] }) => {
         updateOverflow
       );
 
-      return () =>
+      return () => {
+        window.cancelAnimationFrame(
+          animationFrameId
+        );
         window.removeEventListener(
           "resize",
           updateOverflow
         );
+      };
     }
 
     const observer = new ResizeObserver(
       updateOverflow
     );
 
-    observer.observe(viewportRef.current);
-    observer.observe(measureRef.current);
+    observer.observe(viewport);
 
-    return () => observer.disconnect();
+    return () => {
+      window.cancelAnimationFrame(
+        animationFrameId
+      );
+      observer.disconnect();
+    };
   }, [validLogos.length]);
 
   if (!validLogos.length) {
@@ -117,6 +181,7 @@ const SupporterLogoStrip = ({ logos = [] }) => {
             duplicate
             measureRef={measureRef}
             className="invisible absolute w-max"
+            onLogoError={handleLogoError}
           />
 
           {shouldScroll ? (
@@ -129,17 +194,20 @@ const SupporterLogoStrip = ({ logos = [] }) => {
               <LogoGroup
                 logos={validLogos}
                 className="pr-6 sm:pr-10"
+                onLogoError={handleLogoError}
               />
               <LogoGroup
                 logos={validLogos}
                 duplicate
                 className="pr-6 sm:pr-10"
+                onLogoError={handleLogoError}
               />
             </div>
           ) : (
             <LogoGroup
               logos={validLogos}
               className="justify-center"
+              onLogoError={handleLogoError}
             />
           )}
         </div>
@@ -148,4 +216,34 @@ const SupporterLogoStrip = ({ logos = [] }) => {
   );
 };
 
-export default SupporterLogoStrip;
+class SupporterLogoStripBoundary extends Component {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    if (import.meta.env.DEV) {
+      console.error(
+        "Supporter logo strip could not be rendered:",
+        error,
+        errorInfo
+      );
+    }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return null;
+    }
+
+    return (
+      <SupporterLogoStrip
+        logos={this.props.logos}
+      />
+    );
+  }
+}
+
+export default SupporterLogoStripBoundary;

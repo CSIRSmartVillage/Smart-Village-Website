@@ -13,7 +13,9 @@ export const getSupporters = async () => {
     );
   }
 
-  return result.data || [];
+  return Array.isArray(result.data)
+    ? result.data
+    : [];
 };
 
 export const getSupporterLogos = async () => {
@@ -33,5 +35,7 @@ export const getSupporterLogos = async () => {
     );
   }
 
-  return result.data || [];
+  return Array.isArray(result.data)
+    ? result.data
+    : [];
 };

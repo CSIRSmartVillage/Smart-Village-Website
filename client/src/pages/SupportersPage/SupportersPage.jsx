@@ -121,7 +121,7 @@ const SupporterSection = ({
 
 const SupportersPage = () => {
   const {
-    data: supporters = [],
+    data: supportersData,
     isLoading,
     isError,
   } = useQuery({
@@ -129,11 +129,21 @@ const SupportersPage = () => {
     queryFn: getSupporters,
   });
   const {
-    data: supporterLogos = [],
+    data: supporterLogosData,
   } = useQuery({
     queryKey: ["public-supporter-logos"],
     queryFn: getSupporterLogos,
   });
+  const supporters = Array.isArray(
+    supportersData
+  )
+    ? supportersData.filter(Boolean)
+    : [];
+  const supporterLogos = Array.isArray(
+    supporterLogosData
+  )
+    ? supporterLogosData
+    : [];
 
   return (
     <MainLayout>
