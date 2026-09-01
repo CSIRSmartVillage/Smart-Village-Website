@@ -35,7 +35,7 @@ export const sendContactEmail = async ({
 }) => {
   try {
     const info = await transporter.sendMail({
-      from: `"Smart Village Management Portal" <${env.smtpUser}>`,
+      from: `"SMART Village Management Portal" <${env.smtpUser}>`,
       to: env.contactReceiver,
       replyTo: email,
       subject: `📩 Contact Form: ${subject}`,
@@ -77,7 +77,7 @@ ${message}
 
           <p style="color:#666;font-size:13px;">
             This email was automatically generated from the
-            Smart Village Management Portal Contact Form.
+            SMART Village Management Portal Contact Form.
           </p>
         </div>
       `,

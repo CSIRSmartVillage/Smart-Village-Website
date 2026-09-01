@@ -51,7 +51,7 @@ const seedDirectorDeskContent =
   "https://images.unsplash.com/photo-1560250097-0b93528c311a",
 
               message:
-                "Welcome to the CSIR Smart Village Mission. Through innovation, technology and community participation we aim to create sustainable and inclusive rural development models for India.",
+                "Welcome to the CSIR SMART Village Mission. Through innovation, technology and community participation we aim to create sustainable and inclusive rural development models for India.",
             };
             break;
 

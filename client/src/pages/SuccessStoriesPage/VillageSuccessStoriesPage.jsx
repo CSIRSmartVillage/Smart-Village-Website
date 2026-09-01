@@ -175,7 +175,7 @@ const VillageSuccessStoriesPage = () => {
             </h2>
 
             <p className="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">
-              Explore the innovative scientific modules, outcomes, and community participation frameworks emerging from this village under the CSIR Smart Village Mission.
+              Explore the innovative scientific modules, outcomes, and community participation frameworks emerging from this village under the CSIR SMART Village Mission.
             </p>
           </div>
 

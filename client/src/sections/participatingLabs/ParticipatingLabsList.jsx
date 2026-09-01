@@ -81,7 +81,7 @@ const ParticipatingLabsList = () => {
             expertise, innovation,
             scientific research and
             technology development
-            for Smart Village initiatives.
+            for SMART Village initiatives.
           </p>
         </div>
 

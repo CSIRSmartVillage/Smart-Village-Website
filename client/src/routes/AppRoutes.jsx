@@ -151,6 +151,12 @@ const IndicatorsPage = lazy(() =>
   )
 );
 
+const GovernmentApprovalsPage = lazy(() =>
+  import(
+    "../pages/VillagePortal/modules/GovernmentApprovals/GovernmentApprovalsPage"
+  )
+);
+
 const AppRoutes = () => {
   return (
 
@@ -321,6 +327,11 @@ const AppRoutes = () => {
   <Route
     path="indicators"
     element={<IndicatorsPage />}
+  />
+
+  <Route
+    path="government-approvals"
+    element={<GovernmentApprovalsPage />}
   />
 
      </Route>

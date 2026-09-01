@@ -4,7 +4,7 @@ const API = import.meta.env.VITE_API_URL;
 
 /*
 =====================================================
-SMART VILLAGE NAVIGATION
+SMART Village NAVIGATION
 =====================================================
 */
 

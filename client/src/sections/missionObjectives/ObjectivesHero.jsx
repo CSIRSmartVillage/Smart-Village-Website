@@ -16,7 +16,7 @@ const ObjectivesHero = ({
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 text-center">
         <h1 className="text-[30px] font-extrabold leading-tight tracking-[0.06em] text-white [text-shadow:0_3px_14px_rgba(0,0,0,0.5)] sm:text-[32px] md:text-[40px] lg:text-[56px] xl:text-[64px]">
-          CSIR SMART VILLAGE MISSION
+          CSIR SMART Village MISSION
         </h1>
       </div>
     </section>

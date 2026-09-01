@@ -54,7 +54,7 @@ const seedMissionObjectivesContent =
                 "Our Objectives",
 
               description:
-                "The Smart Village Mission seeks to improve quality of life in rural communities through scientific interventions, sustainable infrastructure, digital empowerment, livelihood enhancement and community-driven development.",
+                "The SMART Village Mission seeks to improve quality of life in rural communities through scientific interventions, sustainable infrastructure, digital empowerment, livelihood enhancement and community-driven development.",
             };
             break;
 

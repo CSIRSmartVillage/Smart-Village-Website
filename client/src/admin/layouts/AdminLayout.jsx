@@ -86,11 +86,15 @@ const AdminLayout = () => {
     },
 
     {
-      title: "Smart Village",
+      title: "SMART Village",
       items: [
         {
           label: "Villages",
           path: "/admin/smart-village",
+        },
+        {
+          label: "Government Approvals",
+          path: "/admin/government-approvals",
         },
         {
           label: "Development Plans",

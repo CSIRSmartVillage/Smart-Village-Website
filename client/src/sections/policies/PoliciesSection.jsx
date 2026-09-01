@@ -9,7 +9,7 @@ const PoliciesSection = ({
       "Policies & Schemes",
 
     description =
-      "Explore central and state initiatives supporting sustainable rural development and smart village transformation.",
+      "Explore central and state initiatives supporting sustainable rural development and SMART Village transformation.",
 
     policies = [],
   } = data;

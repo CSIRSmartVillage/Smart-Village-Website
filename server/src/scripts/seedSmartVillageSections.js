@@ -20,7 +20,7 @@ const seedSmartVillageSections =
 
       if (!page) {
         throw new Error(
-          "CSIR Smart Village page not found"
+          "CSIR SMART Village page not found"
         );
       }
 
@@ -34,7 +34,7 @@ const seedSmartVillageSections =
           sectionType:
             "SMART_VILLAGE_HERO",
           title:
-            "CSIR Smart Village",
+            "CSIR SMART Village",
           order: 1,
         },
 
@@ -43,7 +43,7 @@ const seedSmartVillageSections =
           sectionType:
             "SMART_VILLAGE_OVERVIEW",
           title:
-            "About Smart Village Mission",
+            "About SMART Village Mission",
           order: 2,
         },
 
@@ -70,7 +70,7 @@ const seedSmartVillageSections =
           sectionType:
             "SMART_VILLAGE_FRAMEWORK",
           title:
-            "Smart Village Framework",
+            "SMART Village Framework",
           order: 5,
         },
 
@@ -98,7 +98,7 @@ const seedSmartVillageSections =
       );
 
       console.log(
-        "✅ Smart Village Sections Seeded"
+        "✅ SMART Village Sections Seeded"
       );
 
       process.exit(0);

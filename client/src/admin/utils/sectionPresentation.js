@@ -3,7 +3,7 @@ const sectionDisplayNames = {
   ANNOUNCEMENT_LINE: "Announcement Line",
   MISSION: "Mission Overview",
   MISSION_OBJECTIVES: "Mission Objectives Summary",
-  IMPACT_STATISTICS: "Smart Village Impact Summary",
+  IMPACT_STATISTICS: "SMART Village Impact Summary",
   CSIR_CBRI: "CSIR-CBRI Overview",
   LATEST_UPDATES: "Latest News & Events",
   POLICIES: "Policies & Schemes",
@@ -63,7 +63,7 @@ const sectionDisplayNames = {
   PARTICIPATING_LABS_CONTACT: "Contact Information",
 
   SMART_VILLAGE_HERO: "Top Banner",
-  SMART_VILLAGE_OVERVIEW: "Smart Village Overview",
+  SMART_VILLAGE_OVERVIEW: "SMART Village Overview",
   SMART_VILLAGE_OBJECTIVES: "Objectives",
   SMART_VILLAGE_FOCUS_AREAS: "Focus Areas",
   SMART_VILLAGE_FRAMEWORK: "Development Framework",

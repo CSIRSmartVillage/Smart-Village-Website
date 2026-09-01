@@ -72,4 +72,66 @@ const upload = multer({
   },
 });
 
+const approvalMimeTypes = new Set([
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "image/bmp",
+  "image/tiff",
+]);
+
+const approvalExtensions = new Set([
+  ".pdf",
+  ".doc",
+  ".docx",
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".gif",
+  ".webp",
+  ".bmp",
+  ".tif",
+  ".tiff",
+]);
+
+const approvalFileFilter = (req, file, cb) => {
+  const extension = path
+    .extname(file.originalname)
+    .toLowerCase();
+
+  if (
+    approvalMimeTypes.has(file.mimetype) &&
+    approvalExtensions.has(extension)
+  ) {
+    cb(null, true);
+    return;
+  }
+
+  cb(
+    new ApiError(
+      415,
+      "Only PDF, Word and supported image files are allowed"
+    )
+  );
+};
+
+export const governmentApprovalUpload = multer({
+  storage,
+  fileFilter: approvalFileFilter,
+  limits: {
+    fileSize:
+      Number(
+        process.env.MAX_APPROVAL_FILE_SIZE_MB ||
+          process.env.MAX_MEDIA_FILE_SIZE_MB ||
+          250
+      ) *
+      1024 *
+      1024,
+  },
+});
+
 export default upload;

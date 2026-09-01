@@ -28,7 +28,7 @@ const fieldClass =
   "w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100";
 
 const DEFAULT_SUCCESS_STORIES_DESCRIPTION =
-  "Discover how innovation, science, community participation, and sustainable development initiatives are transforming villages under the CSIR Smart Village Mission.";
+  "Discover how innovation, science, community participation, and sustainable development initiatives are transforming villages under the CSIR SMART Village Mission.";
 
 const StructuredEditSectionPage = () => {
   const { id } = useParams();

@@ -22,7 +22,7 @@ const PageLoader = () => {
 
           <img
             src={smartVillageLogo}
-            alt="Smart Village"
+            alt="SMART Village"
             decoding="async"
             fetchPriority="high"
             loading="eager"
@@ -32,7 +32,7 @@ const PageLoader = () => {
 
         {/* Title */}
         <h2 className="text-2xl font-bold text-slate-900">
-          Smart Village Portal
+          SMART Village Portal
         </h2>
 
         <p className="mt-2 text-slate-600">

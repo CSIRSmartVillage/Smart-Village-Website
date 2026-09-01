@@ -13,11 +13,18 @@ import {
 import {
   startAdminSessionHandling,
 } from "./admin/services/adminSession.service";
+import {
+  startSmartVillageDisplayNormalization,
+} from "./utils/normalizeSmartVillageText";
 
 startPerformanceMonitoring();
 startAdminSessionHandling();
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+const rootElement = document.getElementById("root");
+
+startSmartVillageDisplayNormalization(rootElement);
+
+ReactDOM.createRoot(rootElement).render(
   // <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <AppErrorBoundary>

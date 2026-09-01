@@ -38,7 +38,7 @@ const DashboardPage = () => {
       color: "bg-violet-50 text-violet-700",
     },
     {
-      label: "Smart Village",
+      label: "SMART Village",
       value: "Monitor",
       helper: "Villages, plans, surveys, and events",
       icon: Users,
@@ -81,7 +81,7 @@ const DashboardPage = () => {
 
             <p className="mt-3 max-w-2xl text-slate-600">
               Manage website content, village information, media,
-              announcements / updates, and Smart Village records from one place.
+              announcements / updates, and SMART Village records from one place.
             </p>
           </div>
 

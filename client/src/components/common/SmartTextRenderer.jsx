@@ -1,3 +1,7 @@
+import {
+  normalizeSmartVillageText,
+} from "../../utils/normalizeSmartVillageText";
+
 const containerClass =
   "mx-auto max-w-4xl space-y-6 text-gray-700 tracking-normal";
 
@@ -38,7 +42,7 @@ const renderInline = (text = "", keyPrefix = "inline") => {
           key={key}
           className="font-semibold text-slate-900"
         >
-          {part.slice(2, -2)}
+          {normalizeSmartVillageText(part.slice(2, -2))}
         </strong>
       );
     }
@@ -57,7 +61,7 @@ const renderInline = (text = "", keyPrefix = "inline") => {
     if (/^\*[^*]+\*$/.test(part)) {
       return (
         <em key={key}>
-          {part.slice(1, -1)}
+          {normalizeSmartVillageText(part.slice(1, -1))}
         </em>
       );
     }
@@ -75,7 +79,7 @@ const renderInline = (text = "", keyPrefix = "inline") => {
           rel="noreferrer"
           className="font-medium text-blue-700 underline-offset-4 hover:underline"
         >
-          {markdownLink[1]}
+          {normalizeSmartVillageText(markdownLink[1])}
         </a>
       );
     }
@@ -94,7 +98,7 @@ const renderInline = (text = "", keyPrefix = "inline") => {
       );
     }
 
-    return part;
+    return normalizeSmartVillageText(part);
   });
 };
 
@@ -604,7 +608,7 @@ const SmartTextRenderer = ({
         <img
           key={`img-${elements.length}`}
           src={image[2]}
-          alt={image[1]}
+          alt={normalizeSmartVillageText(image[1])}
           decoding="async"
           fetchPriority="low"
           loading="lazy"

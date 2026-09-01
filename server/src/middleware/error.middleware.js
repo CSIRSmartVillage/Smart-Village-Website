@@ -57,7 +57,8 @@ const getSafeMessage = (statusCode, error, req) => {
   const isUploadRequest =
     requestPath.includes("upload") ||
     requestPath.includes("media") ||
-    requestPath.includes("survey");
+    requestPath.includes("survey") ||
+    requestPath.includes("government-approvals");
 
   if (
     statusCode === 413 ||

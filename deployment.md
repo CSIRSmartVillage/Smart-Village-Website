@@ -175,6 +175,18 @@ Contains
 - AWS Credentials
 - S3 Bucket Configuration
 
+Government Approval documents use private S3 access and temporary signed
+URLs. For production, set a private bucket that does not grant anonymous
+`s3:GetObject` access:
+
+```env
+AWS_PRIVATE_S3_BUCKET=your-private-document-bucket
+```
+
+If this value is omitted, the backend uses `AWS_S3_BUCKET`. In that case, the
+`government-approvals/` prefix must be excluded from every public-read bucket
+policy. Existing website media can remain in the current public media bucket.
+
 ---
 
 # PM2

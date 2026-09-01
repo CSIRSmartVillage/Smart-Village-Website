@@ -50,7 +50,7 @@ const seedDGDeskContent =
   "https://images.unsplash.com/photo-1560250097-0b93528c311a",
 
               message:
-                "Welcome to the Smart Village Mission. Through innovation and collaboration, we aim to transform rural communities and create sustainable development models for the nation.",
+                "Welcome to the SMART Village Mission. Through innovation and collaboration, we aim to transform rural communities and create sustainable development models for the nation.",
             };
             break;
 

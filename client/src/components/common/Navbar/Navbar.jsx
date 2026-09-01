@@ -12,6 +12,9 @@ import useNavigation from "../../../hooks/useNavigation";
 
 import useStates from "../../../hooks/useStates";
 import SmartVillageMegaMenu from "./SmartVillageMegaMenu";
+import {
+  normalizeSmartVillageText,
+} from "../../../utils/normalizeSmartVillageText";
 const aboutMenuItems = [
   {
     _id: "about-mission-objectives",
@@ -34,7 +37,7 @@ const navigationOrder = new Map([
   ["Home", 1],
   ["About", 2],
   ["CSIR Laboratories", 3],
-  ["CSIR Smart Village", 4],
+  ["CSIR SMART Village", 4],
   ["News & Updates", 5],
   ["Success Stories", 6],
   ["Contact Us", 7],
@@ -85,8 +88,12 @@ const Navbar = () => {
     )
     .sort(
       (a, b) =>
-        (navigationOrder.get(a.label) ?? 100) -
-        (navigationOrder.get(b.label) ?? 100)
+        (navigationOrder.get(
+          normalizeSmartVillageText(a.label)
+        ) ?? 100) -
+        (navigationOrder.get(
+          normalizeSmartVillageText(b.label)
+        ) ?? 100)
     );
 
   const getChildren = (parentId) =>
@@ -159,11 +166,11 @@ const Navbar = () => {
                         aria-haspopup="menu"
                         className="inline-flex items-center gap-1.5 transition-colors hover:text-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
                       >
-                        {item.label}
+                        {normalizeSmartVillageText(item.label)}
                         <ChevronDown size={16} />
                       </button>
-                    ) : item.label ===
-                      "CSIR Smart Village" ? (
+                    ) : normalizeSmartVillageText(item.label) ===
+                      "CSIR SMART Village" ? (
                       <>
                         <button
                           type="button"
@@ -172,7 +179,7 @@ const Navbar = () => {
                             transition-colors
                           "
                         >
-                          {item.label}
+                          {normalizeSmartVillageText(item.label)}
                         </button>
 
                         <SmartVillageMegaMenu
@@ -186,7 +193,7 @@ const Navbar = () => {
                         to={item.path}
                         className="hover:text-blue-900 transition-colors"
                       >
-                        {item.label}
+                        {normalizeSmartVillageText(item.label)}
                       </Link>
                     )}
 
@@ -242,7 +249,7 @@ const Navbar = () => {
                                 hover:text-blue-900
                               "
                             >
-                              {child.label}
+                              {normalizeSmartVillageText(child.label)}
                             </Link>
                           </li>
                         ))}
@@ -325,7 +332,8 @@ const Navbar = () => {
                 const isAbout =
                   item.path === "/about";
                 const isSmartVillage =
-                  item.label === "CSIR Smart Village";
+                  normalizeSmartVillageText(item.label) ===
+                  "CSIR SMART Village";
 
                 if (isAbout) {
                   return (
@@ -357,7 +365,7 @@ const Navbar = () => {
                           focus-visible:outline-blue-700
                         "
                       >
-                        <span>{item.label}</span>
+                        <span>{normalizeSmartVillageText(item.label)}</span>
 
                         <ChevronDown
                           size={18}
@@ -398,7 +406,7 @@ const Navbar = () => {
                                   hover:text-blue-900
                                 "
                               >
-                                {child.label}
+                                {normalizeSmartVillageText(child.label)}
                               </Link>
                             )
                           )}
@@ -436,7 +444,7 @@ const Navbar = () => {
                           font-medium
                         "
                       >
-                        <span>{item.label}</span>
+                        <span>{normalizeSmartVillageText(item.label)}</span>
 
                         <ChevronDown
                           size={18}
@@ -595,7 +603,7 @@ const Navbar = () => {
                         font-medium
                       "
                     >
-                      {item.label}
+                      {normalizeSmartVillageText(item.label)}
                     </Link>
 
                     {getChildren(item._id).map(
@@ -613,7 +621,7 @@ const Navbar = () => {
                           "
                           onClick={closeMobileMenu}
                         >
-                          {child.label}
+                          {normalizeSmartVillageText(child.label)}
                         </Link>
                       )
                     )}

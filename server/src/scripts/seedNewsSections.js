@@ -22,7 +22,7 @@ const seedNewsSections = async () => {
         sectionType: "NEWS_HERO",
         title: "News & Updates",
         subtitle:
-          "Latest developments from CSIR Smart Village",
+          "Latest developments from CSIR SMART Village",
         order: 1,
         isVisible: true,
       },
@@ -33,7 +33,7 @@ const seedNewsSections = async () => {
         title: "Stay Updated",
         content: {
           description:
-            "Discover recent initiatives, events, announcements and achievements from CSIR Smart Village.",
+            "Discover recent initiatives, events, announcements and achievements from CSIR SMART Village.",
         },
         order: 2,
         isVisible: true,

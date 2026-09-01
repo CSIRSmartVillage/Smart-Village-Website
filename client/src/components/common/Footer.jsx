@@ -18,6 +18,9 @@ import { Link } from "react-router-dom";
 
 import useSiteSettings from "../../hooks/useSiteSettings";
 import SmartTextRenderer from "./SmartTextRenderer";
+import {
+  normalizeSmartVillageText,
+} from "../../utils/normalizeSmartVillageText";
 
 // Official Logos
 import cbriLogo from "../../assets/logos/CBRI.png";
@@ -31,6 +34,9 @@ const Footer = () => {
   const primaryContactPhone =
     settings?.contactPhone ||
     "+91-1332-272243";
+  const normalizedSiteName = normalizeSmartVillageText(
+    settings?.siteName?.trim()
+  );
 
   const developerNames = [
     "Sagar Tomar",
@@ -63,7 +69,7 @@ const Footer = () => {
       path: "/csir-laboratories/nodal-lab",
     },
     {
-      title: "CSIR Smart Village",
+      title: "CSIR SMART Village",
       path: "/smart-village",
     },
     {
@@ -243,7 +249,7 @@ const Footer = () => {
 
             <img
               src={smartVillageLogo}
-              alt="Smart Village"
+              alt="SMART Village"
               decoding="async"
               fetchPriority="low"
               loading="lazy"
@@ -258,9 +264,9 @@ const Footer = () => {
 
             <h2 className="text-2xl font-bold text-slate-900">
 
-              {settings?.siteName?.trim() &&
-              settings.siteName.trim() !== "Smart Village Management Portal" ? (
-                settings.siteName
+              {normalizedSiteName &&
+              normalizedSiteName !== "SMART Village Management Portal" ? (
+                normalizedSiteName
               ) : (
                 <span className="inline-flex flex-wrap items-baseline gap-x-2 gap-y-1">
                   <span
@@ -307,7 +313,7 @@ const Footer = () => {
           <SmartTextRenderer
             text={
               settings?.footerDescription ||
-              "Empowering rural communities through sustainable technologies, scientific research, digital innovation and collaborative development under the CSIR Smart Village Initiative."
+              "Empowering rural communities through sustainable technologies, scientific research, digital innovation and collaborative development under the CSIR SMART Village Initiative."
             }
             className="mt-6 max-w-lg"
           />
@@ -382,7 +388,7 @@ const Footer = () => {
                 </p> 
 
                 <p className="mt-1 text-sm leading-6 text-slate-600"> 
-                  Prof. Pradeep Kumar Ramancharla
+                  Prof. Pradeep Kumar Ramancharla,Mission Director
                   <br />
                   CSIR-CBRI, Roorkee (247667), Uttarakhand, India
                 </p>
@@ -494,7 +500,7 @@ const Footer = () => {
             <p className="mt-5 text-sm leading-6 text-slate-500">
               Stay connected with CSIR-CBRI and follow our latest
               research initiatives, rural development activities,
-              and Smart Village updates.
+              and SMART Village updates.
             </p>
 
           </div>

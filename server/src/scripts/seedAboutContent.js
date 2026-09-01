@@ -40,7 +40,7 @@ const seedAboutContent =
                 "About Us",
 
               description:
-                "Learn about the CSIR Smart Village Mission and its journey towards sustainable rural development through science, technology and innovation.",
+                "Learn about the CSIR SMART Village Mission and its journey towards sustainable rural development through science, technology and innovation.",
 
               images: [],
             };
@@ -52,7 +52,7 @@ const seedAboutContent =
                 "About Us",
 
               description:
-                "The CSIR Smart Village Mission is a transformative initiative aimed at improving the quality of life in rural communities through science, technology and innovation. The mission focuses on sustainable development, livelihood enhancement, digital empowerment and community participation to create resilient and self-reliant villages.",
+                "The CSIR SMART Village Mission is a transformative initiative aimed at improving the quality of life in rural communities through science, technology and innovation. The mission focuses on sustainable development, livelihood enhancement, digital empowerment and community participation to create resilient and self-reliant villages.",
             };
             break;
 
@@ -68,7 +68,7 @@ const seedAboutContent =
                     "Mission Conceptualization",
 
                   description:
-                    "The Smart Village Mission framework was conceptualized to address rural challenges through science, technology and innovation.",
+                    "The SMART Village Mission framework was conceptualized to address rural challenges through science, technology and innovation.",
                 },
 
                 {

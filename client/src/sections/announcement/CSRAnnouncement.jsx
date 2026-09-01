@@ -1,7 +1,7 @@
 import "./CSRAnnouncement.css";
 
 export const DEFAULT_ANNOUNCEMENT =
-  "CSIR Smart Village Mission welcomes Corporates, NGOs, Industries & PSUs to invest CSR funds for the implementation of technologies towards building self-reliant and resilient villages.";
+  "CSIR SMART Village Mission welcomes Corporates, NGOs, Industries & PSUs to invest CSR funds for the implementation of technologies towards building self-reliant and resilient villages.";
 
 const CSRAnnouncement = ({ text }) => {
   const announcement =

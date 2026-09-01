@@ -158,7 +158,7 @@ const SupportersPage = () => {
           </h1>
 
           <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-            We acknowledge the organisations and donors whose support helps advance the CSIR Smart Village Mission.
+            We acknowledge the organisations and donors whose support helps advance the CSIR SMART Village Mission.
           </p>
         </div>
       </section>

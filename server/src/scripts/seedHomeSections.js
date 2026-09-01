@@ -32,7 +32,7 @@ const seedHomeSections =
     pageId: homePage._id,
     sectionType: "HERO",
     title:
-      "Smart Village Management Portal",
+      "SMART Village Management Portal",
     order: 1,
   },
 

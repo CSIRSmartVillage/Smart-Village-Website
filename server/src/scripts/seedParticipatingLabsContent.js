@@ -39,7 +39,7 @@ const seedParticipatingLabsContent =
                 "Participating Laboratories",
 
               subHeading:
-                "A collaborative network of CSIR laboratories contributing expertise, innovation, and technology solutions to Smart Village initiatives.",
+                "A collaborative network of CSIR laboratories contributing expertise, innovation, and technology solutions to SMART Village initiatives.",
 
               backgroundImage:
                 null,
@@ -52,7 +52,7 @@ const seedParticipatingLabsContent =
                 "Overview",
 
               description:
-                "Participating laboratories support Smart Village development through domain-specific research, technology deployment, scientific outreach, and capacity-building programs.",
+                "Participating laboratories support SMART Village development through domain-specific research, technology deployment, scientific outreach, and capacity-building programs.",
             };
             break;
 

@@ -52,7 +52,7 @@ const seedCSIRLabsSections =
           sectionType:
             "CSIR_LABS_ROLE",
           title:
-            "Role In Smart Village Mission",
+            "Role In SMART Village Mission",
           order: 3,
         },
 

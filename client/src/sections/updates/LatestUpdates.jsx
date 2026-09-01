@@ -38,7 +38,7 @@ const LatestUpdates = ({
       "Latest Updates",
 
     description =
-      "Stay informed about recent developments, announcements, initiatives and activities under the Smart Village Mission.",
+      "Stay informed about recent developments, announcements, initiatives and activities under the SMART Village Mission.",
   } = data;
 
 

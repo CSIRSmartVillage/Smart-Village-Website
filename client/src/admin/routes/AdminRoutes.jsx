@@ -49,6 +49,7 @@ const VillageLocationsPage = lazy(() => import("../pages/VillageLocationsPage"))
 const CreateVillageLocationPage = lazy(() => import("../pages/CreateVillageLocationPage"));
 const EditVillageLocationPage = lazy(() => import("../pages/EditVillageLocationPage"));
 const SurveyManagementPage = lazy(() => import("../pages/SurveyManagementPage"));
+const GovernmentApprovalsPage = lazy(() => import("../pages/GovernmentApprovalsPage"));
 const SupportersPage = lazy(() => import("../pages/SupportersPage"));
 const CreateSupporterPage = lazy(() => import("../pages/CreateSupporterPage"));
 const EditSupporterPage = lazy(() => import("../pages/EditSupporterPage"));
@@ -159,6 +160,11 @@ const AdminRoutes = () => {
 <Route
   path="surveys"
   element={<SurveyManagementPage />}
+/>
+
+<Route
+  path="government-approvals"
+  element={<GovernmentApprovalsPage />}
 />
 
 

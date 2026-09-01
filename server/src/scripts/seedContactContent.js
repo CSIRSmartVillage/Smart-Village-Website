@@ -19,7 +19,7 @@ const seedContactContent = async () => {
         case "CONTACT_HERO":
           section.content = {
             heading: "Contact Us",
-            description: "Get in touch with the CSIR Smart Village team.",
+            description: "Get in touch with the CSIR SMART Village team.",
           };
           break;
 
@@ -27,7 +27,7 @@ const seedContactContent = async () => {
           section.content = {
             heading: "Contact Information",
             description:
-              "Feel free to contact the CSIR Smart Village team for any queries, collaborations, or support regarding the Smart Village Mission.",
+              "Feel free to contact the CSIR SMART Village team for any queries, collaborations, or support regarding the SMART Village Mission.",
             address: "CSIR-CBRI, Roorkee, Uttarakhand",
             email: "smartvillage@cbri.res.in",
             phone: "+91 9663530674",

@@ -64,7 +64,7 @@ const SuccessStoriesPage = () => {
 
   const heroEyebrow =
     heroSection?.subtitle ??
-    "REAL IMPACT FROM SMART VILLAGE INITIATIVES";
+    "REAL IMPACT FROM SMART Village INITIATIVES";
 
   const heroTitle =
     heroSection?.title ??
@@ -72,7 +72,7 @@ const SuccessStoriesPage = () => {
 
   const heroDescription =
     heroSection?.content?.description ??
-    "Discover how innovation, science, community participation, and sustainable development initiatives are transforming villages under the CSIR Smart Village Mission.";
+    "Discover how innovation, science, community participation, and sustainable development initiatives are transforming villages under the CSIR SMART Village Mission.";
 
   const heroImage =
     heroSection?.content?.backgroundImage ||
@@ -131,10 +131,10 @@ const SuccessStoriesPage = () => {
               Published Success Stories
             </p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-normal mt-3">
-              Transformation stories from Smart Villages
+              Transformation stories from SMART Villages
             </h2>
             <p className="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">
-              Explore published initiatives, outcomes and community stories from across the CSIR Smart Village Mission.
+              Explore published initiatives, outcomes and community stories from across the CSIR SMART Village Mission.
             </p>
           </div>
 

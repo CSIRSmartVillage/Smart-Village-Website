@@ -1,5 +1,5 @@
 <SectionHeading
-  badge="SMART VILLAGE MISSION"
+  badge="SMART Village MISSION"
   title="Mission Objectives"
   description="..."
 />

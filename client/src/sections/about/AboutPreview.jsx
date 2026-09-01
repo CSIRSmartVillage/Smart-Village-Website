@@ -8,7 +8,7 @@ const AboutPreview = ({
 }) => {
   const {
     heading =
-      "About Smart Village Mission",
+      "About SMART Village Mission",
 
     description =
       "Transforming rural communities through innovation, sustainability, and technology-driven development.",

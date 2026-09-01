@@ -21,7 +21,7 @@ const VillageHeader = ({ village }) => {
 
           <ChevronRight size={16} />
 
-          <span>CSIR Smart Village</span>
+          <span>CSIR SMART Village</span>
 
           <ChevronRight size={16} />
 

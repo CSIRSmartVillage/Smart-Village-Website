@@ -6,6 +6,7 @@ import {
   Trophy,
   Map,
   ScrollText,
+  FileCheck,
   BarChart3,
   UsersRound,
   MapPinned,
@@ -23,6 +24,12 @@ const VillageSidebar = ({ village }) => {
       description: "Profile & demographics",
       icon: Home,
       path: "",
+    },
+    {
+      label: "Government Approvals",
+      description: "Published approvals",
+      icon: FileCheck,
+      path: "government-approvals",
     },
     {
       label: "Development Plans",

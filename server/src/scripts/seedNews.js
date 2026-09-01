@@ -14,16 +14,16 @@ const seedNews =
       await News.insertMany([
         {
           title:
-            "CSIR Smart Village Initiative Launched",
+            "CSIR SMART Village Initiative Launched",
 
           slug:
             "csir-smart-village-initiative-launched",
 
           summary:
-            "CSIR launches a new initiative to accelerate smart village development.",
+            "CSIR launches a new initiative to accelerate SMART Village development.",
 
           content:
-            "The CSIR Smart Village Initiative aims to transform rural communities through technology, innovation, and sustainable development.",
+            "The CSIR SMART Village Initiative aims to transform rural communities through technology, innovation, and sustainable development.",
 
           category:
             "ANNOUNCEMENT",

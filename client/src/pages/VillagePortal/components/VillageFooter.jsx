@@ -7,11 +7,11 @@ const VillageFooter = () => {
 
           <div>
             <h3 className="font-semibold text-lg">
-              CSIR Smart Village
+              CSIR SMART Village
             </h3>
 
             <p className="text-slate-400 text-sm mt-1">
-              Smart Village Management Portal
+              SMART Village Management Portal
             </p>
           </div>
 

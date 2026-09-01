@@ -6,7 +6,7 @@ const EventsHero = () => {
       <div className="mx-auto max-w-7xl">
         <div className="max-w-3xl">
           <span className="inline-flex items-center rounded-full bg-white/20 px-4 py-1 text-sm font-medium backdrop-blur">
-            Smart Village Portal
+            SMART Village Portal
           </span>
 
           <h1 className="mt-5 text-4xl font-bold leading-tight lg:text-5xl">

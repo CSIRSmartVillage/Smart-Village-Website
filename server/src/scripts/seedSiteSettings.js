@@ -13,7 +13,7 @@ const seedSiteSettings = async () => {
     }
 
     await SiteSettings.create({
-      siteName: "Smart Village Management Portal",
+      siteName: "SMART Village Management Portal",
 
       organizationName:
         "CSIR - Central Building Research Institute (CSIR-CBRI)",
@@ -23,7 +23,7 @@ const seedSiteSettings = async () => {
       faviconUrl: null,
 
       footerDescription:
-        "Empowering rural communities through sustainable technologies, innovation, and scientific research under the CSIR Smart Village initiative.",
+        "Empowering rural communities through sustainable technologies, innovation, and scientific research under the CSIR SMART Village initiative.",
 
       contactEmail: "smartvillage@cbri.res.in",
 

@@ -2,7 +2,7 @@ import PageSection
   from "../models/PageSection.model.js";
 
 export const DEFAULT_HOME_ANNOUNCEMENT =
-  "CSIR Smart Village Mission welcomes Corporates, NGOs, Industries & PSUs to invest CSR funds for the implementation of technologies towards building self-reliant and resilient villages.";
+  "CSIR SMART Village Mission welcomes Corporates, NGOs, Industries & PSUs to invest CSR funds for the implementation of technologies towards building self-reliant and resilient villages.";
 
 export const ensureHomeAnnouncementSection =
   async (page) => {

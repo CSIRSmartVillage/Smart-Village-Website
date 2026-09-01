@@ -46,7 +46,7 @@ const FeaturedEvent = ({ event }) => {
 
         <p className="mt-2 text-slate-600">
           Explore the latest featured event from
-          our Smart Village initiatives.
+          our SMART Village initiatives.
         </p>
       </div>
 

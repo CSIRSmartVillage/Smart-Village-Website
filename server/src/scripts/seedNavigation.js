@@ -99,7 +99,7 @@ const csirLabs =
 
       await Navigation.create({
         label:
-          "CSIR Smart Village",
+          "CSIR SMART Village",
 
         path:
           "/csir-smart-village",

@@ -20,7 +20,7 @@ const seedSmartVillageContent =
 
       if (!page) {
         throw new Error(
-          "Smart Village page not found"
+          "SMART Village page not found"
         );
       }
 
@@ -36,7 +36,7 @@ const seedSmartVillageContent =
           case "SMART_VILLAGE_HERO":
             section.content = {
               heading:
-                "CSIR Smart Village",
+                "CSIR SMART Village",
 
               subHeading:
                 "Transforming rural communities through science, technology, innovation, and sustainable development.",
@@ -49,10 +49,10 @@ const seedSmartVillageContent =
           case "SMART_VILLAGE_OVERVIEW":
             section.content = {
               heading:
-                "About Smart Village Mission",
+                "About SMART Village Mission",
 
               description:
-                "The CSIR Smart Village initiative aims to empower rural communities through integrated development, technology adoption, infrastructure enhancement, and knowledge-based transformation.",
+                "The CSIR SMART Village initiative aims to empower rural communities through integrated development, technology adoption, infrastructure enhancement, and knowledge-based transformation.",
             };
             break;
 
@@ -90,7 +90,7 @@ const seedSmartVillageContent =
           case "SMART_VILLAGE_FRAMEWORK":
             section.content = {
               heading:
-                "Smart Village Framework",
+                "SMART Village Framework",
 
               description:
                 "The framework integrates scientific knowledge, community engagement, local governance, and technology-driven interventions to create sustainable and self-reliant villages.",
@@ -118,7 +118,7 @@ const seedSmartVillageContent =
                 "Villages Overview",
 
               description:
-                "Explore villages participating in the Smart Village Mission and learn about their transformation journey.",
+                "Explore villages participating in the SMART Village Mission and learn about their transformation journey.",
             };
             break;
 
@@ -130,7 +130,7 @@ const seedSmartVillageContent =
       }
 
       console.log(
-        "✅ Smart Village Content Seeded"
+        "✅ SMART Village Content Seeded"
       );
 
       process.exit(0);

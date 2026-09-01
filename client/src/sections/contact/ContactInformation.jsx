@@ -39,7 +39,7 @@ const ContactInformation = ({
         </h2>
 
         <p className="mt-3 text-sm leading-6 text-slate-600">
-          Connect with the CSIR Smart Village team for queries,
+          Connect with the CSIR SMART Village team for queries,
           collaborations, and project support.
         </p>
       </div>

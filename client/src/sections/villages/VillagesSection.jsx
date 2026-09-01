@@ -29,7 +29,7 @@ const VillagesSection = ({
         <div className="text-center mb-16">
 
           <span className="text-blue-700 font-semibold uppercase tracking-wider">
-            SMART VILLAGES
+            SMART Villages
           </span>
 
           <h2 className="text-4xl font-bold text-slate-900 mt-3">

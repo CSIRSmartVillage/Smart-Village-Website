@@ -6,6 +6,7 @@ import {
   CalendarDays,
   ClipboardList,
   FileCheck,
+  Files,
   FileText,
   HandHeart,
   MapPin,
@@ -31,6 +32,13 @@ const moduleCards = [
     path: "/admin/village-profiles",
     icon: FileText,
     color: "bg-indigo-50 text-indigo-700",
+  },
+  {
+    title: "Government Approvals",
+    description: "Manage public and confidential approval documents for villages.",
+    path: "/admin/government-approvals",
+    icon: Files,
+    color: "bg-sky-50 text-sky-700",
   },
   {
     title: "Development Plans",
@@ -166,7 +174,7 @@ export default function SmartVillageDashboard() {
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-blue-700">
-              Smart Village
+              SMART Village
             </p>
             <h1 className="mt-2 text-3xl font-bold text-slate-950 sm:text-4xl">
               Villages

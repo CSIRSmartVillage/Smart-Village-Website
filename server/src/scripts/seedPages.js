@@ -43,7 +43,7 @@ const pages = [
   },
 
   {
-    title: "CSIR Smart Village",
+    title: "CSIR SMART Village",
     slug: "csir-smart-village",
     pageType: "SMART_VILLAGE",
     status: "PUBLISHED",

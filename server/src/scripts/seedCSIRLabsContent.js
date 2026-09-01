@@ -39,7 +39,7 @@ const seedCSIRLabsContent =
                 "CSIR Laboratories",
 
               subHeading:
-                "Supporting Smart Village transformation through research, innovation, and collaborative scientific excellence.",
+                "Supporting SMART Village transformation through research, innovation, and collaborative scientific excellence.",
 
               backgroundImage:
                 null,
@@ -59,7 +59,7 @@ const seedCSIRLabsContent =
           case "CSIR_LABS_ROLE":
             section.content = {
               heading:
-                "Role In Smart Village Mission",
+                "Role In SMART Village Mission",
 
               description:
                 "CSIR laboratories support rural transformation through technology deployment, research-based solutions, capacity building, and sustainable development initiatives.",
@@ -82,7 +82,7 @@ const seedCSIRLabsContent =
                 "Nodal Laboratory",
 
               description:
-                "The nodal laboratory leads coordination, implementation, monitoring, and technical support for Smart Village initiatives.",
+                "The nodal laboratory leads coordination, implementation, monitoring, and technical support for SMART Village initiatives.",
 
               buttonText:
                 "View Nodal Laboratory",

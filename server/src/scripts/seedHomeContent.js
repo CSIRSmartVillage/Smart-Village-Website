@@ -38,7 +38,7 @@ const seedHomeContent =
           case "HERO":
             section.content = {
               heading:
-                "Smart Village Management Portal",
+                "SMART Village Management Portal",
 
               subHeading:
                 "Empowering Rural Communities Through Technology and Sustainable Development",
@@ -70,7 +70,7 @@ const seedHomeContent =
             case "ABOUT_PREVIEW":
   section.content = {
     heading:
-      "About Smart Village Mission",
+      "About SMART Village Mission",
 
     description:
       "Transforming rural communities through innovation, sustainability, and technology-driven development. Learn more about our mission, objectives, vision, and the role of CSIR-CBRI in empowering villages.",
@@ -87,10 +87,10 @@ const seedHomeContent =
           case "MISSION":
   section.content = {
     heading:
-      "About Smart Village Mission",
+      "About SMART Village Mission",
 
     description:
-      "The Smart Village Mission aims to transform rural communities through sustainable development, technology adoption, infrastructure improvement, and knowledge-based growth.",
+      "The SMART Village Mission aims to transform rural communities through sustainable development, technology adoption, infrastructure improvement, and knowledge-based growth.",
 
     image: null,
 
@@ -128,7 +128,7 @@ const seedHomeContent =
     "Mission Objectives",
 
   description:
-    "The Smart Village initiative focuses on sustainable, technology-driven development to improve quality of life, strengthen rural infrastructure, and empower communities.",
+    "The SMART Village initiative focuses on sustainable, technology-driven development to improve quality of life, strengthen rural infrastructure, and empower communities.",
 
   objectives: [
     {
@@ -179,7 +179,7 @@ const seedHomeContent =
           case "IMPACT_STATISTICS":
           section.content = {
   heading:
-    "Smart Village Impact",
+    "SMART Village Impact",
 
   description:
     "Key indicators reflecting rural transformation initiatives.",
@@ -274,7 +274,7 @@ const seedHomeContent =
     "News & Announcements",
 
   description:
-    "Stay informed about recent developments, initiatives, programs, and activities under the Smart Village Mission.",
+    "Stay informed about recent developments, initiatives, programs, and activities under the SMART Village Mission.",
 
   displayCount: 3,
 
@@ -321,7 +321,7 @@ const seedHomeContent =
     "Policies & Schemes",
 
   description:
-    "Explore central and state initiatives supporting sustainable rural development and smart village transformation.",
+    "Explore central and state initiatives supporting sustainable rural development and SMART Village transformation.",
 
   displayCount: 4,
 

@@ -62,7 +62,7 @@ const LoginPage = () => {
                 />
                 <img
                   src={SmartVillageLogo}
-                  alt="Smart Village"
+                  alt="SMART Village"
                   className="h-16 w-16 rounded-lg bg-white object-contain p-2"
                 />
               </div>
@@ -72,7 +72,7 @@ const LoginPage = () => {
               </p>
 
               <h1 className="mt-3 max-w-xl text-4xl font-bold leading-tight">
-                CSIR Smart Village Mission
+                CSIR SMART Village Mission
               </h1>
 
               <p className="mt-4 max-w-lg leading-7 text-blue-100">
@@ -103,7 +103,7 @@ const LoginPage = () => {
               />
               <div>
                 <p className="text-sm font-semibold text-slate-950">
-                  CSIR Smart Village
+                  CSIR SMART Village
                 </p>
                 <p className="text-xs text-slate-500">
                   CMS Admin Portal
@@ -121,7 +121,7 @@ const LoginPage = () => {
               </h2>
 
               <p className="mt-2 text-sm leading-6 text-slate-600">
-                Sign in to manage the Smart Village CMS.
+                Sign in to manage the SMART Village CMS.
               </p>
             </div>
 

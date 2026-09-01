@@ -40,7 +40,7 @@ const Header = () => {
           <div className="flex min-w-0 items-center justify-center px-4">
             <img
               src={headingImage}
-              alt="CSIR Gramsetu — CSIR Smart Village Management Portal"
+              alt="CSIR Gramsetu — CSIR SMART Village Management Portal"
               decoding="async"
               fetchPriority="high"
               loading="eager"
@@ -62,7 +62,7 @@ const Header = () => {
 
             <img
               src={smartVillageLogo}
-              alt="Smart Village Mission"
+              alt="SMART Village Mission"
               decoding="async"
               fetchPriority="high"
               loading="eager"
@@ -118,7 +118,7 @@ const Header = () => {
               <div className="flex h-10 min-w-0 items-center justify-end sm:h-12 md:h-16">
                 <img
                   src={smartVillageLogo}
-                  alt="Smart Village Mission"
+                  alt="SMART Village Mission"
                   decoding="async"
                   fetchPriority="high"
                   loading="eager"
@@ -133,7 +133,7 @@ const Header = () => {
           <div className="flex min-w-0 items-center justify-center px-2 sm:px-4">
             <img
               src={headingImage}
-              alt="CSIR Gramsetu — CSIR Smart Village Management Portal"
+              alt="CSIR Gramsetu — CSIR SMART Village Management Portal"
               decoding="async"
               fetchPriority="high"
               loading="eager"

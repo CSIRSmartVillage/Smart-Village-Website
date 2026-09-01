@@ -23,7 +23,7 @@ const router = Router();
  * Get all published villages
  * Used by:
  * - Navbar
- * - Public Smart Village pages
+ * - Public SMART Village pages
  */
 router.get(
   "/public",

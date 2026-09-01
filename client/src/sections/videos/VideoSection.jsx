@@ -257,7 +257,7 @@ const VideoSection = () => {
       <div className="mx-auto max-w-7xl px-4">
         <div className="mb-12 text-center">
           <p className="uppercase tracking-widest text-blue-600">
-            Smart Village Media
+            SMART Village Media
           </p>
 
           <h2 className="mt-3 text-4xl font-bold text-slate-900">
@@ -265,7 +265,7 @@ const VideoSection = () => {
           </h2>
 
           <p className="mx-auto mt-4 max-w-3xl text-slate-600">
-            Explore CSIR Smart Village
+            Explore CSIR SMART Village
             initiatives, success stories,
             technology demonstrations,
             and rural transformation

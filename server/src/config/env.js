@@ -22,6 +22,7 @@ export const env = {
 awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
 awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 awsS3Bucket: process.env.AWS_S3_BUCKET,
+awsPrivateS3Bucket: process.env.AWS_PRIVATE_S3_BUCKET,
 
   smtpHost: process.env.SMTP_HOST,
   smtpPort: process.env.SMTP_PORT,

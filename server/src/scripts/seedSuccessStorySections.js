@@ -27,7 +27,7 @@ const seedSuccessStorySections =
           title:
             "Success Stories",
           subtitle:
-            "Real impact from Smart Village initiatives",
+            "Real impact from SMART Village initiatives",
           order: 1,
           isVisible: true,
         },
@@ -40,7 +40,7 @@ const seedSuccessStorySections =
             "Transforming Communities",
           content: {
             description:
-              "Explore inspiring stories and measurable outcomes from villages participating in the Smart Village initiative.",
+              "Explore inspiring stories and measurable outcomes from villages participating in the SMART Village initiative.",
           },
           order: 2,
           isVisible: true,

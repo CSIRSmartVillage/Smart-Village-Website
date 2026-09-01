@@ -616,7 +616,7 @@ def cat_digital(rows, total):
         ("Internet Access",  ["internet","net access","internet access"]),
         ("Digital Payments", ["digital payment","upi","paytm","online payment","gpay","bhim"]),
         ("Social Media",     ["social media","facebook","whatsapp","instagram"]),
-        ("Smart Village",    ["smart village","desire smart","smart vill"]),
+        ("SMART Village",    ["smart village","desire smart","smart vill"]),
     ])
     return make_cat("Digital Connectivity", "grouped-bar", data)
 
