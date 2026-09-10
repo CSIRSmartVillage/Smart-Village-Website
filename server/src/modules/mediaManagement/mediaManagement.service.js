@@ -4,10 +4,15 @@ import Media
 import Video
   from "../../models/Video.model.js";
 
+import Laboratory
+  from "../../models/Laboratory.model.js";
+
 import Supporter
   from "../supporter/supporter.model.js";
 import SupporterLogo
   from "../supporter/supporterLogo.model.js";
+import MonitoringCommitteeMember
+  from "../monitoringCommittee/MonitoringCommitteeMember.model.js";
 
 import {
   deleteFile,
@@ -199,6 +204,30 @@ export const deleteMedia =
       throw new ApiError(
         409,
         "This image is in use by the supporter logo strip. Delete it from Supporter Logos before removing it from the Media Library."
+      );
+    }
+
+    const isUsedByMonitoringCommittee =
+      await MonitoringCommitteeMember.exists({
+        photo: id,
+      });
+
+    if (isUsedByMonitoringCommittee) {
+      throw new ApiError(
+        409,
+        "This image is in use by the Monitoring Committee. Update or delete the committee member before removing it from the Media Library."
+      );
+    }
+
+    const isUsedAsDirectorPhoto =
+      await Laboratory.exists({
+        directorPhoto: id,
+      });
+
+    if (isUsedAsDirectorPhoto) {
+      throw new ApiError(
+        409,
+        "This image is in use as a laboratory director photo. Update the laboratory before removing it from the Media Library."
       );
     }
 

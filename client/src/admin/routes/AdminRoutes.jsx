@@ -53,6 +53,7 @@ const GovernmentApprovalsPage = lazy(() => import("../pages/GovernmentApprovalsP
 const SupportersPage = lazy(() => import("../pages/SupportersPage"));
 const CreateSupporterPage = lazy(() => import("../pages/CreateSupporterPage"));
 const EditSupporterPage = lazy(() => import("../pages/EditSupporterPage"));
+const MonitoringCommitteePage = lazy(() => import("../pages/MonitoringCommitteePage"));
 const ProtectedRoute = ({
   children,
 }) => {
@@ -359,6 +360,10 @@ const AdminRoutes = () => {
 <Route
   path="supporters/:id/edit"
   element={<EditSupporterPage />}
+/>
+<Route
+  path="monitoring-committee"
+  element={<MonitoringCommitteePage />}
 />
 <Route
   path="*"

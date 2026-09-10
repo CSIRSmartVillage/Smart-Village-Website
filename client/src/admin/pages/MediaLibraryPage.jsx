@@ -68,28 +68,6 @@ const MediaLibraryPage = () => {
   const [error, setError] =
     useState("");
 
-  const loadMedia = async () => {
-    try {
-      setLoading(true);
-      setError("");
-
-      const data =
-        await getAllMedia();
-
-      setMedia(
-        Array.isArray(data)
-          ? data
-          : []
-      );
-    } catch (loadError) {
-      setError(
-        getUserFriendlyError(loadError, "Unable to load media. Please refresh the page.")
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     let isActive = true;
 
@@ -135,8 +113,9 @@ const MediaLibraryPage = () => {
     }, [filter, media]);
 
   const handleUpload = async (e) => {
+    const input = e.currentTarget;
     const file =
-      e.target.files[0];
+      input.files[0];
 
     if (!file) {
       return;
@@ -146,15 +125,35 @@ const MediaLibraryPage = () => {
       setUploading(true);
       setError("");
 
-      await uploadMedia(file);
-      await loadMedia();
+      const uploadedMedia =
+        await uploadMedia(file);
+
+      if (uploadedMedia?._id) {
+        setMedia((currentMedia) => [
+          uploadedMedia,
+          ...currentMedia.filter(
+            (item) =>
+              item._id !==
+              uploadedMedia._id
+          ),
+        ]);
+      } else {
+        const data =
+          await getAllMedia();
+
+        setMedia(
+          Array.isArray(data)
+            ? data
+            : []
+        );
+      }
     } catch (uploadError) {
       setError(
         getUserFriendlyError(uploadError, { action: "upload", fallback: "Unable to upload the media. Please try again." })
       );
     } finally {
       setUploading(false);
-      e.target.value = "";
+      input.value = "";
     }
   };
 
@@ -172,7 +171,13 @@ const MediaLibraryPage = () => {
       try {
         setError("");
         await deleteMedia(id);
-        await loadMedia();
+        setMedia(
+          (currentMedia) =>
+            currentMedia.filter(
+              (item) =>
+                item._id !== id
+            )
+        );
       } catch (deleteError) {
         setError(
           getUserFriendlyError(deleteError, "Unable to delete the media. Please try again.")
@@ -325,6 +330,7 @@ const MediaLibraryPage = () => {
 
                     <div className="mt-3 flex gap-2">
                       <button
+                        type="button"
                         onClick={() =>
                           copyUrl(
                             item.url
@@ -336,6 +342,7 @@ const MediaLibraryPage = () => {
                       </button>
 
                       <button
+                        type="button"
                         onClick={() =>
                           handleDelete(
                             item._id

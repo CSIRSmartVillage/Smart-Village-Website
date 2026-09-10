@@ -82,6 +82,10 @@ const AdminLayout = () => {
           label: "Supporters",
           path: "/admin/supporters",
         },
+        {
+          label: "Monitoring Committee",
+          path: "/admin/monitoring-committee",
+        },
       ],
     },
 

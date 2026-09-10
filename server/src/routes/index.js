@@ -57,6 +57,7 @@
   import selfHelpGroupRoutes from "../modules/selfHelpGroup/selfHelpGroup.routes.js";
   import supporterRoutes from "../modules/supporter/supporter.routes.js";
   import governmentApprovalRoutes from "../modules/governmentApproval/governmentApproval.routes.js";
+  import monitoringCommitteeRoutes from "../modules/monitoringCommittee/monitoringCommittee.routes.js";
   import {
   publicCache,
 } from "../middleware/cache.middleware.js";
@@ -212,6 +213,10 @@ router.use(
   "/government-approvals",
   publicLimiter,
   governmentApprovalRoutes
+);
+router.use(
+  "/monitoring-committee",
+  monitoringCommitteeRoutes
 );
 router.use(
   "/admin/pages",

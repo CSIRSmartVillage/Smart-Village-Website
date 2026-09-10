@@ -19,6 +19,13 @@ export const createLaboratorySchema =
       Joi.string()
         .allow(""),
 
+    directorPhoto:
+      Joi.string()
+        .allow(
+          "",
+          null
+        ),
+
     overview:
       Joi.string()
         .allow(""),

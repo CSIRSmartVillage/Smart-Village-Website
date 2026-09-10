@@ -38,6 +38,7 @@ const CreateLaboratoryPage =
             type: "",
             heroImage: "",
             directorName: "",
+            directorPhoto: null,
             overview: "",
             researchAreas: [""],
             contributions: [""],

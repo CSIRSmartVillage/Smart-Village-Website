@@ -48,6 +48,12 @@ const laboratorySchema =
         default: "",
       },
 
+      directorPhoto: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Media",
+        default: null,
+      },
+
       overview: {
         type: String,
         default: "",

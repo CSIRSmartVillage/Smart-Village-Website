@@ -76,7 +76,7 @@ const ParticipatingLabsList = () => {
             Participating Laboratories
           </h2>
 
-          <p className="mt-4 text-slate-600 max-w-3xl">
+          <p className="mt-4 text-slate-600">
             CSIR laboratories contributing
             expertise, innovation,
             scientific research and

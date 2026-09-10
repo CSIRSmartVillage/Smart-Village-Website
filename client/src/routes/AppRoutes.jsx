@@ -32,6 +32,10 @@ const DirectorDeskPage = lazy(() =>
   import("../pages/AboutPage/DirectorDeskPage")
 );
 
+const MonitoringCommitteePage = lazy(() =>
+  import("../pages/AboutPage/MonitoringCommitteePage")
+);
+
 const NodalLabPage = lazy(() =>
   import("../pages/NodalLabPage/NodalLabPage")
 );
@@ -197,6 +201,11 @@ const AppRoutes = () => {
       <Route
         path="/about/director-desk"
         element={<DirectorDeskPage />}
+      />
+
+      <Route
+        path="/about/monitoring-committee"
+        element={<MonitoringCommitteePage />}
       />
 
       {/* Announcements */}

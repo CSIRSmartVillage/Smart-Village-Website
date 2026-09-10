@@ -31,6 +31,11 @@ const aboutMenuItems = [
     label: "Director's Desk",
     path: "/about/director-desk",
   },
+  {
+    _id: "about-monitoring-committee",
+    label: "Monitoring Committee",
+    path: "/about/monitoring-committee",
+  },
 ];
 
 const navigationOrder = new Map([
@@ -381,7 +386,7 @@ const Navbar = () => {
                         id="mobile-about-menu"
                         className={`overflow-hidden transition-all duration-200 ${
                           mobileAboutOpen
-                            ? "max-h-48 opacity-100"
+                            ? "max-h-64 opacity-100"
                             : "max-h-0 opacity-0"
                         }`}
                       >

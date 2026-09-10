@@ -64,6 +64,9 @@ const LaboratoryForm = ({
         initialValues.heroImage?._id ||
         initialValues.heroImage ||
         "",
+      directorPhoto: normalizeMedia(
+        initialValues.directorPhoto
+      ),
       researchAreas: normalizeList(
         initialValues.researchAreas
       ),
@@ -109,6 +112,10 @@ const LaboratoryForm = ({
 
     onSubmit({
       ...formData,
+      directorPhoto:
+        formData.directorPhoto?._id ||
+        formData.directorPhoto ||
+        null,
       researchAreas:
         normalizeList(
           formData.researchAreas
@@ -226,13 +233,18 @@ const LaboratoryForm = ({
       onSubmit={handleSubmit}
       className="space-y-4"
     >
-      <input
-        name="name"
-        placeholder="Laboratory Name"
-        value={formData.name}
-        onChange={handleChange}
-        className="w-full border p-3 rounded"
-      />
+      <label className="block">
+        <span className="mb-2 block font-medium text-slate-700">
+          Institute Name
+        </span>
+        <input
+          name="name"
+          placeholder="Enter institute name"
+          value={formData.name}
+          onChange={handleChange}
+          className="w-full border p-3 rounded"
+        />
+      </label>
 
       <input
         name="slug"
@@ -311,6 +323,20 @@ const LaboratoryForm = ({
         </p>
       </div>
 
+      <MediaUploader
+        label="Director Photo"
+        value={formData.directorPhoto}
+        onChange={(directorPhoto) =>
+          setFormData((current) => ({
+            ...current,
+            directorPhoto,
+          }))
+        }
+        compactHorizontal
+        className="max-w-xl"
+        previewImageClassName="bg-white"
+      />
+
       <textarea
         name="overview"
         placeholder="Overview"
@@ -366,38 +392,73 @@ const LaboratoryForm = ({
         }
       />
 
-      <textarea
-        name="address"
-        placeholder="Address"
-        value={formData.address}
-        onChange={handleChange}
-        rows={4}
-        className="w-full border p-3 rounded"
-      />
+      <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold text-slate-900">
+            Laboratory Contact Details
+          </h2>
+          <p className="mt-1 text-sm text-slate-500">
+            These details appear with the Director information on the
+            laboratory page.
+          </p>
+        </div>
 
-      <input
-        name="phone"
-        placeholder="Phone"
-        value={formData.phone}
-        onChange={handleChange}
-        className="w-full border p-3 rounded"
-      />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="block sm:col-span-2">
+            <span className="mb-2 block font-medium text-slate-700">
+              Full Address
+            </span>
+            <textarea
+              name="address"
+              placeholder="Enter the full institute address"
+              value={formData.address || ""}
+              onChange={handleChange}
+              rows={4}
+              className="w-full rounded border p-3"
+            />
+          </label>
 
-      <input
-        name="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-        className="w-full border p-3 rounded"
-      />
+          <label className="block">
+            <span className="mb-2 block font-medium text-slate-700">
+              Phone
+            </span>
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Enter phone number"
+              value={formData.phone || ""}
+              onChange={handleChange}
+              className="w-full rounded border p-3"
+            />
+          </label>
 
-      <input
-        name="website"
-        placeholder="Website"
-        value={formData.website}
-        onChange={handleChange}
-        className="w-full border p-3 rounded"
-      />
+          <label className="block">
+            <span className="mb-2 block font-medium text-slate-700">
+              Email
+            </span>
+            <input
+              name="email"
+              placeholder="Enter email address"
+              value={formData.email || ""}
+              onChange={handleChange}
+              className="w-full rounded border p-3"
+            />
+          </label>
+
+          <label className="block sm:col-span-2">
+            <span className="mb-2 block font-medium text-slate-700">
+              Official Website URL
+            </span>
+            <input
+              name="website"
+              placeholder="https://www.example.org"
+              value={formData.website || ""}
+              onChange={handleChange}
+              className="w-full rounded border p-3"
+            />
+          </label>
+        </div>
+      </section>
 
       <MembersField
         members={formData.members || []}
@@ -502,8 +563,8 @@ const MembersField = ({
   onChange,
   onRemove,
 }) => (
-  <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+  <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
       <div>
         <h2 className="text-lg font-semibold text-slate-900">
           Scientists / Members
@@ -527,26 +588,26 @@ const MembersField = ({
         No scientists or members added yet.
       </p>
     ) : (
-      <div className="mt-5 space-y-5">
+      <div className="mt-4 space-y-3">
         {members.map((member, index) => (
           <div
             key={member._id || index}
-            className="rounded-xl border border-slate-200 p-4"
+            className="rounded-xl border border-slate-200 p-3"
           >
-            <div className="mb-4 flex items-center justify-between gap-3">
+            <div className="mb-3 flex items-center justify-between gap-3">
               <h3 className="font-semibold text-slate-800">
                 Member {index + 1}
               </h3>
               <button
                 type="button"
                 onClick={() => onRemove(index)}
-                className="rounded border border-red-200 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+                className="rounded border border-red-200 px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50"
               >
                 Delete Member
               </button>
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-[minmax(220px,0.7fr)_minmax(0,1.3fr)]">
+            <div className="grid items-start gap-3 lg:grid-cols-[minmax(360px,0.9fr)_minmax(0,1.1fr)]">
               <MediaUploader
                 label="Photo"
                 value={member.photo || []}
@@ -557,11 +618,11 @@ const MembersField = ({
                     photo
                   )
                 }
-                uploadAreaClassName="p-5"
-                previewImageClassName="object-contain"
+                compactHorizontal
+                previewImageClassName="bg-white"
               />
 
-              <div className="grid content-start gap-4 sm:grid-cols-2">
+              <div className="grid content-start gap-3 sm:grid-cols-2">
                 <MemberInput
                   label="Name"
                   value={member.name}
@@ -612,7 +673,7 @@ const MemberInput = ({
   onChange,
 }) => (
   <label className="block">
-    <span className="mb-2 block text-sm font-medium text-slate-700">
+    <span className="mb-1.5 block text-sm font-medium text-slate-700">
       {label}
     </span>
     <input
@@ -621,7 +682,7 @@ const MemberInput = ({
       onChange={(event) =>
         onChange(event.target.value)
       }
-      className="w-full rounded border border-slate-300 p-3"
+      className="w-full rounded border border-slate-300 px-3 py-2.5"
     />
   </label>
 );
