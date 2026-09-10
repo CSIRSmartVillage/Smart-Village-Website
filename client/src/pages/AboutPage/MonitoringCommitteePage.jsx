@@ -10,13 +10,14 @@ import {
 import Header from "../../components/common/Header/Header";
 import Navbar from "../../components/common/Navbar/Navbar";
 import Footer from "../../components/common/Footer";
+import csirLogo from "../../assets/logos/CSIR.jpg";
 import {
   getMonitoringCommittee,
   getMonitoringCommitteeSettings,
 } from "../../services/monitoringCommittee.service";
 
 const DEFAULT_HEADER_SUBTITLE =
-  "Committee structure and contact information for monitoring the SMART Village Mission.";
+  "Contact information for monitoring committee of the SMART Village Mission.";
 
 const ROLE_ORDER = [
   "CHAIRMAN",
@@ -132,6 +133,7 @@ const IndependentSection = ({
     ) : (
       <EmptySection message={emptyMessage} />
     )}
+
   </section>
 );
 
@@ -172,12 +174,12 @@ const MonitoringCommitteePage = () => {
 
   const chairman = groupedMembers.CHAIRMAN[0] || null;
   const members = groupedMembers.MEMBER;
-  const conveners = groupedMembers.CONVENER;
+  const conveyers = groupedMembers.CONVENER;
   const heads = groupedMembers.HEAD;
   const hasCommittee =
     Boolean(chairman) ||
     members.length > 0 ||
-    conveners.length > 0 ||
+    conveyers.length > 0 ||
     heads.length > 0;
   const headerSubtitle =
     typeof headerSettings.subtitle === "string"
@@ -190,23 +192,30 @@ const MonitoringCommitteePage = () => {
       <Navbar />
 
       <main className="bg-slate-50">
-        <section className="bg-slate-900 py-20 text-white">
+        <section className="bg-slate-900 py-12 text-white sm:py-14">
           <div className="mx-auto max-w-6xl px-6 text-center">
             <span className="font-semibold uppercase tracking-widest text-blue-300">
               About
             </span>
-            <h1 className="mt-4 text-4xl font-bold md:text-5xl">
-              Monitoring Committee
-            </h1>
+            <div className="mt-3 flex items-center justify-center gap-2 sm:gap-4">
+              <img
+                src={csirLogo}
+                alt="CSIR logo"
+                className="h-[clamp(48px,14vw,64px)] w-auto shrink-0 object-contain"
+              />
+              <h1 className="whitespace-nowrap text-[clamp(1.25rem,7vw,3rem)] font-bold">
+                Monitoring Committee
+              </h1>
+            </div>
             {headerSubtitle && (
-              <p className="mx-auto mt-6 max-w-3xl text-lg text-slate-300">
+              <p className="mx-auto mt-4 max-w-3xl text-lg text-slate-300">
                 {headerSubtitle}
               </p>
             )}
           </div>
         </section>
 
-        <div className="mx-auto max-w-7xl space-y-8 px-6 py-10 lg:px-8 lg:py-14">
+        <div className="mx-auto max-w-7xl space-y-12 px-6 py-10 lg:px-8 lg:py-14">
           {isLoading ? (
             <div className="rounded-2xl border border-slate-200 bg-white p-14 text-center text-slate-500">
               Loading Monitoring Committee...
@@ -228,62 +237,65 @@ const MonitoringCommitteePage = () => {
             </div>
           ) : (
             <>
-              <section className="rounded-2xl bg-blue-50/60 p-5 transition duration-200 hover:shadow-sm sm:p-7 lg:p-8">
-                <div>
-                  {chairman ? (
-                    <div className="mx-auto max-w-2xl rounded-2xl border border-blue-300 bg-blue-100/70 p-2">
-                      <p className="px-3 py-2 text-center text-xs font-bold uppercase tracking-wider text-blue-800">
+              <section aria-label="Chairman hierarchy">
+                {chairman ? (
+                  <div className="mx-auto max-w-[620px] rounded-2xl border border-blue-300 bg-blue-100/70 p-2">
+                    <div className="flex items-center justify-center gap-2 px-3 pb-2 pt-1">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-slate-700 shadow-sm">
+                        <UserRound size={20} />
+                      </span>
+                      <h2 className="text-xl font-bold text-blue-900">
                         Chairman
-                      </p>
-                      <MemberPanel member={chairman} />
+                      </h2>
                     </div>
-                  ) : (
-                    <EmptySection message="Chairman details have not been added yet." />
-                  )}
+                    <MemberPanel member={chairman} />
+                  </div>
+                ) : (
+                  <EmptySection message="Chairman details have not been added yet." />
+                )}
 
-                  {members.length > 0 && (
-                    <>
-                      <div className="mx-auto hidden h-10 w-px bg-blue-300 md:block" />
+                {members.length > 0 && (
+                  <>
+                    <div className="mx-auto hidden h-10 w-px bg-blue-300 md:block" />
 
-                      <div className="relative hidden md:block">
-                        <span className="absolute bottom-0 left-1/2 top-0 w-px -translate-x-1/2 bg-blue-200" />
-                        <div className="relative flex flex-wrap justify-center gap-y-7">
-                          {members.map((member) => (
-                            <div
-                              key={member._id}
-                              className="relative basis-1/2 px-3 pt-6 xl:basis-1/3"
-                            >
-                              <span className="absolute left-0 right-0 top-0 border-t border-blue-300" />
-                              <span className="absolute left-1/2 top-0 h-6 border-l border-blue-300" />
-                              <MemberPanel
-                                member={member}
-                                className="relative"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="ml-5 mt-6 space-y-4 border-l-2 border-blue-300 pl-6 md:hidden">
+                    <div className="relative hidden md:block">
+                      <span className="absolute bottom-0 left-1/2 top-0 w-px -translate-x-1/2 bg-blue-200" />
+                      <div className="relative flex flex-wrap justify-center gap-y-7">
                         {members.map((member) => (
-                          <div key={member._id} className="relative">
-                            <span className="absolute -left-6 top-1/2 w-6 border-t border-blue-300" />
-                            <MemberPanel member={member} />
+                          <div
+                            key={member._id}
+                            className="relative basis-1/2 px-3 pt-6 xl:basis-1/3"
+                          >
+                            <span className="absolute left-0 right-0 top-0 border-t border-blue-300" />
+                            <span className="absolute left-1/2 top-0 h-6 border-l border-blue-300" />
+                            <MemberPanel
+                              member={member}
+                              className="relative"
+                            />
                           </div>
                         ))}
                       </div>
-                    </>
-                  )}
-                </div>
+                    </div>
+
+                    <div className="ml-5 mt-6 space-y-4 border-l-2 border-blue-300 pl-6 md:hidden">
+                      {members.map((member) => (
+                        <div key={member._id} className="relative">
+                          <span className="absolute -left-6 top-1/2 w-6 border-t border-blue-300" />
+                          <MemberPanel member={member} />
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
               </section>
 
               <div className="grid items-start gap-8 lg:grid-cols-2">
                 <IndependentSection
-                  title="Conveners"
-                  members={conveners}
+                  title="Conveyers"
+                  members={conveyers}
                   icon={UsersRound}
                   accentClass="border-orange-200 bg-orange-50/70 hover:border-orange-300"
-                  emptyMessage="No Conveners have been added yet."
+                  emptyMessage="No Conveyers have been added yet."
                 />
 
                 <IndependentSection

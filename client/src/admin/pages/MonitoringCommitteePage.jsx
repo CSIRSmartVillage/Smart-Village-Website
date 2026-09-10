@@ -26,7 +26,7 @@ import {
 } from "../services/monitoringCommittee.service";
 
 const DEFAULT_HEADER_SUBTITLE =
-  "Committee structure and contact information for monitoring the SMART Village Mission.";
+  "Contact information for monitoring committee of the SMART Village Mission.";
 
 const ROLE_SECTIONS = [
   {
@@ -43,8 +43,8 @@ const ROLE_SECTIONS = [
   },
   {
     value: "CONVENER",
-    label: "Conveners",
-    description: "Conveners displayed in their own section.",
+    label: "Conveyers",
+    description: "Conveyers displayed in their own section.",
     accent: "border-orange-200 bg-orange-50/50",
   },
   {
@@ -309,7 +309,7 @@ const MonitoringCommitteePage = () => {
             Monitoring Committee
           </h1>
           <p className="mt-2 text-slate-500">
-            Manage the Chairman, flowchart members, Conveners, and Head.
+            Manage the Chairman, flowchart members, Conveyers, and Head.
           </p>
         </div>
 

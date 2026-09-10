@@ -30,3 +30,15 @@ coverage/
 Thumbs.db
 .idea/
 .vscode/
+
+# Private keys, certificates and local credentials
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Private deployment material
+deployment/
+deployment.md

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export const DEFAULT_MONITORING_COMMITTEE_SUBTITLE =
-  "Committee structure and contact information for monitoring the SMART Village Mission.";
+  "Contact information for monitoring committee of the SMART Village Mission.";
 
 const monitoringCommitteeSettingsSchema = new mongoose.Schema(
   {
