@@ -47,7 +47,7 @@ export const getSettings = asyncHandler(async (_req, res) => {
 
 export const updateSettings = asyncHandler(async (req, res) => {
   const settings = await updateMonitoringCommitteeSettings(
-    req.body.subtitle,
+    req.body,
     req.admin._id
   );
 
@@ -60,7 +60,7 @@ export const updateSettings = asyncHandler(async (req, res) => {
   return res.json(
     new ApiResponse(
       200,
-      { subtitle: settings.subtitle },
+      await getMonitoringCommitteeSettings(),
       "Monitoring Committee header updated successfully."
     )
   );

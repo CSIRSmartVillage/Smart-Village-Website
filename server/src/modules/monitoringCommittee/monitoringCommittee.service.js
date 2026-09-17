@@ -4,6 +4,7 @@ import MonitoringCommitteeMember, {
 } from "./MonitoringCommitteeMember.model.js";
 import MonitoringCommitteeSettings, {
   DEFAULT_MONITORING_COMMITTEE_SUBTITLE,
+  DEFAULT_COMMITTEE_HEADINGS,
 } from "./MonitoringCommitteeSettings.model.js";
 
 const ROLE_ORDER = new Map(
@@ -60,7 +61,7 @@ const assertChairmanAvailable = async (excludedId = null) => {
 };
 
 const nextDisplayOrder = async (role) => {
-  const lastMember = await MonitoringCommitteeMember.findOne({ role })
+  const lastMember = await MonitoringCommitteeMember.findOne({ role: roleFilter(role) })
     .sort({ displayOrder: -1, createdAt: -1 })
     .select("displayOrder")
     .lean();
@@ -73,6 +74,7 @@ const toPublicMember = (member) => ({
   photo: member.photo || null,
   name: member.name || "",
   designation: member.designation || "",
+  roleLabel: member.roleLabel || "",
   phone: member.phone || "",
   email: member.email || "",
   role: member.role,
@@ -85,17 +87,22 @@ export const getPublicMonitoringCommittee = async () => {
     .sort({ displayOrder: 1, createdAt: 1 })
     .lean();
 
-  return sortMembers(members).map(toPublicMember);
+  return sortMembers(await normalizeMembers(members)).map(toPublicMember);
 };
 
 export const getMonitoringCommitteeSettings = async () => {
   const settings = await MonitoringCommitteeSettings.findOne({
     singletonKey: "monitoring-committee",
   })
-    .select("subtitle")
+    .select(["subtitle", "rows", ...Object.keys(DEFAULT_COMMITTEE_HEADINGS)].join(" "))
     .lean();
 
   return {
+    ...Object.fromEntries(
+      Object.entries(DEFAULT_COMMITTEE_HEADINGS).map(([key, value]) => [
+        key, settings?.[key] ?? value,
+      ])
+    ),
     subtitle:
       settings?.subtitle ??
       DEFAULT_MONITORING_COMMITTEE_SUBTITLE,
@@ -103,14 +110,18 @@ export const getMonitoringCommitteeSettings = async () => {
 };
 
 export const updateMonitoringCommitteeSettings = async (
-  subtitle,
+  payload,
   adminId
 ) => {
   return MonitoringCommitteeSettings.findOneAndUpdate(
     { singletonKey: "monitoring-committee" },
     {
       $set: {
-        subtitle: cleanText(subtitle),
+        ...Object.fromEntries(
+          ["subtitle", "chairmanHeading"]
+            .filter((key) => hasOwn(payload, key))
+            .map((key) => [key, cleanText(payload[key])])
+        ),
         updatedBy: adminId,
       },
     },
@@ -118,6 +129,7 @@ export const updateMonitoringCommitteeSettings = async (
       new: true,
       upsert: true,
       setDefaultsOnInsert: true,
+      runValidators: true,
     }
   );
 };
@@ -130,13 +142,30 @@ export const getAdminMonitoringCommittee = async () => {
     .sort({ displayOrder: 1, createdAt: 1 })
     .lean();
 
-  return sortMembers(members);
+  return sortMembers(await normalizeMembers(members));
 };
+
+const assertFixedRole = (role) => {
+  if (!MONITORING_COMMITTEE_ROLES.includes(role)) throw new ApiError(400, "Select Chairman, Committee Members, or Other Members.");
+};
+
+// Read legacy roles and saved dynamic row titles without losing existing people.
+const normalizeMembers = async (members) => {
+  const settings = await MonitoringCommitteeSettings.findOne({ singletonKey: "monitoring-committee" }).lean();
+  const legacyKeys = { CONVENER: "conveyersHeading", HEAD: "headHeading", OTHER: "otherHeading" };
+  return members.map(member => ({
+    ...member,
+    role: ["CHAIRMAN", "MEMBER"].includes(member.role) ? member.role : "OTHER",
+    roleLabel: member.roleLabel || settings?.rows?.find(row => row.id === member.role)?.title || settings?.[legacyKeys[member.role]] || DEFAULT_COMMITTEE_HEADINGS[legacyKeys[member.role]] || "",
+  }));
+};
+const roleFilter = role => role === "OTHER" ? { $nin: ["CHAIRMAN", "MEMBER"] } : role;
 
 export const createMonitoringCommitteeMember = async (
   payload,
   adminId
 ) => {
+  assertFixedRole(payload.role);
   if (payload.role === "CHAIRMAN") {
     await assertChairmanAvailable();
   }
@@ -149,6 +178,7 @@ export const createMonitoringCommitteeMember = async (
     photo: payload.photo || null,
     name: cleanText(payload.name),
     designation: cleanText(payload.designation),
+    roleLabel: cleanText(payload.roleLabel),
     phone: cleanText(payload.phone),
     email: cleanText(payload.email),
     role: payload.role,
@@ -171,7 +201,8 @@ export const updateMonitoringCommitteeMember = async (
     throw new ApiError(404, "Monitoring Committee member not found.");
   }
 
-  const nextRole = payload.role || member.role;
+  const nextRole = payload.role || (["CHAIRMAN", "MEMBER"].includes(member.role) ? member.role : "OTHER");
+  assertFixedRole(nextRole);
 
   if (nextRole === "CHAIRMAN" && member.role !== "CHAIRMAN") {
     await assertChairmanAvailable(member._id);
@@ -183,13 +214,14 @@ export const updateMonitoringCommitteeMember = async (
     member.designation = cleanText(payload.designation);
   }
   if (hasOwn(payload, "phone")) member.phone = cleanText(payload.phone);
+  if (hasOwn(payload, "roleLabel")) member.roleLabel = cleanText(payload.roleLabel);
   if (hasOwn(payload, "email")) member.email = cleanText(payload.email);
 
-  if (hasOwn(payload, "role") && payload.role !== member.role) {
-    member.role = payload.role;
+  if (nextRole !== member.role) {
+    member.role = nextRole;
     member.displayOrder = hasOwn(payload, "displayOrder")
       ? Number(payload.displayOrder)
-      : await nextDisplayOrder(payload.role);
+      : await nextDisplayOrder(nextRole);
   } else if (hasOwn(payload, "displayOrder")) {
     member.displayOrder = Number(payload.displayOrder);
   }
@@ -217,7 +249,7 @@ export const reorderMonitoringCommitteeMembers = async ({
   adminId,
 }) => {
   const members = await MonitoringCommitteeMember.find({
-    role,
+    role: roleFilter(role),
     _id: { $in: orderedIds },
   })
     .select("_id")
@@ -233,7 +265,7 @@ export const reorderMonitoringCommitteeMembers = async ({
   await MonitoringCommitteeMember.bulkWrite(
     orderedIds.map((id, index) => ({
       updateOne: {
-        filter: { _id: id, role },
+        filter: { _id: id, role: roleFilter(role) },
         update: {
           $set: {
             displayOrder: index + 1,

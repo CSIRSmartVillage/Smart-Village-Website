@@ -28,37 +28,13 @@ import {
 const DEFAULT_HEADER_SUBTITLE =
   "Contact information for monitoring committee of the SMART Village Mission.";
 
-const ROLE_SECTIONS = [
-  {
-    value: "CHAIRMAN",
-    label: "Chairman",
-    description: "The top-level committee chairperson.",
-    accent: "border-blue-200 bg-blue-50/50",
-  },
-  {
-    value: "MEMBER",
-    label: "Flowchart Members",
-    description: "Members displayed beneath the Chairman.",
-    accent: "border-slate-200 bg-slate-50",
-  },
-  {
-    value: "CONVENER",
-    label: "Conveyers",
-    description: "Conveyers displayed in their own section.",
-    accent: "border-orange-200 bg-orange-50/50",
-  },
-  {
-    value: "HEAD",
-    label: "Head",
-    description: "Heads displayed in their own section.",
-    accent: "border-emerald-200 bg-emerald-50/50",
-  },
-];
+const HEADING_FIELDS = [["chairmanHeading", "Chairman"]];
 
 const emptyForm = (role = "MEMBER") => ({
   photo: null,
   name: "",
   designation: "",
+  roleLabel: "",
   phone: "",
   email: "",
   role,
@@ -81,6 +57,7 @@ const MonitoringCommitteePage = () => {
   const [movingId, setMovingId] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [headingDraft, setHeadingDraft] = useState({});
   const [subtitleDraft, setSubtitleDraft] = useState(null);
   const [savingHeader, setSavingHeader] = useState(false);
 
@@ -95,6 +72,7 @@ const MonitoringCommitteePage = () => {
   const {
     data: headerSettings = {},
     isError: headerSettingsError,
+    isLoading: settingsLoading,
   } = useQuery({
     queryKey: ["admin-monitoring-committee-settings"],
     queryFn: getMonitoringCommitteeSettingsAdmin,
@@ -109,19 +87,16 @@ const MonitoringCommitteePage = () => {
     (typeof headerSettings.subtitle === "string"
       ? headerSettings.subtitle
       : DEFAULT_HEADER_SUBTITLE);
-  const grouped = useMemo(
-    () =>
-      Object.fromEntries(
-        ROLE_SECTIONS.map(({ value }) => [
-          value,
-          sortByOrder(
-            members.filter((member) => member.role === value)
-          ),
-        ])
-      ),
-    [members]
+  const headingValues = Object.fromEntries(
+    HEADING_FIELDS.map(([key]) => [key, headingDraft[key] ?? headerSettings[key] ?? ""])
   );
-
+  const headingsValid = Object.values(headingValues).every((value) => value.trim().length > 0);
+  const sections = [
+    { value: "CHAIRMAN", label: headerSettings.chairmanHeading || "Chairman", accent: "border-blue-200 bg-blue-50/50" },
+    { value: "MEMBER", label: "Committee Members", accent: "border-slate-200 bg-slate-50" },
+    { value: "OTHER", label: "Other Members", accent: "border-slate-200 bg-slate-50" },
+  ];
+  const grouped = Object.fromEntries(sections.map(section => [section.value, sortByOrder(members.filter(member => member.role === section.value))]));
   const openCreate = (role = "MEMBER") => {
     setEditingId(null);
     setForm(emptyForm(role));
@@ -134,6 +109,7 @@ const MonitoringCommitteePage = () => {
       photo: member.photo || null,
       name: member.name || "",
       designation: member.designation || "",
+      roleLabel: member.roleLabel || "",
       phone: member.phone || "",
       email: member.email || "",
       role: member.role || "MEMBER",
@@ -156,15 +132,11 @@ const MonitoringCommitteePage = () => {
   const handleSave = async (event) => {
     event.preventDefault();
 
-    if (!form.name.trim()) {
-      toast.error("Name is required.");
-      return;
-    }
-
     const payload = {
       photo: form.photo?._id || null,
       name: form.name.trim(),
       designation: form.designation.trim(),
+      roleLabel: form.roleLabel.trim(),
       phone: form.phone.trim(),
       email: form.email.trim(),
       role: form.role,
@@ -249,24 +221,23 @@ const MonitoringCommitteePage = () => {
       setSavingHeader(true);
       const updated =
         await updateMonitoringCommitteeSettingsAdmin(
-          subtitleValue
+          { subtitle: subtitleValue, ...headingValues }
         );
 
       queryClient.setQueryData(
         ["admin-monitoring-committee-settings"],
         updated
       );
-      queryClient.invalidateQueries({
-        queryKey: ["monitoring-committee-settings"],
-      });
+      queryClient.setQueryData(["monitoring-committee-settings"], updated);
       setSubtitleDraft(null);
-      toast.success("Page header updated successfully.");
+      setHeadingDraft({});
+      toast.success("Page headings updated successfully.");
     } catch (error) {
       console.error(error);
       toast.error(
         getUserFriendlyError(
           error,
-          "Unable to update the page header."
+          "Unable to update the page headings."
         )
       );
     } finally {
@@ -309,7 +280,7 @@ const MonitoringCommitteePage = () => {
             Monitoring Committee
           </h1>
           <p className="mt-2 text-slate-500">
-            Manage the Chairman, flowchart members, Conveyers, and Head.
+            Manage the Chairman, Committee Members, and Other Members.
           </p>
         </div>
 
@@ -330,7 +301,7 @@ const MonitoringCommitteePage = () => {
           </h2>
           <p className="mt-1 text-sm text-slate-500">
             The “Monitoring Committee” title is fixed. Edit the
-            subtitle displayed below it.
+            subtitle and Chairman heading. Manage members below.
           </p>
         </div>
 
@@ -347,6 +318,23 @@ const MonitoringCommitteePage = () => {
           />
         </label>
 
+        <div className="mt-5 grid gap-4 sm:grid-cols-2">
+          {HEADING_FIELDS.map(([key, label]) => (
+            <label key={key} className="text-sm font-medium text-slate-700">
+              {label} {key === "chairmanHeading" ? "Heading" : "Card Label"}
+              <input
+                type="text"
+                required
+                maxLength={100}
+                value={headingValues[key]}
+                disabled={settingsLoading || savingHeader || headerSettingsError}
+                onChange={(event) => setHeadingDraft((current) => ({ ...current, [key]: event.target.value }))}
+                className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
+              />
+            </label>
+          ))}
+        </div>
+
         <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs text-slate-500">
@@ -354,8 +342,7 @@ const MonitoringCommitteePage = () => {
             </p>
             {headerSettingsError && (
               <p className="mt-1 text-sm text-red-600">
-                The saved subtitle could not be loaded. You can still
-                enter and save a new value.
+                The saved settings could not be loaded. Reload the page to try again.
               </p>
             )}
           </div>
@@ -363,11 +350,11 @@ const MonitoringCommitteePage = () => {
           <button
             type="button"
             onClick={handleHeaderSave}
-            disabled={savingHeader}
+            disabled={savingHeader || settingsLoading || headerSettingsError || !headingsValid}
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <Save size={18} />
-            {savingHeader ? "Saving..." : "Save Header"}
+            {savingHeader ? "Saving..." : "Save Headings"}
           </button>
         </div>
       </section>
@@ -380,7 +367,7 @@ const MonitoringCommitteePage = () => {
                 {editingId ? "Edit Committee Member" : "Add Committee Member"}
               </h2>
               <p className="mt-1 text-sm text-slate-500">
-                Only the name is required. All other fields are optional.
+                All personal details are optional. Select a row for this member.
               </p>
             </div>
             <button
@@ -406,9 +393,8 @@ const MonitoringCommitteePage = () => {
 
               <div className="grid content-start gap-5 sm:grid-cols-2">
                 <label className="text-sm font-medium text-slate-700">
-                  Name <span className="text-red-600">*</span>
+                  Name (Optional)
                   <input
-                    required
                     maxLength={200}
                     value={form.name}
                     onChange={(event) =>
@@ -457,15 +443,15 @@ const MonitoringCommitteePage = () => {
                 </label>
 
                 <label className="text-sm font-medium text-slate-700">
-                  Role / Section
+                  Row / Placement
                   <select
                     value={form.role}
                     onChange={(event) =>
-                      updateField("role", event.target.value)
+                      setForm(current => ({ ...current, role: event.target.value, displayOrder: "" }))
                     }
                     className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 outline-none focus:border-blue-500"
                   >
-                    {ROLE_SECTIONS.map((section) => (
+                    {sections.map((section) => (
                       <option
                         key={section.value}
                         value={section.value}
@@ -482,6 +468,20 @@ const MonitoringCommitteePage = () => {
                     ))}
                   </select>
                 </label>
+
+                {form.role !== "MEMBER" && <label className="text-sm font-medium text-slate-700">
+                  Card Heading (Optional)
+                  <input
+                    maxLength={100}
+                    value={form.roleLabel}
+                    onChange={(event) => updateField("roleLabel", event.target.value)}
+                    placeholder="Personal role/designation"
+                    className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
+                  />
+                  <span className="mt-1 block text-xs font-normal text-slate-500">
+                    Shown as the small heading above this member’s photo, e.g. Conveyer, Head, or Member Secretary.
+                  </span>
+                </label>}
 
                 <label className="text-sm font-medium text-slate-700">
                   Display Order
@@ -532,7 +532,7 @@ const MonitoringCommitteePage = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          {ROLE_SECTIONS.map((section) => {
+          {sections.map((section) => {
             const roleMembers = grouped[section.value];
             const chairmanExists =
               section.value === "CHAIRMAN" && roleMembers.length > 0;
@@ -610,6 +610,9 @@ const MonitoringCommitteePage = () => {
                                 <div>
                                   <p className="font-semibold text-slate-800">
                                     {member.name}
+                                  </p>
+                                  <p className="text-xs text-slate-500">
+                                    {member.roleLabel || section.label}
                                   </p>
                                   {member.designation && (
                                     <p className="mt-1 text-sm text-slate-500">

@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 export const MONITORING_COMMITTEE_ROLES = [
   "CHAIRMAN",
   "MEMBER",
-  "CONVENER",
-  "HEAD",
+  "OTHER",
 ];
 
 const monitoringCommitteeMemberSchema = new mongoose.Schema(
@@ -17,13 +16,19 @@ const monitoringCommitteeMemberSchema = new mongoose.Schema(
     name: {
       type: String,
       trim: true,
-      required: true,
+      default: "",
       maxlength: 200,
     },
     designation: {
       type: String,
       trim: true,
       maxlength: 300,
+      default: "",
+    },
+    roleLabel: {
+      type: String,
+      trim: true,
+      maxlength: 100,
       default: "",
     },
     phone: {

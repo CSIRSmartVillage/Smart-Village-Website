@@ -1,6 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
+  ChevronLeft,
+  ChevronRight,
   Mail,
   Phone,
   UserRound,
@@ -19,13 +21,6 @@ import {
 const DEFAULT_HEADER_SUBTITLE =
   "Contact information for monitoring committee of the SMART Village Mission.";
 
-const ROLE_ORDER = [
-  "CHAIRMAN",
-  "MEMBER",
-  "CONVENER",
-  "HEAD",
-];
-
 const sortByOrder = (members) =>
   [...members].sort(
     (a, b) =>
@@ -33,13 +28,18 @@ const sortByOrder = (members) =>
       Number(b.displayOrder || 0)
   );
 
-const MemberPanel = ({ member, className = "" }) => (
+const MemberPanel = ({ member, label, vertical = false, className = "" }) => (
   <article
     className={
       "flex h-full min-w-0 items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 transition duration-200 hover:border-blue-300 hover:bg-blue-50/30 hover:shadow-sm " +
-      className
+      (vertical ? "min-h-[320px] flex-col gap-y-2 " : "") + className
     }
   >
+    {label && (
+      <p className="w-full break-words text-center text-xs font-normal text-slate-500">
+        {label}
+      </p>
+    )}
     <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
       {member.photo?.url ? (
         <img
@@ -58,9 +58,11 @@ const MemberPanel = ({ member, className = "" }) => (
       )}
     </div>
 
-    <div className="min-w-0 flex-1">
+    <div className={vertical ? "min-w-0 w-full flex-1 text-left" : "min-w-0 flex-1"}>
       {member.name && (
-        <h3 className="break-words text-base font-bold text-slate-900 sm:text-lg">
+        <h3 className={vertical
+            ? "break-words text-center text-base font-bold text-slate-900"
+            : "break-words text-center text-base font-bold text-slate-900 sm:text-lg"}>
           {member.name}
         </h3>
       )}
@@ -104,38 +106,46 @@ const EmptySection = ({ message }) => (
   </p>
 );
 
-const IndependentSection = ({
-  title,
-  members,
-  icon: Icon,
-  accentClass,
-  emptyMessage,
-}) => (
-  <section
-    className={
-      "rounded-2xl border p-5 transition duration-200 hover:shadow-sm sm:p-6 " +
-      accentClass
-    }
-  >
-    <div className="mb-5 flex items-center gap-3">
-      <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white text-slate-700 shadow-sm">
-        <Icon size={21} />
-      </span>
-      <h2 className="text-xl font-bold text-slate-900">{title}</h2>
-    </div>
+const MemberRow = ({ members, label, individualHeadings = false }) => {
+  const rowRef = useRef(null);
+  const scroll = (direction) => {
+    const row = rowRef.current;
+    if (!row) return;
+    row.scrollBy({
+      left: direction * row.clientWidth * 0.8,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    });
+  };
 
-    {members.length > 0 ? (
-      <div className="space-y-4">
-        {members.map((member) => (
-          <MemberPanel key={member._id} member={member} />
-        ))}
+  return (
+    <>
+      <div className="relative flex h-14 items-center justify-end gap-2">
+        <span className="absolute inset-y-0 left-1/2 w-px bg-blue-300" aria-hidden="true" />
+        <button type="button" onClick={() => scroll(-1)} aria-label={`Scroll ${label} left`}
+          className="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-blue-500">
+          <ChevronLeft size={18} />
+        </button>
+        <button type="button" onClick={() => scroll(1)} aria-label={`Scroll ${label} right`}
+          className="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-blue-500">
+          <ChevronRight size={18} />
+        </button>
       </div>
-    ) : (
-      <EmptySection message={emptyMessage} />
-    )}
-
-  </section>
-);
+      <div ref={rowRef} role="region" aria-label={label} tabIndex={0}
+        className="overflow-x-auto overscroll-x-contain rounded-lg pb-3 focus-visible:outline-2 focus-visible:outline-blue-500">
+        <div className="mx-auto grid w-max min-w-full grid-flow-col auto-cols-[240px] justify-center">
+          {members.map((member) => (
+            <div key={member._id} className="relative min-w-0 px-2 pt-6">
+              <span aria-hidden="true" className="absolute left-0 right-0 top-0 border-t border-blue-300" />
+              <span aria-hidden="true" className="absolute left-1/2 top-0 h-6 border-l border-blue-300" />
+              <MemberPanel member={member} vertical
+                label={individualHeadings ? member.roleLabel || "Other Member" : "Committee Member"} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
 
 const MonitoringCommitteePage = () => {
   const {
@@ -145,42 +155,31 @@ const MonitoringCommitteePage = () => {
   } = useQuery({
     queryKey: ["monitoring-committee"],
     queryFn: getMonitoringCommittee,
+    staleTime: 0,
+    refetchInterval: 5000,
+    refetchOnWindowFocus: "always",
   });
-  const { data: headerSettings = {} } = useQuery({
+  const {
+    data: headerSettings = {},
+    isLoading: settingsLoading,
+    isError: settingsError,
+  } = useQuery({
     queryKey: ["monitoring-committee-settings"],
     queryFn: getMonitoringCommitteeSettings,
+    staleTime: 0,
+    refetchInterval: 5000,
+    refetchOnWindowFocus: "always",
   });
 
-  const groupedMembers = useMemo(() => {
-    const safeMembers = Array.isArray(rawMembers)
-      ? rawMembers
-      : [];
-    const groups = Object.fromEntries(
-      ROLE_ORDER.map((role) => [role, []])
-    );
-
-    safeMembers.forEach((member) => {
-      if (groups[member?.role]) {
-        groups[member.role].push(member);
-      }
-    });
-
-    ROLE_ORDER.forEach((role) => {
-      groups[role] = sortByOrder(groups[role]);
-    });
-
-    return groups;
+  const { chairman, members, otherMembers } = useMemo(() => {
+    const sorted = sortByOrder(Array.isArray(rawMembers) ? rawMembers.filter(Boolean) : []);
+    return {
+      chairman: sorted.find(member => member.role === "CHAIRMAN"),
+      members: sorted.filter(member => member.role === "MEMBER"),
+      otherMembers: sorted.filter(member => !["CHAIRMAN", "MEMBER"].includes(member.role)),
+    };
   }, [rawMembers]);
-
-  const chairman = groupedMembers.CHAIRMAN[0] || null;
-  const members = groupedMembers.MEMBER;
-  const conveyers = groupedMembers.CONVENER;
-  const heads = groupedMembers.HEAD;
-  const hasCommittee =
-    Boolean(chairman) ||
-    members.length > 0 ||
-    conveyers.length > 0 ||
-    heads.length > 0;
+  const hasCommittee = Boolean(chairman) || members.length > 0 || otherMembers.length > 0;
   const headerSubtitle =
     typeof headerSettings.subtitle === "string"
       ? headerSettings.subtitle
@@ -203,7 +202,7 @@ const MonitoringCommitteePage = () => {
                 alt="CSIR logo"
                 className="h-[clamp(48px,14vw,64px)] w-auto shrink-0 object-contain"
               />
-              <h1 className="whitespace-nowrap text-[clamp(1.25rem,7vw,3rem)] font-bold">
+              <h1 className="min-w-0 text-[clamp(1.25rem,7vw,3rem)] font-bold">
                 Monitoring Committee
               </h1>
             </div>
@@ -216,11 +215,11 @@ const MonitoringCommitteePage = () => {
         </section>
 
         <div className="mx-auto max-w-7xl space-y-12 px-6 py-10 lg:px-8 lg:py-14">
-          {isLoading ? (
+          {isLoading || settingsLoading ? (
             <div className="rounded-2xl border border-slate-200 bg-white p-14 text-center text-slate-500">
               Loading Monitoring Committee...
             </div>
-          ) : isError ? (
+          ) : isError || settingsError ? (
             <div className="rounded-2xl border border-red-200 bg-red-50 p-14 text-center text-red-700">
               Unable to load the Monitoring Committee. Please try again
               later.
@@ -245,7 +244,7 @@ const MonitoringCommitteePage = () => {
                         <UserRound size={20} />
                       </span>
                       <h2 className="text-xl font-bold text-blue-900">
-                        Chairman
+                        {chairman.roleLabel || headerSettings.chairmanHeading}
                       </h2>
                     </div>
                     <MemberPanel member={chairman} />
@@ -254,58 +253,9 @@ const MonitoringCommitteePage = () => {
                   <EmptySection message="Chairman details have not been added yet." />
                 )}
 
-                {members.length > 0 && (
-                  <>
-                    <div className="mx-auto hidden h-10 w-px bg-blue-300 md:block" />
-
-                    <div className="relative hidden md:block">
-                      <span className="absolute bottom-0 left-1/2 top-0 w-px -translate-x-1/2 bg-blue-200" />
-                      <div className="relative flex flex-wrap justify-center gap-y-7">
-                        {members.map((member) => (
-                          <div
-                            key={member._id}
-                            className="relative basis-1/2 px-3 pt-6 xl:basis-1/3"
-                          >
-                            <span className="absolute left-0 right-0 top-0 border-t border-blue-300" />
-                            <span className="absolute left-1/2 top-0 h-6 border-l border-blue-300" />
-                            <MemberPanel
-                              member={member}
-                              className="relative"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="ml-5 mt-6 space-y-4 border-l-2 border-blue-300 pl-6 md:hidden">
-                      {members.map((member) => (
-                        <div key={member._id} className="relative">
-                          <span className="absolute -left-6 top-1/2 w-6 border-t border-blue-300" />
-                          <MemberPanel member={member} />
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
+                {members.length > 0 && <MemberRow members={members} label="Committee Members" />}
+                {otherMembers.length > 0 && <MemberRow members={otherMembers} label="Other Members" individualHeadings />}
               </section>
-
-              <div className="grid items-start gap-8 lg:grid-cols-2">
-                <IndependentSection
-                  title="Conveyers"
-                  members={conveyers}
-                  icon={UsersRound}
-                  accentClass="border-orange-200 bg-orange-50/70 hover:border-orange-300"
-                  emptyMessage="No Conveyers have been added yet."
-                />
-
-                <IndependentSection
-                  title="Head"
-                  members={heads}
-                  icon={UserRound}
-                  accentClass="border-emerald-200 bg-emerald-50/70 hover:border-emerald-300"
-                  emptyMessage="No Head members have been added yet."
-                />
-              </div>
             </>
           )}
         </div>

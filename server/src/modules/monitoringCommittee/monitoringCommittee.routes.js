@@ -3,7 +3,6 @@ import { Router } from "express";
 import verifyJWT from "../../middleware/auth.middleware.js";
 import authorize from "../../middleware/rbac.middleware.js";
 import validate from "../../middleware/validate.middleware.js";
-import { publicCache } from "../../middleware/cache.middleware.js";
 import {
   adminLimiter,
   publicLimiter,
@@ -18,7 +17,7 @@ import {
 } from "./monitoringCommittee.validation.js";
 
 const router = Router();
-const publicReadCache = publicCache();
+const publicReadCache = (_req, res, next) => { res.set("Cache-Control", "no-store"); next(); };
 
 router.get(
   "/",

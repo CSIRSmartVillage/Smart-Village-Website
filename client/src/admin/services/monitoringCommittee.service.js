@@ -26,11 +26,11 @@ export const getMonitoringCommitteeSettingsAdmin = async () => {
 };
 
 export const updateMonitoringCommitteeSettingsAdmin = async (
-  subtitle
+  settings
 ) => {
   const response = await axios.patch(
     API_URL + "/settings",
-    { subtitle },
+    settings,
     authConfig()
   );
   return response.data.data || {};

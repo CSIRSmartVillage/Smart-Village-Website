@@ -1,8 +1,5 @@
 import { z } from "zod";
-
-import {
-  MONITORING_COMMITTEE_ROLES,
-} from "./MonitoringCommitteeMember.model.js";
+import { MONITORING_COMMITTEE_ROLES } from "./MonitoringCommitteeMember.model.js";
 
 const objectId = z
   .string()
@@ -16,9 +13,9 @@ const personFields = {
   name: z
     .string()
     .trim()
-    .min(1, "Name is required")
-    .max(200),
+    .max(200).optional(),
   designation: optionalText(300),
+  roleLabel: optionalText(100),
   phone: optionalText(50),
   email: z
     .string()
@@ -49,15 +46,22 @@ export const updateMonitoringCommitteeSettingsSchema = z.object({
     subtitle: z
       .string()
       .trim()
-      .max(500, "Subtitle cannot exceed 500 characters"),
-  }),
+      .max(500, "Subtitle cannot exceed 500 characters")
+      .optional(),
+    ...Object.fromEntries(
+      ["chairmanHeading"].map((key) => [
+        key,
+        z.string().trim().min(1, "Heading is required").max(100).optional(),
+      ])
+    ),
+  }).strict(),
 });
 
 export const reorderMonitoringCommitteeMembersSchema = z.object({
   body: z
     .object({
       role: z.enum(MONITORING_COMMITTEE_ROLES),
-      orderedIds: z.array(objectId).min(1).max(1000),
+      orderedIds: z.array(objectId).min(1),
     })
     .refine(
       ({ orderedIds }) =>
