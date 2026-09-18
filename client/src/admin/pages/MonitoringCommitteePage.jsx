@@ -93,8 +93,8 @@ const MonitoringCommitteePage = () => {
   const headingsValid = Object.values(headingValues).every((value) => value.trim().length > 0);
   const sections = [
     { value: "CHAIRMAN", label: headerSettings.chairmanHeading || "Chairman", accent: "border-blue-200 bg-blue-50/50" },
-    { value: "MEMBER", label: "Committee Members", accent: "border-slate-200 bg-slate-50" },
-    { value: "OTHER", label: "Other Members", accent: "border-slate-200 bg-slate-50" },
+    { value: "MEMBER", label: "Members — Row 1", accent: "border-slate-200 bg-slate-50" },
+    { value: "OTHER", label: "Members — Row 2", accent: "border-slate-200 bg-slate-50" },
   ];
   const grouped = Object.fromEntries(sections.map(section => [section.value, sortByOrder(members.filter(member => member.role === section.value))]));
   const openCreate = (role = "MEMBER") => {
@@ -136,7 +136,7 @@ const MonitoringCommitteePage = () => {
       photo: form.photo?._id || null,
       name: form.name.trim(),
       designation: form.designation.trim(),
-      roleLabel: form.roleLabel.trim(),
+      ...(form.role === "CHAIRMAN" ? { roleLabel: form.roleLabel.trim() } : {}),
       phone: form.phone.trim(),
       email: form.email.trim(),
       role: form.role,
@@ -280,7 +280,7 @@ const MonitoringCommitteePage = () => {
             Monitoring Committee
           </h1>
           <p className="mt-2 text-slate-500">
-            Manage the Chairman, Committee Members, and Other Members.
+            Manage the Chairman and members in the two rows.
           </p>
         </div>
 
@@ -405,8 +405,9 @@ const MonitoringCommitteePage = () => {
                 </label>
 
                 <label className="text-sm font-medium text-slate-700">
-                  Designation
-                  <input
+                  Designation / Details
+                  <textarea
+                    rows={4}
                     maxLength={300}
                     value={form.designation}
                     onChange={(event) =>
@@ -469,7 +470,7 @@ const MonitoringCommitteePage = () => {
                   </select>
                 </label>
 
-                {form.role !== "MEMBER" && <label className="text-sm font-medium text-slate-700">
+                {form.role === "CHAIRMAN" && <label className="text-sm font-medium text-slate-700">
                   Card Heading (Optional)
                   <input
                     maxLength={100}
@@ -479,7 +480,7 @@ const MonitoringCommitteePage = () => {
                     className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
                   />
                   <span className="mt-1 block text-xs font-normal text-slate-500">
-                    Shown as the small heading above this member’s photo, e.g. Conveyer, Head, or Member Secretary.
+                    Shown above the Chairman panel.
                   </span>
                 </label>}
 
@@ -611,11 +612,11 @@ const MonitoringCommitteePage = () => {
                                   <p className="font-semibold text-slate-800">
                                     {member.name}
                                   </p>
-                                  <p className="text-xs text-slate-500">
+                                  {section.value === "CHAIRMAN" && <p className="text-xs text-slate-500">
                                     {member.roleLabel || section.label}
-                                  </p>
+                                  </p>}
                                   {member.designation && (
-                                    <p className="mt-1 text-sm text-slate-500">
+                                    <p className="mt-1 whitespace-pre-wrap break-words text-sm text-slate-500">
                                       {member.designation}
                                     </p>
                                   )}

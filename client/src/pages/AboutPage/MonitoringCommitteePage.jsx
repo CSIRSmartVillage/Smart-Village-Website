@@ -28,18 +28,13 @@ const sortByOrder = (members) =>
       Number(b.displayOrder || 0)
   );
 
-const MemberPanel = ({ member, label, vertical = false, className = "" }) => (
+const MemberPanel = ({ member, vertical = false, className = "" }) => (
   <article
     className={
       "flex h-full min-w-0 items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 transition duration-200 hover:border-blue-300 hover:bg-blue-50/30 hover:shadow-sm " +
       (vertical ? "min-h-[320px] flex-col gap-y-2 " : "") + className
     }
   >
-    {label && (
-      <p className="w-full break-words text-center text-xs font-normal text-slate-500">
-        {label}
-      </p>
-    )}
     <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
       {member.photo?.url ? (
         <img
@@ -68,7 +63,7 @@ const MemberPanel = ({ member, label, vertical = false, className = "" }) => (
       )}
 
       {member.designation && (
-        <p className="mt-1 break-words text-sm leading-5 text-slate-600">
+        <p className="mt-1 whitespace-pre-wrap break-words text-sm leading-5 text-slate-600">
           {member.designation}
         </p>
       )}
@@ -106,7 +101,7 @@ const EmptySection = ({ message }) => (
   </p>
 );
 
-const MemberRow = ({ members, label, individualHeadings = false }) => {
+const MemberRow = ({ members, label, showHeading = false }) => {
   const rowRef = useRef(null);
   const scroll = (direction) => {
     const row = rowRef.current;
@@ -120,7 +115,7 @@ const MemberRow = ({ members, label, individualHeadings = false }) => {
   return (
     <>
       <div className="relative flex h-14 items-center justify-end gap-2">
-        <span className="absolute inset-y-0 left-1/2 w-px bg-blue-300" aria-hidden="true" />
+        {showHeading && <h2 className="absolute left-1/2 -translate-x-1/2 text-xl font-bold text-slate-800">Members</h2>}
         <button type="button" onClick={() => scroll(-1)} aria-label={`Scroll ${label} left`}
           className="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-blue-500">
           <ChevronLeft size={18} />
@@ -135,10 +130,7 @@ const MemberRow = ({ members, label, individualHeadings = false }) => {
         <div className="mx-auto grid w-max min-w-full grid-flow-col auto-cols-[240px] justify-center">
           {members.map((member) => (
             <div key={member._id} className="relative min-w-0 px-2 pt-6">
-              <span aria-hidden="true" className="absolute left-0 right-0 top-0 border-t border-blue-300" />
-              <span aria-hidden="true" className="absolute left-1/2 top-0 h-6 border-l border-blue-300" />
-              <MemberPanel member={member} vertical
-                label={individualHeadings ? member.roleLabel || "Other Member" : "Committee Member"} />
+              <MemberPanel member={member} vertical />
             </div>
           ))}
         </div>
@@ -236,25 +228,24 @@ const MonitoringCommitteePage = () => {
             </div>
           ) : (
             <>
-              <section aria-label="Chairman hierarchy">
+              <section aria-label="Monitoring Committee">
                 {chairman ? (
-                  <div className="mx-auto max-w-[620px] rounded-2xl border border-blue-300 bg-blue-100/70 p-2">
-                    <div className="flex items-center justify-center gap-2 px-3 pb-2 pt-1">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-slate-700 shadow-sm">
-                        <UserRound size={20} />
-                      </span>
-                      <h2 className="text-xl font-bold text-blue-900">
-                        {chairman.roleLabel || headerSettings.chairmanHeading}
+                  <div className="mb-10">
+                    <div className="flex h-14 items-center justify-center">
+                      <h2 className="text-xl font-bold text-slate-800">
+                        {chairman.roleLabel || headerSettings.chairmanHeading || "Chairman"}
                       </h2>
                     </div>
-                    <MemberPanel member={chairman} />
+                    <div className="mx-auto w-[380px] max-w-full px-2 pt-6">
+                      <MemberPanel member={chairman} vertical />
+                    </div>
                   </div>
                 ) : (
                   <EmptySection message="Chairman details have not been added yet." />
                 )}
 
-                {members.length > 0 && <MemberRow members={members} label="Committee Members" />}
-                {otherMembers.length > 0 && <MemberRow members={otherMembers} label="Other Members" individualHeadings />}
+                {members.length > 0 && <MemberRow members={members} label="Members row 1" showHeading />}
+                {otherMembers.length > 0 && <MemberRow members={otherMembers} label="Members row 2" showHeading={members.length === 0} />}
               </section>
             </>
           )}
