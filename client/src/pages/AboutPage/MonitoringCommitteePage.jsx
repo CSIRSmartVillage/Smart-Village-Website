@@ -35,7 +35,12 @@ const MemberPanel = ({ member, vertical = false, className = "" }) => (
       (vertical ? "min-h-[320px] flex-col gap-y-2 " : "") + className
     }
   >
-    <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+    <div
+      className={
+        "flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-50 " +
+        (vertical ? "h-34 w-34 mb-3" : "h-20 w-20")
+      }
+    >  
       {member.photo?.url ? (
         <img
           src={member.photo.url}
