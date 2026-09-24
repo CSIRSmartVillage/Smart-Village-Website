@@ -175,7 +175,6 @@ export const getHomePageNews = async () => {
       eventDate: -1,
       createdAt: -1,
     })
-    .limit(4)
     .lean();
 };
 
