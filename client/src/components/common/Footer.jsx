@@ -388,7 +388,7 @@ const Footer = () => {
                 </p> 
 
                 <p className="mt-1 text-sm leading-6 text-slate-600"> 
-                  Prof. Pradeep Kumar Ramancharla,Mission Director
+                  Prof. Pradeep Kumar Ramancharla Mission Director
                   <br />
                   CSIR-CBRI, Roorkee (247667), Uttarakhand, India
                 </p>
@@ -498,7 +498,7 @@ const Footer = () => {
             </div>
 
             <p className="mt-5 text-sm leading-6 text-slate-500">
-              Stay connected with CSIR-CBRI and follow our latest
+              Stay connected with CSIR-CBRI, follow our latest
               research initiatives, rural development activities,
               and SMART Village updates.
             </p>
