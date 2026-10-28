@@ -81,33 +81,31 @@ const filteredFacilities = useMemo(() => {
       <VillageMapHero villageLocation={villageLocation} />
 
       <div className="container mx-auto px-4 lg:px-6">
-        <VillageMapContainer
-          villageLocation={villageLocation}
-          facilities={filteredFacilities}
-        />
+        <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
+          <div className="space-y-8">
+            <VillageMapContainer
+              villageLocation={villageLocation}
+              facilities={filteredFacilities}
+            />
 
-        <div className="mt-8">
-  <FacilityFilters
-    searchTerm={searchTerm}
-    onSearchChange={setSearchTerm}
-    category={category}
-    onCategoryChange={setCategory}
-    categories={categories}
-    totalFacilities={filteredFacilities.length}
-  />
-</div>
+            <FacilityFilters
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              category={category}
+              onCategoryChange={setCategory}
+              categories={categories}
+              totalFacilities={filteredFacilities.length}
+            />
+          </div>
 
-        <div className="mt-8">
           <Legend
-  facilityCount={filteredFacilities.length}
-  facilities={filteredFacilities}
-/>
-</div>
+            facilityCount={filteredFacilities.length}
+            facilities={filteredFacilities}
+          />
+        </div>
 
         <div className="mt-10">
-            <FacilityList
-  facilities={filteredFacilities}
-/>
+          <FacilityList facilities={filteredFacilities} />
         </div>
       </div>
     </div>

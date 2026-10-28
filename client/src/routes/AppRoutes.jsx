@@ -133,12 +133,6 @@ const EventDetailPage = lazy(() =>
   )
 );
 
-const VillageMapPage = lazy(() =>
-  import(
-    "../pages/VillagePortal/modules/VillageMap/VillageMapPage"
-  )
-);
-
 const PoliciesPage = lazy(() =>
   import(
     "../pages/VillagePortal/modules/Policies/PoliciesPage"
@@ -333,7 +327,7 @@ const AppRoutes = () => {
 
   <Route
     path="map"
-    element={<VillageMapPage />}
+    element={<Navigate to=".." replace />}
   />
 
   <Route

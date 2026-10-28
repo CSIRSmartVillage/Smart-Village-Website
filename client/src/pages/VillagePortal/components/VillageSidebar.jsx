@@ -4,7 +4,6 @@ import {
   Home,
   FolderKanban,
   Trophy,
-  Map,
   ScrollText,
   FileCheck,
   BarChart3,
@@ -42,12 +41,6 @@ const VillageSidebar = ({ village }) => {
       description: "Community highlights",
       icon: Trophy,
       path: "events",
-    },
-    {
-      label: "Village Map",
-      description: "Explore village",
-      icon: Map,
-      path: "map",
     },
     {
       label: "Policies & Schemes",

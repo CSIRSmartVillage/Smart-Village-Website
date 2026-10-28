@@ -21,8 +21,6 @@ const AboutSection = ({ profile, loading = false }) => {
     return <AboutSkeleton />;
   }
 
-  const heading =
-    profile?.aboutHeading || "About Village";
   const subtitle = profile?.aboutSubtitle || "";
   const description = profile?.overview || "";
 
@@ -30,12 +28,8 @@ const AboutSection = ({ profile, loading = false }) => {
     <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <div className="p-6 sm:p-8 lg:p-10">
         <div className="max-w-5xl">
-          <span className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-blue-700">
-            Village Information
-          </span>
-
           <h2 className="text-3xl font-bold leading-tight text-slate-950 sm:text-4xl">
-            {heading}
+            Village Information
           </h2>
 
           {subtitle ? (
