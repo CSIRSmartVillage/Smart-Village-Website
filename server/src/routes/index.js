@@ -58,6 +58,7 @@
   import supporterRoutes from "../modules/supporter/supporter.routes.js";
   import governmentApprovalRoutes from "../modules/governmentApproval/governmentApproval.routes.js";
   import monitoringCommitteeRoutes from "../modules/monitoringCommittee/monitoringCommittee.routes.js";
+  import trainingManualRoutes from "../modules/trainingManual/trainingManual.routes.js";
   import {
   publicCache,
 } from "../middleware/cache.middleware.js";
@@ -217,6 +218,11 @@ router.use(
 router.use(
   "/monitoring-committee",
   monitoringCommitteeRoutes
+);
+router.use(
+  "/training-manuals",
+  publicLimiter,
+  trainingManualRoutes
 );
 router.use(
   "/admin/pages",

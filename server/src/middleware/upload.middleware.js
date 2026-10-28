@@ -134,4 +134,42 @@ export const governmentApprovalUpload = multer({
   },
 });
 
+const trainingManualMimeTypes = new Set([
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "video/mp4",
+  "video/webm",
+  "video/quicktime",
+]);
+
+const trainingManualExtensions = new Set([
+  ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx",
+  ".jpg", ".jpeg", ".png", ".gif", ".webp", ".mp4", ".webm", ".mov",
+]);
+
+export const trainingManualUpload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    const extension = path.extname(file.originalname).toLowerCase();
+    if (trainingManualMimeTypes.has(file.mimetype) && trainingManualExtensions.has(extension)) {
+      cb(null, true);
+      return;
+    }
+    cb(new ApiError(415, "Only PDF, Office, image and supported video files are allowed"));
+  },
+  limits: {
+    fileSize: Number(process.env.MAX_TRAINING_MANUAL_FILE_SIZE_MB || process.env.MAX_MEDIA_FILE_SIZE_MB || 250) * 1024 * 1024,
+    files: 10,
+  },
+});
+
 export default upload;

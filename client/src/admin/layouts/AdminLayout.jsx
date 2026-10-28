@@ -75,6 +75,10 @@ const AdminLayout = () => {
           path: "/admin/videos",
         },
         {
+          label: "Training Manuals",
+          path: "/admin/training-manuals",
+        },
+        {
           label: "Success Stories",
           path: "/admin/success-stories",
         },

@@ -44,9 +44,10 @@ const navigationOrder = new Map([
   ["CSIR Laboratories", 3],
   ["CSIR SMART Village", 4],
   ["News & Updates", 5],
-  ["Success Stories", 6],
-  ["Contact Us", 7],
-  ["Our Supporters", 8],
+  ["Training Manuals", 6],
+  ["Success Stories", 7],
+  ["Contact Us", 8],
+  ["Our Supporters", 9],
 ]);
 
 
@@ -75,17 +76,30 @@ const Navbar = () => {
     (item) => item.path === "/our-supporters"
   );
 
-  const navigationItems = hasSupportersItem
-    ? items
-    : [
-        ...items,
+  const hasTrainingManualsItem = items.some(
+    (item) => item.path === "/training-manuals"
+  );
+
+  const navigationItems = [
+    ...items,
+    ...(hasTrainingManualsItem
+      ? []
+      : [{
+          _id: "training-manuals-navigation",
+          label: "Training Manuals",
+          path: "/training-manuals",
+          parentId: null,
+        }]),
+    ...(hasSupportersItem
+      ? []
+      : [
         {
           _id: "our-supporters-navigation",
           label: "Our Supporters",
           path: "/our-supporters",
           parentId: null,
-        },
-      ];
+        }]),
+  ];
 
   const parentItems = navigationItems
     .filter(
@@ -137,12 +151,12 @@ const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 lg:px-6">
+      <div className="mx-auto w-full max-w-[1600px] px-3 sm:px-4 lg:px-5 xl:px-6">
         <div className="relative h-16 lg:h-20 flex items-center justify-center">
 
           {/* Desktop Menu */}
-          <nav className="hidden lg:flex justify-center">
-            <ul className="flex items-center gap-8 font-medium text-slate-700">
+          <nav className="hidden min-w-0 max-w-full overflow-x-auto lg:flex lg:justify-center xl:overflow-visible">
+            <ul className="flex min-w-max items-center gap-3 whitespace-nowrap text-xs font-medium text-slate-700 xl:gap-4 xl:text-sm 2xl:gap-5 2xl:text-base">
 
               {loading ? (
                 <>
@@ -277,7 +291,8 @@ const Navbar = () => {
                     border-blue-900/30
                     px-3
                     py-2
-                    text-sm
+                    text-xs
+                    xl:text-sm
                     font-semibold
                     text-blue-900
                     hover:bg-blue-900
@@ -322,7 +337,7 @@ const Navbar = () => {
       {mobileOpen && (
         <div className="lg:hidden border-t border-slate-200 bg-white">
           <nav className="px-4 py-4">
-            <ul className="space-y-1">
+            <ul className="space-y-1 whitespace-nowrap">
 
               {loading ? (
                 <>

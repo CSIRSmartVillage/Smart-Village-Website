@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
@@ -23,6 +23,7 @@ const FeaturedVillageUpdates = ({
 
   const navigate = useNavigate();
   const [updates, setUpdates] = useState([]);
+  const swiperRef = useRef(null);
 
   useEffect(() => {
     const loadUpdates = async () => {
@@ -74,7 +75,29 @@ const FeaturedVillageUpdates = ({
             No featured News & Updates are available at this time.
           </div>
         ) : (
-          <Swiper
+          <div className="relative">
+            <button
+              type="button"
+              aria-label="Previous news item"
+              onClick={() => swiperRef.current?.slidePrev()}
+              className="absolute left-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-blue-200 bg-white text-xl font-semibold text-blue-700 shadow-md transition hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:left-3"
+            >
+              ←
+            </button>
+
+            <button
+              type="button"
+              aria-label="Next news item"
+              onClick={() => swiperRef.current?.slideNext()}
+              className="absolute right-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-blue-200 bg-white text-xl font-semibold text-blue-700 shadow-md transition hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:right-3"
+            >
+              →
+            </button>
+
+            <Swiper
+              onSwiper={(swiper) => {
+                swiperRef.current = swiper;
+              }}
             modules={[Autoplay, Pagination]}
             autoplay={{
               delay: 2000,
@@ -97,9 +120,9 @@ const FeaturedVillageUpdates = ({
                 slidesPerView: 3,
               },
             }}
-          >
-            {updates.map((item) => (
-              <SwiperSlide key={item._id}>
+            >
+              {updates.map((item) => (
+                <SwiperSlide key={item._id}>
                 <div
                   onClick={() => openUpdate(item)}
                   className="flex h-[320px] cursor-pointer flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
@@ -132,9 +155,10 @@ const FeaturedVillageUpdates = ({
                     </span>
                   </div>
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
         )}
       </div>
     </section>

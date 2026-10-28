@@ -80,6 +80,14 @@ const SupportersPage = lazy(() =>
   import("../pages/SupportersPage/SupportersPage")
 );
 
+const TrainingManualsPage = lazy(() =>
+  import("../pages/TrainingManualsPage/TrainingManualsPage")
+);
+
+const TrainingManualDetailPage = lazy(() =>
+  import("../pages/TrainingManualsPage/TrainingManualDetailPage")
+);
+
 const NotFoundPage = lazy(() =>
   import("../pages/NotFoundPage")
 );
@@ -276,6 +284,16 @@ const AppRoutes = () => {
       <Route
         path="/our-supporters"
         element={<SupportersPage />}
+      />
+
+      <Route
+        path="/training-manuals"
+        element={<TrainingManualsPage />}
+      />
+
+      <Route
+        path="/training-manuals/:id"
+        element={<TrainingManualDetailPage />}
       />
       {/* Contact */}
 
